@@ -1,0 +1,141 @@
+package apiclient
+
+import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+)
+
+type NetworkPolicyRuleCreateRequest struct {
+	EnvironmentName string `json:"-"`
+	WorkloadId      string `json:"workloadId"`
+	Description     string `json:"description"`
+	Protocol        string `json:"protocol"`
+	Type            string `json:"type"`
+	Action          string `json:"action"`
+	Source          string `json:"source"`
+	PortRange       string `json:"portRange"`
+}
+
+//GetNetworkPolicyRules Get networkPolicyRules in account
+func (c *Client) GetNetworkPolicyRules(environmentName string) ([]NetworkPolicyRule, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedNetworkPolicyRules
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+//GetNetworkPolicyRule Get networkPolicyRule in account by id
+func (c *Client) GetNetworkPolicyRule(environmentName string, id string) (*NetworkPolicyRule, error) {
+	//Create the request
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules/"+id,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	//Unmarshal, unwrap, and return
+	var wrappedAPIStruct WrappedNetworkPolicyRule
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+//CreateNetworkPolicyRule Create the networkPolicyRule
+func (c *Client) CreateNetworkPolicyRule(newNetworkPolicyRule NetworkPolicyRuleCreateRequest) (*NetworkPolicyRule, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(newNetworkPolicyRule)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules",
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct WrappedNetworkPolicyRule
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+//UpdateNetworkPolicyRule Update a networkPolicyRule
+func (c *Client) UpdateNetworkPolicyRule(networkPolicyRuleId string, newNetworkPolicyRule NetworkPolicyRuleCreateRequest) (*NetworkPolicyRule, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(newNetworkPolicyRule)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("PUT",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules/"+networkPolicyRuleId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct WrappedNetworkPolicyRule
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+//DeleteNetworkPolicyRule Delete networkPolicyRule in account by id
+func (c *Client) DeleteNetworkPolicyRule(environmentName string, id string) error {
+	//Create the request
+	request, err := http.NewRequest("DELETE",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules/"+id,
+		nil,
+	)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
+}

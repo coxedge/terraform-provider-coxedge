@@ -1,0 +1,252 @@
+package coxedge
+
+import (
+	"context"
+	"coxedge/terraform-provider/coxedge/apiclient"
+	"coxedge/terraform-provider/coxedge/utils"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"time"
+)
+
+func resourceWorkload() *schema.Resource {
+	return &schema.Resource{
+		CreateContext: resourceWorkloadCreate,
+		ReadContext:   resourceWorkloadRead,
+		UpdateContext: resourceWorkloadUpdate,
+		DeleteContext: resourceWorkloadDelete,
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Schema: getWorkloadSchema(),
+	}
+}
+
+func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	//Get the API Client
+	coxEdgeClient := m.(apiclient.Client)
+
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+
+	//Convert resource data to API Object
+	newWorkload := convertResourceDataToWorkloadCreateAPIObject(d)
+
+	for _, deployment := range newWorkload.Deployments {
+		if !deployment.EnableAutoScaling {
+			if deployment.InstancesPerPop == -1 {
+				return diag.Errorf("instances_per_pop must be set when autoscaling is disabled.")
+			}
+		}
+	}
+
+	//Call the API
+	createdWorkload, err := coxEdgeClient.CreateWorkload(newWorkload)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	tflog.Info(ctx, "Initiated Create. Awaiting task result.")
+
+	//Await
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdWorkload.TaskId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	//Save the ID
+	d.SetId(taskResult.Data.Result.Id)
+
+	return diags
+}
+
+func resourceWorkloadRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	//Get the API Client
+	coxEdgeClient := m.(apiclient.Client)
+
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+
+	//Get the resource ID
+	resourceId := d.Id()
+
+	//Get the resource
+	workload, err := coxEdgeClient.GetWorkload(d.Get("environment_name").(string), resourceId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	convertWorkloadAPIObjectToResourceData(d, workload)
+
+	//Update state
+	resourceWorkloadRead(ctx, d, m)
+
+	return diags
+}
+
+func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	//Get the API Client
+	coxEdgeClient := m.(apiclient.Client)
+
+	//Get the resource ID
+	resourceId := d.Id()
+
+	//Convert resource data to API object
+	updatedWorkload := convertResourceDataToWorkloadCreateAPIObject(d)
+
+	//Call the API
+	_, err := coxEdgeClient.UpdateWorkload(resourceId, updatedWorkload)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	//Set last_updated
+	d.Set("last_updated", time.Now().Format(time.RFC850))
+
+	return resourceWorkloadRead(ctx, d, m)
+}
+
+func resourceWorkloadDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+
+	//Get the API Client
+	coxEdgeClient := m.(apiclient.Client)
+
+	//Get the resource ID
+	resourceId := d.Id()
+
+	//Delete the Workload
+	err := coxEdgeClient.DeleteWorkload(d.Get("environment_name").(string), resourceId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// From Docs: d.SetId("") is automatically called assuming delete returns no errors, but
+	// it is added here for explicitness.
+	d.SetId("")
+
+	return diags
+}
+
+func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apiclient.WorkloadCreateRequest {
+	//Create update workload struct
+	updatedWorkload := apiclient.WorkloadCreateRequest{
+		Name:                d.Get("name").(string),
+		EnvironmentName:     d.Get("environment_name").(string),
+		Image:               d.Get("image").(string),
+		Specs:               d.Get("specs").(string),
+		Type:                d.Get("type").(string),
+		AddAnyCastIpAddress: d.Get("add_anycast_ip_address").(bool),
+		ContainerEmail:      d.Get("container_email").(string),
+		ContainerServer:     d.Get("container_server").(string),
+		ContainerUsername:   d.Get("container_username").(string),
+		ContainerPassword:   d.Get("container_password").(string),
+		Slug:                d.Get("slug").(string),
+	}
+
+	//Set commands
+	updatedWorkload.Commands = make([]string, len(d.Get("commands").([]interface{})))
+	for i, command := range d.Get("commands").([]interface{}) {
+		updatedWorkload.Commands[i] = command.(string)
+	}
+
+	//Convert ports
+	for _, entry := range d.Get("ports").([]interface{}) {
+		convertedEntry := entry.(map[string]string)
+		portSpec := apiclient.WorkloadPort{
+			Protocol:       convertedEntry["protocol"],
+			PublicPort:     convertedEntry["public_port"],
+			PublicPortDesc: convertedEntry["public_port_desc"],
+			PublicPortSrc:  convertedEntry["public_port_src"],
+		}
+		updatedWorkload.Ports = append(updatedWorkload.Ports, portSpec)
+	}
+
+	//Convert env vars
+	for key, value := range d.Get("environment_variables").(map[string]interface{}) {
+		newVar := apiclient.WorkloadEnvironmentVariable{
+			Key:   key,
+			Value: value.(string),
+		}
+		updatedWorkload.EnvironmentVariables = append(updatedWorkload.EnvironmentVariables, newVar)
+	}
+
+	//Convert secret env vars
+	for key, value := range d.Get("secret_environment_variables").(map[string]interface{}) {
+		newVar := apiclient.WorkloadEnvironmentVariable{
+			Key:   key,
+			Value: value.(string),
+		}
+		updatedWorkload.SecretEnvironmentVariables = append(updatedWorkload.SecretEnvironmentVariables, newVar)
+	}
+
+	//Convert deployments
+	for _, entry := range d.Get("deployment").([]interface{}) {
+		convertedEntry := entry.(map[string]interface{})
+		deploymentEntry := apiclient.WorkloadAutoscaleDeployment{
+			Name:               convertedEntry["name"].(string),
+			Pops:               utils.ConvertListInterfaceToStringArray(convertedEntry["pops"]),
+			EnableAutoScaling:  convertedEntry["enable_autoscaling"].(bool),
+			InstancesPerPop:    convertedEntry["instances_per_pop"].(int),
+			MaxInstancesPerPop: convertedEntry["max_instances_per_pop"].(int),
+			MinInstancesPerPop: convertedEntry["min_instances_per_pop"].(int),
+			CPUUtilization:     convertedEntry["cpu_utilization"].(int),
+		}
+		updatedWorkload.Deployments = append(updatedWorkload.Deployments, deploymentEntry)
+	}
+
+	return updatedWorkload
+}
+
+func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *apiclient.Workload) {
+	//Store the data
+	d.Set("id", workload.Id)
+	d.Set("name", workload.Name)
+	d.Set("image", workload.Image)
+	d.Set("specs", workload.Specs)
+	d.Set("type", workload.Type)
+	d.Set("anycast_ip_address", workload.AnycastIpAddress)
+	d.Set("commands", workload.Commands)
+	d.Set("container_email", workload.ContainerEmail)
+	d.Set("container_username", workload.ContainerUsername)
+	d.Set("container_server", workload.ContainerServer)
+	//Now the list structures
+	deployments := make([]map[string]interface{}, len(workload.Deployments), len(workload.Deployments))
+	for i, deployment := range workload.Deployments {
+		item := make(map[string]interface{})
+		item["name"] = deployment.Name
+		item["pops"] = deployment.Pops
+		item["enable_autoscaling"] = deployment.EnableAutoScaling
+		item["instances_per_pop"] = deployment.InstancesPerPop
+		item["max_instances_per_pop"] = deployment.MaxInstancesPerPop
+		item["min_instances_per_pop"] = deployment.MinInstancesPerPop
+		item["cpu_utilization"] = deployment.CPUUtilization
+		deployments[i] = item
+	}
+	d.Set("deployments", deployments)
+
+	ports := make([]map[string]string, len(workload.Ports), len(workload.Ports))
+	for i, portObj := range workload.Ports {
+		item := make(map[string]string)
+		item["protocol"] = portObj.Protocol
+		item["public_port"] = portObj.PublicPort
+		item["public_port_desc"] = portObj.PublicPortDesc
+		item["public_port_src"] = portObj.PublicPortSrc
+		ports[i] = item
+	}
+	d.Set("ports", ports)
+
+	envVars := make(map[string]string, len(workload.EnvironmentVariables))
+	for _, envVarObj := range workload.EnvironmentVariables {
+		envVars[envVarObj.Key] = envVarObj.Value
+	}
+	d.Set("environment_variables", envVars)
+
+	secretEnvVars := make(map[string]string, len(workload.SecretEnvironmentVariables))
+	for _, envVarObj := range workload.SecretEnvironmentVariables {
+		secretEnvVars[envVarObj.Key] = envVarObj.Value
+	}
+	d.Set("secret_environment_variables", secretEnvVars)
+}
