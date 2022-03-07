@@ -1,0 +1,6 @@
+.idea/
+build/
+tests/.terraform.lock.hcl
+tests/terraform.tfstate*
+tests/.terraform
+terraform-provider
