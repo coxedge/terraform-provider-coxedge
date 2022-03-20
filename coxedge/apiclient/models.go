@@ -140,9 +140,9 @@ type WorkloadAutoscaleDeployment struct {
 	Name               string   `json:"name,omitempty"`
 	Pops               []string `json:"pops,omitempty"`
 	EnableAutoScaling  bool     `json:"enableAutoScaling,omitempty"`
-	InstancesPerPop    int      `json:"instancesPerPop,omitempty"`
-	MaxInstancesPerPop int      `json:"maxInstancesPerPop,omitempty"`
-	MinInstancesPerPop int      `json:"minInstancesPerPop,omitempty"`
+	InstancesPerPop    int      `json:"instancesPerPop,string,omitempty"`
+	MaxInstancesPerPop int      `json:"maxInstancesPerPop,string,omitempty"`
+	MinInstancesPerPop int      `json:"minInstancesPerPop,string,omitempty"`
 	CPUUtilization     int      `json:"cpuUtilization,omitempty"`
 }
 
