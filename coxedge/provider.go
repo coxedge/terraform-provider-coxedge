@@ -19,10 +19,21 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"coxedge_organizations": dataSourceOrganization(),
 			"coxedge_environments":  dataSourceEnvironment(),
+			"coxedge_images":        dataSourceImage(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"coxedge_environment": resourceEnvironment(),
-			"coxedge_workload":    resourceWorkload(),
+			"coxedge_cdn_purge":           resourceCDNPurgeResource(),
+			"coxedge_cdn_settings":        resourceCDNSettings(),
+			"coxedge_delivery_domain":     resourceDeliveryDomain(),
+			"coxedge_environment":         resourceEnvironment(),
+			"coxedge_firewall_rule":       resourceFirewallRule(),
+			"coxedge_network_policy_rule": resourceNetworkPolicyRule(),
+			"coxedge_origin_setting":      resourceOriginSettings(),
+			"coxedge_script":              resourceScript(),
+			"coxedge_site":                resourceSite(),
+			"coxedge_user":                resourceUser(),
+			"coxedge_waf_settings":        resourceWAFSettings(),
+			"coxedge_workload":            resourceWorkload(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

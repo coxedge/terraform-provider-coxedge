@@ -325,6 +325,23 @@ type WrappedCDNSettingsSet struct {
 	Data []CDNSettings `json:"data"`
 }
 
+type CDNPurgeOptions struct {
+	PurgeType string `json:"purgeType"`
+	Items     []struct {
+		URL             string   `json:"url,omitempty"`
+		Recursive       bool     `json:"recursive,omitempty"`
+		InvalidateOnly  bool     `json:"invalidateOnly,omitempty"`
+		PurgeAllDynamic bool     `json:"purgeAllDynamic,omitempty"`
+		Headers         []string `json:"headers,omitempty"`
+		PurgeSelector   struct {
+			SelectorName           string `json:"selectorName,omitempty"`
+			SelectorValue          string `json:"selectorValue,omitempty"`
+			SelectorType           string `json:"selectorType,omitempty"`
+			SelectorValueDelimiter string `json:"selectorValueDelimiter,omitempty"`
+		} `json:"purgeSelector,omitempty"`
+	} `json:"items,omitempty"`
+}
+
 //WAF
 type WAFSettings struct {
 	EnvironmentName             string                         `json:"-"`
@@ -445,4 +462,21 @@ type WrappedScript struct {
 }
 type WrappedScripts struct {
 	Data []Script `json:"data,omitempty"`
+}
+
+//Edge Logic
+type EdgeLogic struct {
+	AllowEmptyReferrer        bool     `json:"allowEmptyReferrer,omitempty"`
+	ForceWwwEnabled           bool     `json:"forceWwwEnabled,omitempty"`
+	Id                        string   `json:"id,omitempty"`
+	PseudoStreamingEnabled    bool     `json:"pseudoStreamingEnabled,omitempty"`
+	ReferrerList              []string `json:"referrerList,omitempty"`
+	ReferrerProtectionEnabled bool     `json:"referrerProtectionEnabled,omitempty"`
+	RobotTxtEnabled           bool     `json:"robotTxtEnabled,omitempty"`
+	RobotTxtFile              string   `json:"robotTxtFile,omitempty"`
+	ScopeId                   string   `json:"scopeId,omitempty"`
+	StackId                   string   `json:"stackId,omitempty"`
+}
+type WrappedEdgeLogic struct {
+	Data EdgeLogic `json:"data,omitempty"`
 }
