@@ -340,7 +340,11 @@ func getImageSetSchema() map[string]*schema.Schema {
 			Computed: true,
 			Optional: true,
 		},
-		"environments": &schema.Schema{
+		"environment": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"images": &schema.Schema{
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
@@ -703,6 +707,82 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 	}
 }
 
+func getCDNPurgeResourceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"site_id": {
+			Type:     schema.TypeString,
+			Required: true,
+			ForceNew: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+			ForceNew: true,
+		},
+		"purge_type": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Default:  "URL",
+			ForceNew: true,
+		},
+		"items": {
+			Type:     schema.TypeList,
+			Optional: true,
+			ForceNew: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"url": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"recursive": {
+						Type:     schema.TypeBool,
+						Optional: true,
+					},
+					"invalidate_only": {
+						Type:     schema.TypeBool,
+						Optional: true,
+					},
+					"purge_all_dynamic": {
+						Type:     schema.TypeBool,
+						Optional: true,
+					},
+					"headers": {
+						Type:     schema.TypeList,
+						Optional: true,
+						Elem: &schema.Schema{
+							Type: schema.TypeString,
+						},
+					},
+					"purge_selector": {
+						Type:     schema.TypeList,
+						Optional: true,
+						MaxItems: 1,
+						Elem: map[string]*schema.Schema{
+							"selector_name": {
+								Type:     schema.TypeString,
+								Optional: true,
+							},
+							"selector_type": {
+								Type:     schema.TypeString,
+								Optional: true,
+							},
+							"selector_value": {
+								Type:     schema.TypeString,
+								Optional: true,
+							},
+							"selector_value_delimiter": {
+								Type:     schema.TypeString,
+								Optional: true,
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func getWAFSettingsSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"environment_name": {
@@ -998,5 +1078,45 @@ func getFirewallRuleSchema() map[string]*schema.Schema {
 }
 
 func getScriptSchema() map[string]*schema.Schema {
-	return map[string]*schema.Schema{}
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"site_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"created_at": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"updated_at": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"version": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"code": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"routes": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Required: true,
+		},
+	}
 }

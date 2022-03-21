@@ -7,16 +7,10 @@ import (
 )
 
 type ScriptCreateRequest struct {
-	ScriptName        string       `json:"name,omitempty"`
-	Description       string       `json:"description,omitempty"`
-	ServiceConnection IdOnlyHelper `json:"serviceConnection,omitempty"`
-	Organization      IdOnlyHelper `json:"organization,omitempty"`
-	Membership        string       `json:"membership,omitempty"`
-	Roles             []struct {
-		Name      string         `json:"name,omitempty"`
-		Users     []IdOnlyHelper `json:"users,omitempty"`
-		IsDefault bool           `json:"isDefault,omitempty"`
-	} `json:"roles,omitempty"`
+	SiteId string   `json:"siteId,omitempty"`
+	Name   string   `json:"name,omitempty"`
+	Routes []string `json:"routes,omitempty"`
+	Code   string   `json:"code,omitempty"`
 }
 
 //GetScripts Get Scripts in account
@@ -63,7 +57,7 @@ func (c *Client) GetScript(id string) (*Script, error) {
 }
 
 //CreateScript Create the Script
-func (c *Client) CreateScript(newScript ScriptCreateRequest) (*Script, error) {
+func (c *Client) CreateScript(newScript ScriptCreateRequest) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newScript)
 	if err != nil {
@@ -80,16 +74,16 @@ func (c *Client) CreateScript(newScript ScriptCreateRequest) (*Script, error) {
 		return nil, err
 	}
 	//Return struct
-	var wrappedAPIStruct WrappedScript
+	var wrappedAPIStruct TaskStatusResponse
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err
 	}
-	return &wrappedAPIStruct.Data, nil
+	return &wrappedAPIStruct, nil
 }
 
 //UpdateScript Update a Script
-func (c *Client) UpdateScript(ScriptId string, newScript ScriptCreateRequest) (*Script, error) {
+func (c *Client) UpdateScript(ScriptId string, newScript ScriptCreateRequest) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newScript)
 	if err != nil {
@@ -106,12 +100,12 @@ func (c *Client) UpdateScript(ScriptId string, newScript ScriptCreateRequest) (*
 		return nil, err
 	}
 	//Return struct
-	var wrappedAPIStruct WrappedScript
+	var wrappedAPIStruct TaskStatusResponse
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err
 	}
-	return &wrappedAPIStruct.Data, nil
+	return &wrappedAPIStruct, nil
 }
 
 //DeleteScript Delete Script in account by id
