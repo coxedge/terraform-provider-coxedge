@@ -124,12 +124,12 @@ func convertResourceDataToUserCreateAPIObject(d *schema.ResourceData) apiclient.
 
 	//Create update user struct
 	updatedUser := apiclient.UserCreateRequest{
-		UserName:  d.Get("userName").(string),
-		FirstName: d.Get("firstName").(string),
-		LastName:  d.Get("lastName").(string),
+		UserName:  d.Get("user_name").(string),
+		FirstName: d.Get("first_name").(string),
+		LastName:  d.Get("last_name").(string),
 		Email:     d.Get("email").(string),
 		OrganizationId: apiclient.IdOnlyHelper{
-			Id: d.Get("organizationId").(string),
+			Id: d.Get("organization_id").(string),
 		},
 		Roles: roleIds,
 	}
@@ -140,10 +140,10 @@ func convertResourceDataToUserCreateAPIObject(d *schema.ResourceData) apiclient.
 func convertUserAPIObjectToResourceData(d *schema.ResourceData, user *apiclient.User) {
 	//Store the data
 	d.Set("id", user.Id)
-	d.Set("organizationId", user.Organization.Id)
-	d.Set("userName", user.UserName)
-	d.Set("firstName", user.FirstName)
-	d.Set("lastName", user.LastName)
+	d.Set("organization_id", user.Organization.Id)
+	d.Set("user_name", user.UserName)
+	d.Set("first_name", user.FirstName)
+	d.Set("last_name", user.LastName)
 
 	roles := make([]interface{}, len(user.Roles), len(user.Roles))
 	for i, role := range user.Roles {

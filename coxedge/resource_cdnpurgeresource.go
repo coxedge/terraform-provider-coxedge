@@ -11,7 +11,6 @@ func resourceCDNPurgeResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: resourceCDNPurgeResourceCreate,
 		ReadContext:   resourceCDNPurgeResourceRead,
-		UpdateContext: resourceCDNPurgeResourceUpdate,
 		DeleteContext: resourceCDNPurgeResourceDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -49,15 +48,6 @@ func resourceCDNPurgeResourceCreate(ctx context.Context, d *schema.ResourceData,
 func resourceCDNPurgeResourceRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-
-	return diags
-}
-
-func resourceCDNPurgeResourceUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	// Warning or errors can be collected in a slice type
-	var diags diag.Diagnostics
-
-	//NOOP
 
 	return diags
 }

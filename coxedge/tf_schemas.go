@@ -111,15 +111,15 @@ func getEnvironmentSchema() map[string]*schema.Schema {
 
 func getUserSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"userName": {
+		"user_name": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"firstName": {
+		"first_name": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"lastName": {
+		"last_name": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
@@ -127,7 +127,7 @@ func getUserSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"organizationId": {
+		"organization_id": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
@@ -298,7 +298,7 @@ func getImageSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		"stackId": {
+		"stack_id": {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
@@ -314,7 +314,7 @@ func getImageSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"createdAt": {
+		"created_at": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
@@ -469,10 +469,12 @@ func getSiteSchema() map[string]*schema.Schema {
 					"domain": {
 						Type:     schema.TypeString,
 						Computed: true,
+						ForceNew: true,
 					},
 					"validated_at": {
 						Type:     schema.TypeString,
 						Computed: true,
+						ForceNew: true,
 					},
 				},
 			},
@@ -552,7 +554,9 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 		"origin": {
 			Type:     schema.TypeList,
 			MaxItems: 1,
-			Elem:     getOriginSettingOriginSchema(),
+			Elem: &schema.Resource{
+				Schema: getOriginSettingOriginSchema(),
+			},
 			Required: true,
 		},
 		"backup_origin_enabled": {
@@ -563,7 +567,9 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 		"backup_origin": {
 			Type:     schema.TypeList,
 			MaxItems: 1,
-			Elem:     getOriginSettingOriginSchema(),
+			Elem: &schema.Resource{
+				Schema: getOriginSettingOriginSchema(),
+			},
 			Optional: true,
 		},
 		"backup_origin_exclude_codes": {
@@ -589,10 +595,12 @@ func getDeliveryDomainSchema() map[string]*schema.Schema {
 		"environment_name": {
 			Type:     schema.TypeString,
 			Required: true,
+			ForceNew: true,
 		},
 		"domain": {
 			Type:     schema.TypeString,
 			Required: true,
+			ForceNew: true,
 		},
 	}
 }
@@ -758,22 +766,24 @@ func getCDNPurgeResourceSchema() map[string]*schema.Schema {
 						Type:     schema.TypeList,
 						Optional: true,
 						MaxItems: 1,
-						Elem: map[string]*schema.Schema{
-							"selector_name": {
-								Type:     schema.TypeString,
-								Optional: true,
-							},
-							"selector_type": {
-								Type:     schema.TypeString,
-								Optional: true,
-							},
-							"selector_value": {
-								Type:     schema.TypeString,
-								Optional: true,
-							},
-							"selector_value_delimiter": {
-								Type:     schema.TypeString,
-								Optional: true,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"selector_name": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
+								"selector_type": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
+								"selector_value": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
+								"selector_value_delimiter": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
 							},
 						},
 					},
@@ -792,6 +802,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		"id": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Computed: true,
 		},
 		"site_id": {
 			Type:     schema.TypeString,
