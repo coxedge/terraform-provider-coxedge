@@ -59,12 +59,12 @@ func flattenImageData(apiImages *[]apiclient.Image) []interface{} {
 			item := make(map[string]interface{})
 
 			item["id"] = img.Id
-			item["stackId"] = img.StackId
+			item["stack_id"] = img.StackId
 			item["family"] = img.Family
 			item["tag"] = img.Tag
 			item["slug"] = img.Slug
 			item["status"] = img.Status
-			item["createdAt"] = img.CreatedAt
+			item["created_at"] = img.CreatedAt
 			item["description"] = img.Description
 			item["reference"] = img.Reference
 
