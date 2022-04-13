@@ -1,5 +1,5 @@
 release:
   disable: false
   github:
-      owner: dominicholt
+      owner: coxedge
       name: terraform-provider-coxedge
