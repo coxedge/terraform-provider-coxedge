@@ -59,10 +59,8 @@ func resourceUserRead(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
-	convertUserAPIObjectToResourceData(d, user)
-
 	//Update state
-	resourceUserRead(ctx, d, m)
+	convertUserAPIObjectToResourceData(d, user)
 
 	return diags
 }
@@ -115,7 +113,7 @@ func resourceUserDelete(ctx context.Context, d *schema.ResourceData, m interface
 func convertResourceDataToUserCreateAPIObject(d *schema.ResourceData) apiclient.UserCreateRequest {
 	//Get roles
 	var roleIds []apiclient.IdOnlyHelper
-	for _, val := range d.Get("roles").(map[string]interface{}) {
+	for _, val := range d.Get("roles").([]interface{}) {
 		newRoleId := apiclient.IdOnlyHelper{
 			Id: val.(string),
 		}
