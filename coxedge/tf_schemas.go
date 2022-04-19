@@ -221,6 +221,7 @@ func getWorkloadSchema() map[string]*schema.Schema {
 		"add_anycast_ip_address": {
 			Type:     schema.TypeBool,
 			Optional: true,
+			Default:  false,
 		},
 		"anycast_ip_address": {
 			Type:     schema.TypeString,
@@ -253,6 +254,11 @@ func getWorkloadSchema() map[string]*schema.Schema {
 		},
 		"environment_variables": {
 			Type:     schema.TypeMap,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+			Optional: true,
+		},
+		"first_boot_ssh_key": {
+			Type:     schema.TypeString,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 			Optional: true,
 		},
