@@ -65,10 +65,8 @@ func resourceSiteRead(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
-	convertSiteAPIObjectToResourceData(d, site)
-
 	//Update state
-	resourceSiteRead(ctx, d, m)
+	convertSiteAPIObjectToResourceData(d, site)
 
 	return diags
 }
@@ -124,12 +122,14 @@ func convertResourceDataToSiteCreateAPIObject(d *schema.ResourceData) apiclient.
 		EnvironmentName: d.Get("environment_name").(string),
 		Domain:          d.Get("domain").(string),
 		Hostname:        d.Get("hostname").(string),
-		Services:        d.Get("services").([]string),
 		Protocol:        d.Get("protocol").(string),
 		//Optional
 		AuthMethod: d.Get("auth_method").(string),
 		Username:   d.Get("username").(string),
 		Password:   d.Get("password").(string),
+	}
+	for _, svcName := range d.Get("services").([]interface{}) {
+		updatedSite.Services = append(updatedSite.Services, svcName.(string))
 	}
 
 	return updatedSite
