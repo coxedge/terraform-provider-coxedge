@@ -77,10 +77,8 @@ func resourceWorkloadRead(ctx context.Context, d *schema.ResourceData, m interfa
 		return diag.FromErr(err)
 	}
 
-	convertWorkloadAPIObjectToResourceData(d, workload)
-
 	//Update state
-	resourceWorkloadRead(ctx, d, m)
+	convertWorkloadAPIObjectToResourceData(d, workload)
 
 	return diags
 }
@@ -139,6 +137,7 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		Specs:               d.Get("specs").(string),
 		Type:                d.Get("type").(string),
 		AddAnyCastIpAddress: d.Get("add_anycast_ip_address").(bool),
+		FirstBootSSHKey:     d.Get("first_boot_ssh_key").(string),
 		ContainerEmail:      d.Get("container_email").(string),
 		ContainerServer:     d.Get("container_server").(string),
 		ContainerUsername:   d.Get("container_username").(string),
@@ -162,6 +161,16 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 			PublicPortSrc:  convertedEntry["public_port_src"],
 		}
 		updatedWorkload.Ports = append(updatedWorkload.Ports, portSpec)
+	}
+
+	//Convert Persistent Storage
+	for _, entry := range d.Get("persistent_storage").([]interface{}) {
+		convertedEntry := entry.(map[string]interface{})
+		storageSpec := apiclient.WorkloadPersistentStorage{
+			Path: convertedEntry["path"].(string),
+			Size: convertedEntry["size"].(int),
+		}
+		updatedWorkload.PersistentStorage = append(updatedWorkload.PersistentStorage, storageSpec)
 	}
 
 	//Convert env vars
@@ -212,6 +221,7 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 	d.Set("container_email", workload.ContainerEmail)
 	d.Set("container_username", workload.ContainerUsername)
 	d.Set("container_server", workload.ContainerServer)
+	d.Set("first_boot_ssh_key", workload.FirstBootSshKey)
 	//Now the list structures
 	deployments := make([]map[string]interface{}, len(workload.Deployments), len(workload.Deployments))
 	for i, deployment := range workload.Deployments {
@@ -237,6 +247,14 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		ports[i] = item
 	}
 	d.Set("ports", ports)
+
+	persistentStorageMap := make([]map[string]interface{}, len(workload.PersistentStorages), len(workload.PersistentStorages))
+	for i, persistentStorageObj := range workload.PersistentStorages {
+		item := make(map[string]interface{})
+		item["path"] = persistentStorageObj.Path
+		item["size"] = persistentStorageObj.Size
+		persistentStorageMap[i] = item
+	}
 
 	envVars := make(map[string]string, len(workload.EnvironmentVariables))
 	for _, envVarObj := range workload.EnvironmentVariables {
