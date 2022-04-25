@@ -4,3 +4,4 @@ tests/.terraform.lock.hcl
 tests/terraform.tfstate*
 tests/.terraform
 terraform-provider
+tests/**/terraform.tfstate*
