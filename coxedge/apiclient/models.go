@@ -125,7 +125,7 @@ type Workload struct {
 	Memory                      string                        `json:"memory,omitempty"`
 	Name                        string                        `json:"name,omitempty"`
 	Network                     string                        `json:"network,omitempty"`
-	PersistentStorages          WorkloadPersistentStorage     `json:"persistentStorages,omitempty"`
+	PersistentStorages          []WorkloadPersistentStorage   `json:"persistentStorages,omitempty"`
 	Ports                       []WorkloadPort                `json:"ports,omitempty"`
 	SecretEnvironmentVariables  []WorkloadEnvironmentVariable `json:"secretEnvironmentVariables,omitempty"`
 	Slug                        string                        `json:"slug,omitempty"`
@@ -160,7 +160,7 @@ type WorkloadPort struct {
 
 type WorkloadPersistentStorage struct {
 	Path string `json:"path,omitempty"`
-	Size int32  `json:"size,omitempty"`
+	Size int    `json:"size,omitempty"`
 }
 
 type WrappedWorkloads struct {

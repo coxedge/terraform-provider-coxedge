@@ -286,6 +286,22 @@ func getWorkloadSchema() map[string]*schema.Schema {
 				},
 			},
 		},
+		"persistent_storage": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"path": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"size": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+				},
+			},
+		},
 		"secret_environment_variables": {
 			Type:     schema.TypeMap,
 			Elem:     &schema.Schema{Type: schema.TypeString},
