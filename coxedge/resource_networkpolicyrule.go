@@ -59,10 +59,8 @@ func resourceNetworkPolicyRuleRead(ctx context.Context, d *schema.ResourceData, 
 		return diag.FromErr(err)
 	}
 
-	convertNetworkPolicyRuleAPIObjectToResourceData(d, networkPolicyRule)
-
 	//Update state
-	resourceNetworkPolicyRuleRead(ctx, d, m)
+	convertNetworkPolicyRuleAPIObjectToResourceData(d, networkPolicyRule)
 
 	return diags
 }
@@ -78,13 +76,15 @@ func resourceNetworkPolicyRuleUpdate(ctx context.Context, d *schema.ResourceData
 	updatedNetworkPolicyRule := convertResourceDataToNetworkPolicyRuleCreateAPIObject(d)
 
 	//Call the API
-	_, err := coxEdgeClient.UpdateNetworkPolicyRule(resourceId, updatedNetworkPolicyRule)
+	updatedRule, err := coxEdgeClient.UpdateNetworkPolicyRule(resourceId, updatedNetworkPolicyRule)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	//Set last_updated
 	d.Set("last_updated", time.Now().Format(time.RFC850))
+	//Set new id
+	d.SetId(updatedRule.Id)
 
 	return resourceNetworkPolicyRuleRead(ctx, d, m)
 }
