@@ -114,8 +114,9 @@ func convertResourceDataToUserCreateAPIObject(d *schema.ResourceData) apiclient.
 	//Get roles
 	var roleIds []apiclient.IdOnlyHelper
 	for _, val := range d.Get("roles").([]interface{}) {
+		mapVals := val.(map[string]interface{})
 		newRoleId := apiclient.IdOnlyHelper{
-			Id: val.(string),
+			Id: mapVals["id"].(string),
 		}
 		roleIds = append(roleIds, newRoleId)
 	}
