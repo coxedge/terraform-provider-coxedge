@@ -30,6 +30,11 @@ func resourceCDNSettingsCreate(ctx context.Context, d *schema.ResourceData, m in
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
+	//Convert to struct
+	updatedCDNSettings := convertResourceDataToCDNSettingsCreateAPIObject(d)
+	d.SetId(updatedCDNSettings.SiteId)
+	resourceCDNSettingsUpdate(ctx, d, m)
+
 	return diags
 }
 
@@ -90,6 +95,7 @@ func convertResourceDataToCDNSettingsCreateAPIObject(d *schema.ResourceData) api
 	//Create update cdnSettings struct
 	updatedCDNSettings := apiclient.CDNSettings{
 		EnvironmentName:               d.Get("environment_name").(string),
+		SiteId:                        d.Get("site_id").(string),
 		CacheExpirePolicy:             d.Get("cache_expire_policy").(string),
 		CacheTtl:                      d.Get("cache_ttl").(string),
 		QueryStringControl:            d.Get("query_string_control").(string),
@@ -119,6 +125,7 @@ func convertResourceDataToCDNSettingsCreateAPIObject(d *schema.ResourceData) api
 func convertCDNSettingsAPIObjectToResourceData(d *schema.ResourceData, cdnSettings *apiclient.CDNSettings) {
 	//Store the data
 	d.Set("environment_name", cdnSettings.EnvironmentName)
+	d.Set("site_id", cdnSettings.SiteId)
 	d.Set("cache_expire_policy", cdnSettings.CacheExpirePolicy)
 	d.Set("cache_ttl", cdnSettings.CacheTtl)
 	d.Set("query_string_control", cdnSettings.QueryStringControl)
