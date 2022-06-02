@@ -19,7 +19,7 @@ type DeliveryDomainCreateRequest struct {
 //GetDeliveryDomains Get deliveryDomains in account
 func (c *Client) GetDeliveryDomains(environmentName string) ([]DeliveryDomain, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryDomains",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains",
 		nil,
 	)
 	if err != nil {
@@ -43,7 +43,7 @@ func (c *Client) GetDeliveryDomains(environmentName string) ([]DeliveryDomain, e
 func (c *Client) GetDeliveryDomain(environmentName string, id string) (*DeliveryDomain, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryDomains/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains/"+id,
 		nil,
 	)
 	if err != nil {
@@ -76,7 +76,7 @@ func (c *Client) CreateDeliveryDomain(newDeliveryDomain DeliveryDomainCreateRequ
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newDeliveryDomain.EnvironmentName+"/deliveryDomains",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newDeliveryDomain.EnvironmentName+"/deliverydomains",
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -98,7 +98,7 @@ func (c *Client) CreateDeliveryDomain(newDeliveryDomain DeliveryDomainCreateRequ
 func (c *Client) DeleteDeliveryDomain(environmentName string, id string) error {
 	//Create the request
 	request, err := http.NewRequest("DELETE",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryDomains/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains/"+id,
 		nil,
 	)
 	if err != nil {

@@ -37,7 +37,7 @@ func resourceFirewallRuleCreate(ctx context.Context, d *schema.ResourceData, m i
 	newFirewallRule := convertResourceDataToFirewallRuleCreateAPIObject(d)
 
 	//Call the API
-	createdFirewallRule, err := coxEdgeClient.CreateFirewallRule(newFirewallRule)
+	createdFirewallRule, err := coxEdgeClient.CreateFirewallRule(newFirewallRule.EnvironmentName, newFirewallRule)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -65,7 +65,7 @@ func resourceFirewallRuleRead(ctx context.Context, d *schema.ResourceData, m int
 	resourceId := d.Id()
 
 	//Get the resource
-	firewallRule, err := coxEdgeClient.GetFirewallRule(d.Get("site_id").(string), resourceId)
+	firewallRule, err := coxEdgeClient.GetFirewallRule(d.Get("environment_name").(string), d.Get("site_id").(string), resourceId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -89,7 +89,7 @@ func resourceFirewallRuleUpdate(ctx context.Context, d *schema.ResourceData, m i
 	updatedFirewallRule := convertResourceDataToFirewallRuleCreateAPIObject(d)
 
 	//Call the API
-	_, err := coxEdgeClient.UpdateFirewallRule(resourceId, updatedFirewallRule)
+	_, err := coxEdgeClient.UpdateFirewallRule(updatedFirewallRule.EnvironmentName, resourceId, updatedFirewallRule)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -111,7 +111,7 @@ func resourceFirewallRuleDelete(ctx context.Context, d *schema.ResourceData, m i
 	resourceId := d.Id()
 
 	//Delete the FirewallRule
-	err := coxEdgeClient.DeleteFirewallRule(d.Get("site_id").(string), resourceId)
+	err := coxEdgeClient.DeleteFirewallRule(d.Get("environment_name").(string), d.Get("site_id").(string), resourceId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -126,13 +126,14 @@ func resourceFirewallRuleDelete(ctx context.Context, d *schema.ResourceData, m i
 func convertResourceDataToFirewallRuleCreateAPIObject(d *schema.ResourceData) apiclient.FirewallRule {
 	//Create update firewallRule struct
 	updatedFirewallRule := apiclient.FirewallRule{
-		Action:  d.Get("action").(string),
-		Enabled: d.Get("enabled").(bool),
-		Id:      d.Get("id").(string),
-		IpEnd:   d.Get("ip_end").(string),
-		IpStart: d.Get("ip_start").(string),
-		Name:    d.Get("name").(string),
-		SiteId:  d.Get("site_id").(string),
+		Action:          d.Get("action").(string),
+		Enabled:         d.Get("enabled").(bool),
+		Id:              d.Get("id").(string),
+		IpEnd:           d.Get("ip_end").(string),
+		IpStart:         d.Get("ip_start").(string),
+		Name:            d.Get("name").(string),
+		SiteId:          d.Get("site_id").(string),
+		EnvironmentName: d.Get("environment_name").(string),
 	}
 
 	return updatedFirewallRule

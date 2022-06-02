@@ -120,17 +120,22 @@ func resourceOriginSettingsDelete(ctx context.Context, d *schema.ResourceData, m
 func convertResourceDataToOriginSettingsCreateAPIObject(d *schema.ResourceData) apiclient.OriginSettings {
 	//Create update originSettings struct
 	updatedOriginSettings := apiclient.OriginSettings{
-		EnvironmentName:          d.Get("environment_name").(string),
-		Id:                       d.Get("id").(string),
-		StackId:                  d.Get("stack_id").(string),
-		ScopeConfigurationId:     d.Get("scope_configuration_id").(string),
-		Domain:                   d.Get("domain").(string),
-		WebSocketsEnabled:        d.Get("websockets_enabled").(bool),
-		SSLValidationEnabled:     d.Get("ssl_validation_enabled").(bool),
-		PullProtocol:             d.Get("pull_protocol").(string),
-		HostHeader:               d.Get("host_header").(string),
-		BackupOriginEnabled:      d.Get("backup_origin_enabled").(bool),
-		BackupOriginExcludeCodes: d.Get("backup_origin_exclude_codes").([]string),
+		EnvironmentName:      d.Get("environment_name").(string),
+		Id:                   d.Get("id").(string),
+		StackId:              d.Get("stack_id").(string),
+		ScopeConfigurationId: d.Get("scope_configuration_id").(string),
+		Domain:               d.Get("domain").(string),
+		WebSocketsEnabled:    d.Get("websockets_enabled").(bool),
+		SSLValidationEnabled: d.Get("ssl_validation_enabled").(bool),
+		PullProtocol:         d.Get("pull_protocol").(string),
+		HostHeader:           d.Get("host_header").(string),
+		BackupOriginEnabled:  d.Get("backup_origin_enabled").(bool),
+	}
+
+	//Convert Backup Origin Codes
+	updatedOriginSettings.BackupOriginExcludeCodes = []string{}
+	for _, excludeCode := range d.Get("backup_origin_exclude_codes").([]interface{}) {
+		updatedOriginSettings.BackupOriginExcludeCodes = append(updatedOriginSettings.BackupOriginExcludeCodes, excludeCode.(string))
 	}
 
 	//Convert origin
