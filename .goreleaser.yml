@@ -37,7 +37,7 @@ checksum:
     - glob: 'terraform-registry-manifest.json'
       name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
-  algorithm: sha256
+  algorithm: sha1
 signs:
   - artifacts: checksum
     args:
