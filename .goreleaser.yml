@@ -51,7 +51,6 @@ signs:
       - "--detach-sign"
       - "${artifact}"
 release:
-  disable: false
   github:
     owner: coxedge
     name: terraform-provider-coxedge
