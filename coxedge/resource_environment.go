@@ -128,6 +128,31 @@ func convertResourceDataToEnvironmentCreateAPIObject(d *schema.ResourceData) api
 		},
 	}
 
+	//Optional values
+	membershipValue, hasMembershipValue := d.GetOk("membership")
+	if hasMembershipValue {
+		updatedEnvironment.Membership = membershipValue.(string)
+	}
+
+	rolesValue, hasRolesValue := d.GetOk("roles")
+	if hasRolesValue {
+		for _, rawRole := range rolesValue.([]map[string]interface{}) {
+			newRole := apiclient.Role{
+				Name:      rawRole["name"].(string),
+				IsDefault: rawRole["is_default"].(bool),
+			}
+			//Check for user assignments
+			usersValues, hasUsersValues := rawRole["users"]
+			if hasUsersValues {
+				newRole.Users = []apiclient.IdOnlyHelper{}
+				for _, rawUser := range usersValues.([]map[string]interface{}) {
+					idOnlyHelper := apiclient.IdOnlyHelper{Id: rawUser["id"].(string)}
+					newRole.Users = append(newRole.Users, idOnlyHelper)
+				}
+			}
+		}
+	}
+
 	return updatedEnvironment
 }
 
@@ -139,4 +164,23 @@ func convertEnvironmentAPIObjectToResourceData(d *schema.ResourceData, environme
 	d.Set("organization_id", environment.Organization.Id)
 	d.Set("service_connection_id", environment.ServiceConnection.Id)
 	d.Set("creation_date", environment.CreationDate)
+	d.Set("membership", environment.Membership)
+
+	roles := make([]map[string]interface{}, len(environment.Roles), len(environment.Roles))
+	for i, role := range environment.Roles {
+		item := make(map[string]interface{})
+		item["name"] = role.Name
+		item["is_default"] = role.IsDefault
+
+		users := make([]map[string]string, len(role.Users), len(role.Users))
+		for ii, user := range role.Users {
+			userItem := make(map[string]string)
+			userItem["id"] = user.Id
+			users[ii] = userItem
+		}
+		item["users"] = users
+
+		roles[i] = item
+	}
+
 }

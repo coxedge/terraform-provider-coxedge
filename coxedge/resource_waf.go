@@ -30,6 +30,13 @@ func resourceWAFSettingsCreate(ctx context.Context, d *schema.ResourceData, m in
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
+	//Convert resource data to API object
+	updatedWAFSettings := convertResourceDataToWAFSettingsCreateAPIObject(d)
+	d.SetId(updatedWAFSettings.Id)
+
+	//Run Update since you do not "create" these
+	resourceWAFSettingsUpdate(ctx, d, m)
+
 	return diags
 }
 
