@@ -12,8 +12,8 @@ import (
 )
 
 //GetFirewallRules Get FirewallRules in account
-func (c *Client) GetFirewallRules(siteId string) ([]FirewallRule, error) {
-	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/firewallrules?siteId="+siteId, nil)
+func (c *Client) GetFirewallRules(environmentName string, siteId string) ([]FirewallRule, error) {
+	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/"+environmentName+"/firewallrules?siteId="+siteId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -32,9 +32,9 @@ func (c *Client) GetFirewallRules(siteId string) ([]FirewallRule, error) {
 }
 
 //GetFirewallRule Get FirewallRule in account by id
-func (c *Client) GetFirewallRule(siteId string, id string) (*FirewallRule, error) {
+func (c *Client) GetFirewallRule(environmentName string, siteId string, id string) (*FirewallRule, error) {
 	//Create the request
-	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/firewallrules/"+id+"?siteId="+siteId, nil)
+	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/"+environmentName+"/firewallrules/"+id+"?siteId="+siteId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (c *Client) GetFirewallRule(siteId string, id string) (*FirewallRule, error
 }
 
 //CreateFirewallRule Create the FirewallRule
-func (c *Client) CreateFirewallRule(newFirewallRule FirewallRule) (*TaskStatusResponse, error) {
+func (c *Client) CreateFirewallRule(environmentName string, newFirewallRule FirewallRule) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newFirewallRule)
 	if err != nil {
@@ -64,7 +64,7 @@ func (c *Client) CreateFirewallRule(newFirewallRule FirewallRule) (*TaskStatusRe
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
-	request, err := http.NewRequest("POST", CoxEdgeAPIBase+"/firewallrules?siteId="+newFirewallRule.SiteId, bReader)
+	request, err := http.NewRequest("POST", CoxEdgeAPIBase+"/"+environmentName+"/firewallrules?siteId="+newFirewallRule.SiteId, bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)
@@ -81,7 +81,7 @@ func (c *Client) CreateFirewallRule(newFirewallRule FirewallRule) (*TaskStatusRe
 }
 
 //UpdateFirewallRule Update a FirewallRule
-func (c *Client) UpdateFirewallRule(FirewallRuleId string, newFirewallRule FirewallRule) (*TaskStatusResponse, error) {
+func (c *Client) UpdateFirewallRule(environmentName string, firewallRuleId string, newFirewallRule FirewallRule) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newFirewallRule)
 	if err != nil {
@@ -90,7 +90,7 @@ func (c *Client) UpdateFirewallRule(FirewallRuleId string, newFirewallRule Firew
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
-	request, err := http.NewRequest("PUT", CoxEdgeAPIBase+"/firewallrules/"+FirewallRuleId+"?siteId="+newFirewallRule.SiteId, bReader)
+	request, err := http.NewRequest("PUT", CoxEdgeAPIBase+"/"+environmentName+"/firewallrules/"+firewallRuleId+"?siteId="+newFirewallRule.SiteId, bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)
@@ -107,9 +107,9 @@ func (c *Client) UpdateFirewallRule(FirewallRuleId string, newFirewallRule Firew
 }
 
 //DeleteFirewallRule Delete FirewallRule in account by id
-func (c *Client) DeleteFirewallRule(siteId string, id string) error {
+func (c *Client) DeleteFirewallRule(environmentName string, siteId string, id string) error {
 	//Create the request
-	request, err := http.NewRequest("DELETE", CoxEdgeAPIBase+"/firewallrules/"+id+"?siteId="+siteId, nil)
+	request, err := http.NewRequest("DELETE", CoxEdgeAPIBase+"/"+environmentName+"/firewallrules/"+id+"?siteId="+siteId, nil)
 	if err != nil {
 		return err
 	}

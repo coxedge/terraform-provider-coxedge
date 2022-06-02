@@ -136,8 +136,13 @@ func convertResourceDataToScriptCreateAPIObject(d *schema.ResourceData) apiclien
 	updatedScript := apiclient.ScriptCreateRequest{
 		SiteId: d.Get("site_id").(string),
 		Name:   d.Get("name").(string),
-		Routes: d.Get("routes").([]string),
 		Code:   d.Get("code").(string),
+	}
+
+	//Convert Backup Origin Codes
+	updatedScript.Routes = []string{}
+	for _, route := range d.Get("routes").([]interface{}) {
+		updatedScript.Routes = append(updatedScript.Routes, route.(string))
 	}
 
 	return updatedScript

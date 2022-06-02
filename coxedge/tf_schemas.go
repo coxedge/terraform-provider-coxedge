@@ -99,6 +99,10 @@ func getEnvironmentSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
+		"membership": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"organization_id": {
 			Type:     schema.TypeString,
 			Required: true,
@@ -110,6 +114,30 @@ func getEnvironmentSchema() map[string]*schema.Schema {
 		"creation_date": {
 			Type:     schema.TypeString,
 			Computed: true,
+		},
+		"roles": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"name": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"is_default": {
+						Type:     schema.TypeBool,
+						Optional: true,
+						Default:  false,
+					},
+					"users": {
+						Type:     schema.TypeList,
+						Required: true,
+						Elem: &schema.Schema{
+							Type: schema.TypeString,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -636,11 +664,11 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"site_id": {
 			Type:     schema.TypeString,
-			Computed: true,
+			Required: true,
 		},
 		"environment_name": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Required: true,
 		},
 		"cache_expire_policy": {
 			Type:     schema.TypeString,
@@ -1086,6 +1114,10 @@ func getFirewallRuleSchema() map[string]*schema.Schema {
 		"id": {
 			Type:     schema.TypeString,
 			Computed: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
 		},
 		"site_id": {
 			Type:     schema.TypeString,

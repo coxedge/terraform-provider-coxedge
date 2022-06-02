@@ -32,13 +32,10 @@ type ServiceConnection struct {
 }
 
 type Role struct {
-	Id        string `json:"id,omitempty"`
-	Name      string `json:"name,omitempty"`
-	IsDefault bool   `json:"isDefault,omitempty"`
-	Users     []struct {
-		Id   string `json:"id,omitempty"`
-		Name string `json:"name,omitempty"`
-	} `json:"users,omitempty"`
+	Id        string         `json:"id,omitempty"`
+	Name      string         `json:"name,omitempty"`
+	IsDefault bool           `json:"isDefault,omitempty"`
+	Users     []IdOnlyHelper `json:"users,omitempty"`
 }
 
 type Environment struct {
@@ -299,6 +296,7 @@ type WrappedDeliveryDomains struct {
 //CDNSettings
 type CDNSettings struct {
 	EnvironmentName               string   `json:"-"`
+	SiteId                        string   `json:"-"`
 	CacheExpirePolicy             string   `json:"cacheExpirePolicy,omitempty"`
 	CacheTtl                      string   `json:"cacheTtl,omitempty"`
 	QueryStringControl            string   `json:"queryStringControl,omitempty"`
@@ -432,13 +430,14 @@ type WrappedWAFSettingsSet struct {
 
 //Firewall Rule
 type FirewallRule struct {
-	Action  string `json:"action,omitempty"`
-	Enabled bool   `json:"enabled,omitempty"`
-	Id      string `json:"id,omitempty"`
-	IpEnd   string `json:"ipEnd,omitempty"`
-	IpStart string `json:"ipStart,omitempty"`
-	Name    string `json:"name,omitempty"`
-	SiteId  string `json:"siteId,omitempty"`
+	Action          string `json:"action,omitempty"`
+	Enabled         bool   `json:"enabled,omitempty"`
+	Id              string `json:"id,omitempty"`
+	IpEnd           string `json:"ipEnd,omitempty"`
+	IpStart         string `json:"ipStart,omitempty"`
+	Name            string `json:"name,omitempty"`
+	SiteId          string `json:"siteId,omitempty"`
+	EnvironmentName string `json:"-"`
 }
 
 type WrappedFirewallRule struct {

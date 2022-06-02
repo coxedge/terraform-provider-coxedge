@@ -260,6 +260,7 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		item["size"] = persistentStorageObj.Size
 		persistentStorageMap[i] = item
 	}
+	d.Set("persistent_storages", persistentStorageMap)
 
 	envVars := make(map[string]string, len(workload.EnvironmentVariables))
 	for _, envVarObj := range workload.EnvironmentVariables {
