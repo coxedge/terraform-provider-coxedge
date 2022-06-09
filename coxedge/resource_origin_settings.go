@@ -27,23 +27,17 @@ func resourceOriginSettings() *schema.Resource {
 }
 
 func resourceOriginSettingsCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	//Get the API Client
-	coxEdgeClient := m.(apiclient.Client)
-
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
 	//Convert resource data to API Object
-	newOriginSettings := convertResourceDataToOriginSettingsCreateAPIObject(d)
+	//newOriginSettings := convertResourceDataToOriginSettingsCreateAPIObject(d)
 
 	//Call the API
-	createdOriginSettings, err := coxEdgeClient.CreateOriginSettings(newOriginSettings)
-	if err != nil {
-		return diag.FromErr(err)
-	}
+	resourceOriginSettingsUpdate(ctx, d, m)
 
 	//Save the ID
-	d.SetId(createdOriginSettings.Id)
+	d.SetId(d.Get("site_id").(string))
 
 	return diags
 }
@@ -139,30 +133,32 @@ func convertResourceDataToOriginSettingsCreateAPIObject(d *schema.ResourceData) 
 	}
 
 	//Convert origin
-	for _, originSpec := range d.Get("origin").([]map[string]string) {
+	for _, originSpecRaw := range d.Get("origin").([]interface{}) {
+		originSpec := originSpecRaw.(map[string]interface{})
 		origin := apiclient.OriginSettingsOrigin{
-			Id:                    originSpec["id"],
-			Address:               originSpec["address"],
-			AuthMethod:            originSpec["auth_method"],
-			Username:              originSpec["username"],
-			Password:              originSpec["password"],
-			CommonCertificateName: originSpec["common_certificate_name"],
+			Id:                    originSpec["id"].(string),
+			Address:               originSpec["address"].(string),
+			AuthMethod:            originSpec["auth_method"].(string),
+			Username:              originSpec["username"].(string),
+			Password:              originSpec["password"].(string),
+			CommonCertificateName: originSpec["common_certificate_name"].(string),
 		}
 		updatedOriginSettings.Origin = origin
 	}
 
 	if updatedOriginSettings.BackupOriginEnabled {
 		//Convert origin
-		for _, originSpec := range d.Get("backup_origin").([]map[string]string) {
+		for _, originSpecRaw := range d.Get("backup_origin").([]interface{}) {
+			originSpec := originSpecRaw.(map[string]interface{})
 			origin := apiclient.OriginSettingsOrigin{
-				Id:                    originSpec["id"],
-				Address:               originSpec["address"],
-				AuthMethod:            originSpec["auth_method"],
-				Username:              originSpec["username"],
-				Password:              originSpec["password"],
-				CommonCertificateName: originSpec["common_certificate_name"],
+				Id:                    originSpec["id"].(string),
+				Address:               originSpec["address"].(string),
+				AuthMethod:            originSpec["auth_method"].(string),
+				Username:              originSpec["username"].(string),
+				Password:              originSpec["password"].(string),
+				CommonCertificateName: originSpec["common_certificate_name"].(string),
 			}
-			updatedOriginSettings.BackupOrigin = origin
+			updatedOriginSettings.Origin = origin
 		}
 	}
 
