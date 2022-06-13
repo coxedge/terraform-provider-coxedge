@@ -8,6 +8,7 @@ package coxedge
 import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
+	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"time"
@@ -48,7 +49,7 @@ func resourceWAFSettingsRead(ctx context.Context, d *schema.ResourceData, m inte
 	var diags diag.Diagnostics
 
 	//Get the resource ID
-	resourceId := d.Id()
+	resourceId := d.Get("site_id").(string)
 
 	//Get the resource
 	cdnSettings, err := coxEdgeClient.GetWAFSettings(d.Get("environment_name").(string), resourceId)
@@ -58,9 +59,6 @@ func resourceWAFSettingsRead(ctx context.Context, d *schema.ResourceData, m inte
 
 	convertWAFSettingsAPIObjectToResourceData(d, cdnSettings)
 
-	//Update state
-	resourceWAFSettingsRead(ctx, d, m)
-
 	return diags
 }
 
@@ -68,15 +66,14 @@ func resourceWAFSettingsUpdate(ctx context.Context, d *schema.ResourceData, m in
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
-	resourceId := d.Id()
-
 	//Convert resource data to API object
 	updatedWAFSettings := convertResourceDataToWAFSettingsCreateAPIObject(d)
 
 	//Call the API
-	_, err := coxEdgeClient.UpdateWAFSettings(resourceId, updatedWAFSettings)
+	_, err := coxEdgeClient.UpdateWAFSettings(updatedWAFSettings.Id, updatedWAFSettings)
+	fmt.Println("BEH")
 	if err != nil {
+		fmt.Println(err)
 		return diag.FromErr(err)
 	}
 
@@ -97,10 +94,8 @@ func convertResourceDataToWAFSettingsCreateAPIObject(d *schema.ResourceData) api
 	//Create update cdnSettings struct
 	updatedWAFSettings := apiclient.WAFSettings{
 		EnvironmentName:             d.Get("environment_name").(string),
-		Id:                          d.Get("id").(string),
-		StackId:                     d.Get("stack_id").(string),
+		Id:                          d.Get("site_id").(string),
 		Domain:                      d.Get("domain").(string),
-		APIUrls:                     d.Get("api_urls").([]string),
 		MonitoringEnabled:           d.Get("monitoring_enabled").(bool),
 		SpamAndAbuseForm:            d.Get("spam_and_abuse_form").(bool),
 		Csrf:                        d.Get("csrf").(bool),
@@ -114,82 +109,95 @@ func convertResourceDataToWAFSettingsCreateAPIObject(d *schema.ResourceData) api
 		AllowKnownBots:              apiclient.WAFAllowKnownBots{},
 	}
 
-	for _, entry := range d.Get("ddos_settings").([]map[string]int) {
+	updatedWAFSettings.APIUrls = []string{}
+	for _, val := range d.Get("api_urls").([]interface{}) {
+		updatedWAFSettings.APIUrls = append(updatedWAFSettings.APIUrls, val.(string))
+	}
+
+	for _, entryRaw := range d.Get("ddos_settings").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.DdosSettings = apiclient.WAFDdosSettings{
-			GlobalThreshold:         entry["global_threshold"],
-			BurstThreshold:          entry["burst_threshold"],
-			SubSecondBurstThreshold: entry["subsecond_burst_threshold"],
+			GlobalThreshold:         entry["global_threshold"].(int),
+			BurstThreshold:          entry["burst_threshold"].(int),
+			SubSecondBurstThreshold: entry["subsecond_burst_threshold"].(int),
 		}
 	}
 
-	for _, entry := range d.Get("owasp_threats").([]map[string]bool) {
+	for _, entryRaw := range d.Get("owasp_threats").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.OwaspThreats = apiclient.WAFOwaspThreats{
-			SQLInjection:                        entry["sql_injection"],
-			XSSAttack:                           entry["xss_attack"],
-			RemoteFileInclusion:                 entry["remote_file_inclusion"],
-			WordpressWafRuleset:                 entry["wordpress_waf_ruleset"],
-			ApacheStrutsExploit:                 entry["apache_struts_exploit"],
-			LocalFileInclusion:                  entry["local_file_inclusion"],
-			CommonWebApplicationVulnerabilities: entry["common_web_application_vulnerabilities"],
-			WebShellExecutionAttempt:            entry["webshell_execution_attempt"],
-			ResponseHeaderInjection:             entry["response_header_injections"],
-			OpenRedirect:                        entry["open_redirect"],
-			ShellInjection:                      entry["shell_injection"],
+			SQLInjection:                        entry["sql_injection"].(bool),
+			XSSAttack:                           entry["xss_attack"].(bool),
+			RemoteFileInclusion:                 entry["remote_file_inclusion"].(bool),
+			WordpressWafRuleset:                 entry["wordpress_waf_ruleset"].(bool),
+			ApacheStrutsExploit:                 entry["apache_struts_exploit"].(bool),
+			LocalFileInclusion:                  entry["local_file_inclusion"].(bool),
+			CommonWebApplicationVulnerabilities: entry["common_web_application_vulnerabilities"].(bool),
+			WebShellExecutionAttempt:            entry["webshell_execution_attempt"].(bool),
+			ResponseHeaderInjection:             entry["response_header_injections"].(bool),
+			OpenRedirect:                        entry["open_redirect"].(bool),
+			ShellInjection:                      entry["shell_injection"].(bool),
 		}
 	}
 
-	for _, entry := range d.Get("user_agents").([]map[string]bool) {
+	for _, entryRaw := range d.Get("user_agents").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.UserAgents = apiclient.WAFUserAgents{
-			BlockInvalidUserAgents: entry["block_invalid_user_agents"],
-			BlockUnknownUserAgents: entry["block_unknown_user_agents"],
+			BlockInvalidUserAgents: entry["block_invalid_user_agents"].(bool),
+			BlockUnknownUserAgents: entry["block_unknown_user_agents"].(bool),
 		}
 	}
 
-	for _, entry := range d.Get("traffic_sources").([]map[string]bool) {
+	for _, entryRaw := range d.Get("traffic_sources").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.TrafficSources = apiclient.WAFTrafficSources{
-			ViaTorNodes:                      entry["via_tor_nodes"],
-			ViaProxyNetworks:                 entry["via_proxy_networks"],
-			ViaHostingServices:               entry["via_hosting_services"],
-			ViaVpn:                           entry["via_vpn"],
-			ConvictedBotTraffic:              entry["convicted_bot_traffic"],
-			SuspiciousTrafficByLocalIPFormat: entry["suspicious_traffic_by_local_ip_format"],
+			ViaTorNodes:                      entry["via_tor_nodes"].(bool),
+			ViaProxyNetworks:                 entry["via_proxy_networks"].(bool),
+			ViaHostingServices:               entry["via_hosting_services"].(bool),
+			ViaVpn:                           entry["via_vpn"].(bool),
+			ConvictedBotTraffic:              entry["convicted_bot_traffic"].(bool),
+			SuspiciousTrafficByLocalIPFormat: entry["suspicious_traffic_by_local_ip_format"].(bool),
 		}
 	}
 
-	for _, entry := range d.Get("anti_automation_bot_protection").([]map[string]bool) {
+	for _, entryRaw := range d.Get("anti_automation_bot_protection").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.AntiAutomationBotProtection = apiclient.WAFAntiAutomationBotProtection{
-			ForceBrowserValidationOnTrafficAnomalies: entry["force_browser_validation_on_traffic_anomalies"],
-			ChallengeAutomatedClients:                entry["challenge_automated_clients"],
-			ChallengeHeadlessBrowsers:                entry["challenge_headless_browsers"],
-			AntiScraping:                             entry["anti_scraping"],
+			ForceBrowserValidationOnTrafficAnomalies: entry["force_browser_validation_on_traffic_anomalies"].(bool),
+			ChallengeAutomatedClients:                entry["challenge_automated_clients"].(bool),
+			ChallengeHeadlessBrowsers:                entry["challenge_headless_browsers"].(bool),
+			AntiScraping:                             entry["anti_scraping"].(bool),
 		}
 	}
 
-	for _, entry := range d.Get("behavioral_waf").([]map[string]bool) {
+	for _, entryRaw := range d.Get("behavioral_waf").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.BehavioralWaf = apiclient.WAFBehavioralWaf{
-			SpamProtection:                        entry["spam_protection"],
-			BlockProbingAndForcedBrowsing:         entry["block_probing_and_forced_browsing"],
-			ObfuscatedAttacksAndZeroDayMitigation: entry["obfuscated_attacks_and_zeroday_mitigation"],
-			RepeatedViolations:                    entry["repeated_violations"],
-			BruteForceProtection:                  entry["bruteforce_protection"],
+			SpamProtection:                        entry["spam_protection"].(bool),
+			BlockProbingAndForcedBrowsing:         entry["block_probing_and_forced_browsing"].(bool),
+			ObfuscatedAttacksAndZeroDayMitigation: entry["obfuscated_attacks_and_zeroday_mitigation"].(bool),
+			RepeatedViolations:                    entry["repeated_violations"].(bool),
+			BruteForceProtection:                  entry["bruteforce_protection"].(bool),
 		}
 	}
 
-	for _, entry := range d.Get("cms_protection").([]map[string]bool) {
+	for _, entryRaw := range d.Get("cms_protection").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.CmsProtection = apiclient.WAFCmsProtection{
-			WhiteListWordpress: entry["whitelist_wordpress"],
-			WhiteListModx:      entry["whitelist_modx"],
-			WhiteListDrupal:    entry["whitelist_drupal"],
-			WhiteListJoomla:    entry["whitelist_joomla"],
-			WhiteMagento:       entry["whitelist_magento"],
-			WhiteListOriginIP:  entry["whitelist_origin_ip"],
-			WhiteListUmbraco:   entry["whitelist_umbraco"],
+			WhiteListWordpress: entry["whitelist_wordpress"].(bool),
+			WhiteListModx:      entry["whitelist_modx"].(bool),
+			WhiteListDrupal:    entry["whitelist_drupal"].(bool),
+			WhiteListJoomla:    entry["whitelist_joomla"].(bool),
+			WhiteMagento:       entry["whitelist_magneto"].(bool),
+			WhiteListOriginIP:  entry["whitelist_origin_ip"].(bool),
+			WhiteListUmbraco:   entry["whitelist_umbraco"].(bool),
 		}
 	}
 
-	for _, entry := range d.Get("all_known_bots").([]map[string]bool) {
+	for _, entryRaw := range d.Get("allow_known_bots").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
 		updatedWAFSettings.AllowKnownBots = apiclient.WAFAllowKnownBots{
-			InternetArchiveBot: entry["internet_archive_bot"],
+			InternetArchiveBot: entry["internet_archive_bot"].(bool),
 		}
 	}
 
@@ -199,7 +207,7 @@ func convertResourceDataToWAFSettingsCreateAPIObject(d *schema.ResourceData) api
 func convertWAFSettingsAPIObjectToResourceData(d *schema.ResourceData, wafSettings *apiclient.WAFSettings) {
 	//Store the data
 	d.Set("environment_name", wafSettings.EnvironmentName)
-	d.Set("id", wafSettings.Id)
+	d.Set("site_id", wafSettings.Id)
 	d.Set("stack_id", wafSettings.StackId)
 	d.Set("domain", wafSettings.Domain)
 	d.Set("api_urls", wafSettings.APIUrls)

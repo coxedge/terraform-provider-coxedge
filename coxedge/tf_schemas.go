@@ -860,14 +860,11 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"id": {
-			Type:     schema.TypeString,
-			Optional: true,
-			Computed: true,
-		},
 		"site_id": {
 			Type:     schema.TypeString,
-			Computed: true,
+			Computed: false,
+			Required: true,
+			ForceNew: true,
 		},
 		"domain": {
 			Type:     schema.TypeString,
