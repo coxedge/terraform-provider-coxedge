@@ -15,7 +15,7 @@ import (
 func (c *Client) GetWAFSettings(environmentName string, id string) (*WAFSettings, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/wafSettings/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/wafsettings/"+id,
 		nil,
 	)
 	if err != nil {
@@ -47,7 +47,7 @@ func (c *Client) UpdateWAFSettings(wafSettingsId string, newWAFSettings WAFSetti
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
-	request, err := http.NewRequest("PUT",
+	request, err := http.NewRequest("PATCH",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newWAFSettings.EnvironmentName+"/wafsettings/"+wafSettingsId,
 		bReader,
 	)
