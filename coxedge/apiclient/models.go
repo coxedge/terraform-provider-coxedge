@@ -298,7 +298,7 @@ type CDNSettings struct {
 	EnvironmentName               string   `json:"-"`
 	SiteId                        string   `json:"-"`
 	CacheExpirePolicy             string   `json:"cacheExpirePolicy,omitempty"`
-	CacheTtl                      string   `json:"cacheTtl,omitempty"`
+	CacheTtl                      int      `json:"cacheTtl,omitempty"`
 	QueryStringControl            string   `json:"queryStringControl,omitempty"`
 	CustomCachedQueryStrings      []string `json:"customCachedQueryStrings,omitempty"`
 	DynamicCachingByHeaderEnabled bool     `json:"dynamicCachingByHeaderEnabled,omitempty"`
