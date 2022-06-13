@@ -20,7 +20,7 @@ output "envs" {
 
 # Workloads
 resource "coxedge_workload" "test" {
-  name = "demo-container"
+  name = "demo-container-2"
   environment_name = "demo_env"
   type = "CONTAINER"
   image = "ubuntu:latest"
@@ -28,7 +28,7 @@ resource "coxedge_workload" "test" {
   deployment {
     name = "test"
     enable_autoscaling = false
-    pops = ["PVD"]
-    instances_per_pop = 2
+    pops = ["BTR"]
+    instances_per_pop = 3
   }
 }
