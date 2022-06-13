@@ -97,11 +97,9 @@ func convertResourceDataToCDNSettingsCreateAPIObject(d *schema.ResourceData) api
 		EnvironmentName:               d.Get("environment_name").(string),
 		SiteId:                        d.Get("site_id").(string),
 		CacheExpirePolicy:             d.Get("cache_expire_policy").(string),
-		CacheTtl:                      d.Get("cache_ttl").(string),
+		CacheTtl:                      d.Get("cache_ttl").(int),
 		QueryStringControl:            d.Get("query_string_control").(string),
-		CustomCachedQueryStrings:      d.Get("custom_cached_query_strings").([]string),
 		DynamicCachingByHeaderEnabled: d.Get("dynamic_caching_by_header_enabled").(bool),
-		CustomCacheHeaders:            d.Get("custom_cached_headers").([]string),
 		GzipCompressionEnabled:        d.Get("gzip_compression_enabled").(bool),
 		GzipCompressionLevel:          d.Get("gzip_compression_level").(int),
 		ContentPersistenceEnabled:     d.Get("content_persistence_enabled").(bool),
@@ -110,13 +108,27 @@ func convertResourceDataToCDNSettingsCreateAPIObject(d *schema.ResourceData) api
 		BrowserCacheTtl:               d.Get("browser_cache_ttl").(int),
 		CorsHeaderEnabled:             d.Get("cors_header_enabled").(bool),
 		AllowedCorsOrigins:            d.Get("allowed_cors_origins").(string),
-		OriginsToAllowCors:            d.Get("origins_to_allow_cors").([]string),
 		Http2SupportEnabled:           d.Get("http2_support_enabled").(bool),
 		LinkHeader:                    d.Get("link_header").(string),
 		CanonicalHeaderEnabled:        d.Get("canonical_header_enabled").(bool),
 		CanonicalHeader:               d.Get("canonical_header").(string),
 		UrlCachingEnabled:             d.Get("url_caching_enabled").(bool),
 		UrlCachingTtl:                 d.Get("url_caching_ttl").(int),
+	}
+
+	updatedCDNSettings.OriginsToAllowCors = []string{}
+	for _, val := range d.Get("origins_to_allow_cors").([]interface{}) {
+		updatedCDNSettings.OriginsToAllowCors = append(updatedCDNSettings.OriginsToAllowCors, val.(string))
+	}
+
+	updatedCDNSettings.CustomCacheHeaders = []string{}
+	for _, val := range d.Get("custom_cached_headers").([]interface{}) {
+		updatedCDNSettings.CustomCacheHeaders = append(updatedCDNSettings.CustomCacheHeaders, val.(string))
+	}
+
+	updatedCDNSettings.CustomCachedQueryStrings = []string{}
+	for _, val := range d.Get("custom_cached_query_strings").([]interface{}) {
+		updatedCDNSettings.CustomCachedQueryStrings = append(updatedCDNSettings.CustomCachedQueryStrings, val.(string))
 	}
 
 	return updatedCDNSettings

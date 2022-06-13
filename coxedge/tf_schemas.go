@@ -677,14 +677,16 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 		"cache_expire_policy": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"cache_ttl": {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
-		"query_control_string": {
+		"query_string_control": {
 			Type:     schema.TypeString,
 			Optional: true,
+			Default:  "",
 		},
 		"custom_cached_query_strings": {
 			Type: schema.TypeList,
