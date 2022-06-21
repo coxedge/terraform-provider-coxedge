@@ -15,7 +15,7 @@ import (
 func (c *Client) GetCDNSettings(environmentName string, id string) (*CDNSettings, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/cdnSettings/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/cdnsettings/"+id,
 		nil,
 	)
 	if err != nil {
