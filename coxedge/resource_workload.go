@@ -169,7 +169,7 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 	}
 
 	//Convert Persistent Storage
-	for _, entry := range d.Get("persistent_storage").([]interface{}) {
+	for _, entry := range d.Get("persistent_storages").([]interface{}) {
 		convertedEntry := entry.(map[string]interface{})
 		storageSpec := apiclient.WorkloadPersistentStorage{
 			Path: convertedEntry["path"].(string),

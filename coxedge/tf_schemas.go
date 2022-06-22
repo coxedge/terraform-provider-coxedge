@@ -319,7 +319,7 @@ func getWorkloadSchema() map[string]*schema.Schema {
 				},
 			},
 		},
-		"persistent_storage": {
+		"persistent_storages": {
 			Type:     schema.TypeList,
 			Optional: true,
 			Elem: &schema.Resource{
