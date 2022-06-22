@@ -879,7 +879,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"ddos_settings": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"global_threshold": {
@@ -903,7 +903,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"owasp_threats": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"sql_injection": {
@@ -955,7 +955,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"user_agents": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"block_invalid_user_agents": {
@@ -975,7 +975,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"traffic_sources": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"via_tor_nodes": {
@@ -1007,7 +1007,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"anti_automation_bot_protection": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"force_browser_validation_on_traffic_anomalies": {
@@ -1035,7 +1035,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"behavioral_waf": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"spam_protection": {
@@ -1063,7 +1063,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"cms_protection": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"whitelist_wordpress": {
@@ -1099,7 +1099,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"allow_known_bots": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"internet_archive_bot": {
