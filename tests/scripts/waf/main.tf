@@ -28,7 +28,6 @@ resource "coxedge_waf_settings" "testing" {
   owasp_threats {
     sql_injection = "false"
     xss_attack = "true"
-
     remote_file_inclusion = "true"
     wordpress_waf_ruleset = "true"
     apache_struts_exploit = "true"
@@ -61,7 +60,6 @@ resource "coxedge_waf_settings" "testing" {
     spam_protection = "true"
     block_probing_and_forced_browsing = "true"
     obfuscated_attacks_and_zeroday_mitigation = "true"
-
     repeated_violations = "true"
     bruteforce_protection = "true"
   }
@@ -77,4 +75,4 @@ resource "coxedge_waf_settings" "testing" {
   allow_known_bots {
     internet_archive_bot = "true"
   }
-}git
+}
