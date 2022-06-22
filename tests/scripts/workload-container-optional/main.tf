@@ -2,7 +2,7 @@ terraform {
   required_providers {
     coxedge = {
       version = "0.1"
-      source = "coxedge.com/cox/coxedge"
+      source  = "coxedge.com/cox/coxedge"
     }
   }
 }
@@ -20,19 +20,19 @@ output "added_workload" {
 
 # Workloads
 resource "coxedge_workload" "test" {
-  name = "demo-container"
+  name             = "demo-container"
   environment_name = "demo_env"
-  type = "CONTAINER"
-  image = "ubuntu:latest"
-  specs = "SP-2"
-  commands = [
-    "/bin/sh -c \"sleep 50\""
-  ]
-  persistent_storages = ""
+  type             = "CONTAINER"
+  image            = "bitnami/nginx"
+  specs            = "SP-2"
+  persistent_storages {
+    path = "/var/lib/data"
+    size = 1000
+  }
   deployment {
-    name = "test"
+    name               = "test"
     enable_autoscaling = false
-    pops = ["PVD"]
-    instances_per_pop = 2
+    pops               = ["LAS"]
+    instances_per_pop  = 2
   }
 }

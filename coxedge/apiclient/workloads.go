@@ -28,7 +28,7 @@ type WorkloadCreateRequest struct {
 	ContainerUsername             string                        `json:"containerUsername,omitempty"`
 	EnvironmentVariables          []WorkloadEnvironmentVariable `json:"environmentVariables,omitempty"`
 	FirstBootSSHKey               string                        `json:"firstBootSshKey,omitempty"`
-	PersistentStorage             []WorkloadPersistentStorage   `json:"persistentStorage,omitempty"`
+	PersistentStorage             []WorkloadPersistentStorage   `json:"persistentStorages,omitempty"`
 	Ports                         []WorkloadPort                `json:"ports,omitempty"`
 	SecretEnvironmentVariables    []WorkloadEnvironmentVariable `json:"secretEnvironmentVariables,omitempty"`
 	Slug                          string                        `json:"slug,omitempty"`
