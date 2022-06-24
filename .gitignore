@@ -2,6 +2,7 @@
 build/
 tests/.terraform.lock.hcl
 tests/terraform.tfstate*
+tests/terraform.log
 tests/.terraform
 terraform-provider
 tests/**/terraform.tfstate*
