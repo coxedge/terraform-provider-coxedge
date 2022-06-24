@@ -537,6 +537,26 @@ func getSiteSchema() map[string]*schema.Schema {
 	}
 }
 
+func getOriginSettingSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"origin_settings": &schema.Schema{
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getOriginSettingsSchema(),
+			},
+		},
+	}
+}
+
 func getOriginSettingOriginSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"id": {
@@ -571,10 +591,11 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 		"id": {
 			Type:     schema.TypeString,
 			Computed: true,
+			Optional: true,
 		},
 		"site_id": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"stack_id": {
 			Type:     schema.TypeString,
@@ -590,7 +611,7 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 		},
 		"domain": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"websockets_enabled": {
 			Type:     schema.TypeBool,
@@ -604,11 +625,11 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 		},
 		"pull_protocol": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"host_header": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"origin": {
 			Type:     schema.TypeList,
@@ -616,7 +637,7 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: getOriginSettingOriginSchema(),
 			},
-			Required: true,
+			Optional: true,
 		},
 		"backup_origin_enabled": {
 			Type:     schema.TypeBool,

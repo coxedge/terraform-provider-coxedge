@@ -12,34 +12,11 @@ import (
 	"net/http"
 )
 
-//GetOriginSettingss Get originSettingss in account
-func (c *Client) GetOriginSettingss(environmentName string) ([]OriginSettings, error) {
-	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/originSettingss",
-		nil,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	respBytes, err := c.doRequest(request)
-	if err != nil {
-		return nil, err
-	}
-
-	var wrappedAPIStruct WrappedOriginSettingsSet
-	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
-	if err != nil {
-		return nil, err
-	}
-	return wrappedAPIStruct.Data, nil
-}
-
 //GetOriginSettings Get originSettings in account by id
 func (c *Client) GetOriginSettings(environmentName string, id string) (*OriginSettings, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/originSettingss/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/originsettings/"+id,
 		nil,
 	)
 	if err != nil {
@@ -63,7 +40,7 @@ func (c *Client) GetOriginSettings(environmentName string, id string) (*OriginSe
 
 //CreateOriginSettings Create the originSettings
 func (c *Client) CreateOriginSettings(newOriginSettings OriginSettings) (*OriginSettings, error) {
-	return nil, errors.New("cannot create OriginSettings!")
+	return nil, errors.New("cannot create OriginSettings")
 }
 
 //UpdateOriginSettings Update a originSettings
@@ -76,8 +53,8 @@ func (c *Client) UpdateOriginSettings(originSettingsId string, newOriginSettings
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
-	request, err := http.NewRequest("PUT",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newOriginSettings.EnvironmentName+"/originSettingss/"+originSettingsId,
+	request, err := http.NewRequest("PATCH",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newOriginSettings.EnvironmentName+"/originsettings/"+originSettingsId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -97,19 +74,5 @@ func (c *Client) UpdateOriginSettings(originSettingsId string, newOriginSettings
 
 //DeleteOriginSettings Delete originSettings in account by id
 func (c *Client) DeleteOriginSettings(environmentName string, id string) error {
-	//Create the request
-	request, err := http.NewRequest("DELETE",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/originSettingss/"+id,
-		nil,
-	)
-	if err != nil {
-		return err
-	}
-
-	//Execute request
-	_, err = c.doRequest(request)
-	if err != nil {
-		return err
-	}
-	return nil
+	return errors.New("cannot delete OriginSettings")
 }
