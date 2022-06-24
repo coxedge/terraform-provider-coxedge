@@ -25,6 +25,7 @@ func Provider() *schema.Provider {
 			"coxedge_organizations": dataSourceOrganization(),
 			"coxedge_environments":  dataSourceEnvironment(),
 			"coxedge_images":        dataSourceImage(),
+			"coxedge_origin_settings":dataSourceOriginSetting(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"coxedge_cdn_purge":           resourceCDNPurgeResource(),

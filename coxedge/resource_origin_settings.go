@@ -10,6 +10,7 @@ import (
 	"coxedge/terraform-provider/coxedge/apiclient"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strings"
 	"time"
 )
 
@@ -30,9 +31,6 @@ func resourceOriginSettingsCreate(ctx context.Context, d *schema.ResourceData, m
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Convert resource data to API Object
-	//newOriginSettings := convertResourceDataToOriginSettingsCreateAPIObject(d)
-
 	//Call the API
 	resourceOriginSettingsUpdate(ctx, d, m)
 
@@ -49,6 +47,14 @@ func resourceOriginSettingsRead(ctx context.Context, d *schema.ResourceData, m i
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
+	//check the id comes with id & environment_name, then split the value -> in case of importing the resource
+	//format is <site_id>:<environment_name>
+	if strings.Contains(d.Id(), ":") {
+		keys := strings.Split(d.Id(), ":")
+		d.SetId(keys[0])
+		d.Set("environment_name", keys[1])
+	}
+
 	//Get the resource ID
 	resourceId := d.Id()
 
@@ -57,11 +63,7 @@ func resourceOriginSettingsRead(ctx context.Context, d *schema.ResourceData, m i
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
 	convertOriginSettingsAPIObjectToResourceData(d, originSettings)
-
-	//Update state
-	resourceOriginSettingsRead(ctx, d, m)
 
 	return diags
 }
@@ -169,13 +171,20 @@ func convertOriginSettingsAPIObjectToResourceData(d *schema.ResourceData, origin
 	d.Set("id", originSettings.Id)
 	d.Set("stack_id", originSettings.StackId)
 	d.Set("scope_configuration_id", originSettings.ScopeConfigurationId)
-	d.Set("environment_name", originSettings.EnvironmentName)
 	d.Set("domain", originSettings.Domain)
 	d.Set("websockets_enabled", originSettings.WebSocketsEnabled)
 	d.Set("ssl_validation_enabled", originSettings.SSLValidationEnabled)
 	d.Set("pull_protocol", originSettings.PullProtocol)
 	d.Set("host_header", originSettings.HostHeader)
-	d.Set("origin", originSettings.Origin)
+	origin := make([]map[string]string, 1)
+	origin[0] = make(map[string]string)
+	origin[0]["id"] = originSettings.Origin.Id
+	origin[0]["address"] = originSettings.Origin.Address
+	origin[0]["auth_method"] = originSettings.Origin.AuthMethod
+	origin[0]["username"] = originSettings.Origin.Username
+	origin[0]["password"] = originSettings.Origin.Password
+	origin[0]["common_certificate_name"] = originSettings.Origin.CommonCertificateName
+	d.Set("origin", origin)
 	d.Set("backup_origin_enabled", originSettings.BackupOriginEnabled)
 	d.Set("backup_origin_exclude_codes", originSettings.BackupOriginExcludeCodes)
 }
