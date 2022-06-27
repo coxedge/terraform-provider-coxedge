@@ -353,13 +353,11 @@ type WAFSettings struct {
 	Domain                      string                         `json:"domain,omitempty"`
 	APIUrls                     []string                       `json:"apiUrls,omitempty"`
 	DdosSettings                WAFDdosSettings                `json:"ddosSettings,omitempty"`
-	MonitoringEnabled           bool                           `json:"monitoringEnabled,omitempty"`
+	MonitoringModeEnabled       *bool                          `json:"monitoringModeEnabled,omitempty"`
 	OwaspThreats                WAFOwaspThreats                `json:"owaspThreats,omitempty"`
-	UserAgents                  WAFUserAgents                  `json:"userAgents,omitempty"`
-	Csrf                        bool                           `json:"csrf,omitempty"`
+	GeneralPolicies             WAFGeneralPolicies             `json:"generalPolicies,omitempty"`
 	TrafficSources              WAFTrafficSources              `json:"trafficSources,omitempty"`
 	AntiAutomationBotProtection WAFAntiAutomationBotProtection `json:"antiAutomationBotProtection,omitempty"`
-	SpamAndAbuseForm            bool                           `json:"spamAndAbuseForm,omitempty"`
 	BehavioralWaf               WAFBehavioralWaf               `json:"behavioralWaf,omitempty"`
 	CmsProtection               WAFCmsProtection               `json:"cmsProtection,omitempty"`
 	AllowKnownBots              WAFAllowKnownBots              `json:"allowKnownBots,omitempty"`
@@ -370,54 +368,64 @@ type WAFDdosSettings struct {
 	SubSecondBurstThreshold int `json:"subSecondBurstThreshold,omitempty"`
 }
 type WAFOwaspThreats struct {
-	SQLInjection                        bool `json:"sqlInjection,omitempty"`
-	XSSAttack                           bool `json:"xssAttack,omitempty"`
-	RemoteFileInclusion                 bool `json:"remoteFileInclusion,omitempty"`
-	WordpressWafRuleset                 bool `json:"wordpressWafRuleset,omitempty"`
-	ApacheStrutsExploit                 bool `json:"apacheStrutsExploit,omitempty"`
-	LocalFileInclusion                  bool `json:"localFileInclusion,omitempty"`
-	CommonWebApplicationVulnerabilities bool `json:"commonWebApplicationVulnerabilities,omitempty"`
-	WebShellExecutionAttempt            bool `json:"webShellExecutionAttempt,omitempty"`
-	ResponseHeaderInjection             bool `json:"responseHeaderInjection,omitempty"`
-	OpenRedirect                        bool `json:"openRedirect,omitempty"`
-	ShellInjection                      bool `json:"shellInjection,omitempty"`
+	SQLInjection                        *bool `json:"sqlInjection,omitempty"`
+	XSSAttack                           *bool `json:"xssAttack,omitempty"`
+	ShellShockAttack                    *bool `json:"shellShockAttack,omitempty"`
+	RemoteFileInclusion                 *bool `json:"remoteFileInclusion,omitempty"`
+	ApacheStrutsExploit                 *bool `json:"apacheStrutsExploit,omitempty"`
+	LocalFileInclusion                  *bool `json:"localFileInclusion,omitempty"`
+	CommonWebApplicationVulnerabilities *bool `json:"commonWebApplicationVulnerabilities,omitempty"`
+	WebShellExecutionAttempt            *bool `json:"webShellExecutionAttempt,omitempty"`
+	ProtocolAttack                      *bool `json:"protocolAttack,omitempty"`
+	Csrf                                *bool `json:"csrf,omitempty"`
+	OpenRedirect                        *bool `json:"openRedirect,omitempty"`
+	ShellInjection                      *bool `json:"shellInjection,omitempty"`
+	CodeInjection                       *bool `json:"codeInjection,omitempty"`
+	SensitiveDataExposure               *bool `json:"sensitiveDataExposure,omitempty"`
+	XmlExternalEntity                   *bool `json:"xmlExternalEntity,omitempty"`
+	PersonalIdentifiableInfo            *bool `json:"personalIdentifiableInfo,omitempty"`
+	ServerSideTemplateInjection         *bool `json:"serverSideTemplateInjection,omitempty"`
 }
-type WAFUserAgents struct {
-	BlockInvalidUserAgents bool `json:"blockInvalidUserAgents,omitempty"`
-	BlockUnknownUserAgents bool `json:"blockUnknownUserAgents,omitempty"`
+type WAFGeneralPolicies struct {
+	BlockInvalidUserAgents *bool `json:"blockInvalidUserAgents,omitempty"`
+	BlockUnknownUserAgents *bool `json:"blockUnknownUserAgents,omitempty"`
+	HttpMethodValidation   *bool `json:"httpMethodValidation,omitempty"`
 }
 type WAFTrafficSources struct {
-	ViaTorNodes                      bool `json:"viaTorNodes,omitempty"`
-	ViaProxyNetworks                 bool `json:"viaProxyNetworks,omitempty"`
-	ViaHostingServices               bool `json:"viaHostingServices,omitempty"`
-	ViaVpn                           bool `json:"viaVpn,omitempty"`
-	ConvictedBotTraffic              bool `json:"convictedBotTraffic,omitempty"`
-	SuspiciousTrafficByLocalIPFormat bool `json:"suspiciousTrafficByLocalIpFormat,omitempty"`
+	ViaTorNodes                    *bool `json:"viaTorNodes,omitempty"`
+	ViaProxyNetworks               *bool `json:"viaProxyNetworks,omitempty"`
+	ViaHostingServices             *bool `json:"viaHostingServices,omitempty"`
+	ViaVpn                         *bool `json:"viaVpn,omitempty"`
+	ConvictedBotTraffic            *bool `json:"convictedBotTraffic,omitempty"`
+	TrafficFromSuspiciousNatRanges *bool `json:"trafficFromSuspiciousNatRanges,omitempty"`
+	ExternalReputationBlockList    *bool `json:"externalReputationBlockList,omitempty"`
+	TrafficViaCDN                  *bool `json:"trafficViaCDN,omitempty"`
 }
 type WAFAntiAutomationBotProtection struct {
-	ForceBrowserValidationOnTrafficAnomalies bool `json:"forceBrowserValidationOnTrafficAnomalies,omitempty"`
-	ChallengeAutomatedClients                bool `json:"challengeAutomatedClients,omitempty"`
-	ChallengeHeadlessBrowsers                bool `json:"challengeHeadlessBrowsers,omitempty"`
-	AntiScraping                             bool `json:"antiScraping,omitempty"`
+	ForceBrowserValidationOnTrafficAnomalies *bool `json:"forceBrowserValidationOnTrafficAnomalies,omitempty"`
+	ChallengeAutomatedClients                *bool `json:"challengeAutomatedClients,omitempty"`
+	ChallengeHeadlessBrowsers                *bool `json:"challengeHeadlessBrowsers,omitempty"`
+	AntiScraping                             *bool `json:"antiScraping,omitempty"`
 }
 type WAFBehavioralWaf struct {
-	SpamProtection                        bool `json:"spamProtection,omitempty"`
-	BlockProbingAndForcedBrowsing         bool `json:"blockProbingAndForcedBrowsing,omitempty"`
-	ObfuscatedAttacksAndZeroDayMitigation bool `json:"obfuscatedAttacksAndZeroDayMitigation,omitempty"`
-	RepeatedViolations                    bool `json:"repeatedViolations,omitempty"`
-	BruteForceProtection                  bool `json:"bruteForceProtection,omitempty"`
+	SpamProtection                        *bool `json:"spamProtection,omitempty"`
+	BlockProbingAndForcedBrowsing         *bool `json:"blockProbingAndForcedBrowsing,omitempty"`
+	ObfuscatedAttacksAndZeroDayMitigation *bool `json:"obfuscatedAttacksAndZeroDayMitigation,omitempty"`
+	RepeatedViolations                    *bool `json:"repeatedViolations,omitempty"`
+	BruteForceProtection                  *bool `json:"bruteForceProtection,omitempty"`
 }
 type WAFCmsProtection struct {
-	WhiteListWordpress bool `json:"whiteListWordpress,omitempty"`
-	WhiteListModx      bool `json:"whiteListModx,omitempty"`
-	WhiteListDrupal    bool `json:"whiteListDrupal,omitempty"`
-	WhiteListJoomla    bool `json:"whiteListJoomla,omitempty"`
-	WhiteMagento       bool `json:"whiteMagento,omitempty"`
-	WhiteListOriginIP  bool `json:"whiteListOriginIp,omitempty"`
-	WhiteListUmbraco   bool `json:"whiteListUmbraco,omitempty"`
+	WordpressWafRuleset *bool `json:"wordpressWafRuleset,omitempty"`
+	WhiteListWordpress  *bool `json:"whiteListWordpress,omitempty"`
+	WhiteListModx       *bool `json:"whiteListModx,omitempty"`
+	WhiteListDrupal     *bool `json:"whiteListDrupal,omitempty"`
+	WhiteListJoomla     *bool `json:"whiteListJoomla,omitempty"`
+	WhiteMagento        *bool `json:"whiteMagento,omitempty"`
+	WhiteListOriginIP   *bool `json:"whiteListOriginIp,omitempty"`
+	WhiteListUmbraco    *bool `json:"whiteListUmbraco,omitempty"`
 }
 type WAFAllowKnownBots struct {
-	InternetArchiveBot bool `json:"Internet Archive Bot,omitempty"`
+	InternetArchiveBot *bool `json:"Internet Archive Bot,omitempty"`
 }
 
 type WrappedWAFSettings struct {

@@ -883,9 +883,11 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 		},
 		"site_id": {
 			Type:     schema.TypeString,
-			Computed: false,
 			Required: true,
-			ForceNew: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 		"domain": {
 			Type:     schema.TypeString,
@@ -896,7 +898,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
-			Optional: true,
+			Required: true,
 		},
 		"ddos_settings": {
 			Type:     schema.TypeList,
@@ -905,22 +907,22 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 				Schema: map[string]*schema.Schema{
 					"global_threshold": {
 						Type:     schema.TypeInt,
-						Optional: true,
+						Required: true,
 					},
 					"burst_threshold": {
 						Type:     schema.TypeInt,
-						Optional: true,
+						Required: true,
 					},
 					"subsecond_burst_threshold": {
 						Type:     schema.TypeInt,
-						Optional: true,
+						Required: true,
 					},
 				},
 			},
 		},
-		"monitoring_enabled": {
+		"monitoring_mode_enabled": {
 			Type:     schema.TypeBool,
-			Optional: true,
+			Required: true,
 		},
 		"owasp_threats": {
 			Type:     schema.TypeList,
@@ -929,70 +931,98 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 				Schema: map[string]*schema.Schema{
 					"sql_injection": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"xss_attack": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
+					},
+					"shell_shock_attack": {
+						Type:     schema.TypeBool,
+						Required: true,
 					},
 					"remote_file_inclusion": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"wordpress_waf_ruleset": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"apache_struts_exploit": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"local_file_inclusion": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"common_web_application_vulnerabilities": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"webshell_execution_attempt": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
-					"response_header_injections": {
+					"protocol_attack": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
+					},
+					"csrf": {
+						Type:     schema.TypeBool,
+						Required: true,
 					},
 					"open_redirect": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"shell_injection": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
+					},
+					"code_injection": {
+						Type:     schema.TypeBool,
+						Required: true,
+					},
+					"sensitive_data_exposure": {
+						Type:     schema.TypeBool,
+						Required: true,
+					},
+					"xml_external_entity": {
+						Type:     schema.TypeBool,
+						Required: true,
+					},
+					"personal_identifiable_info": {
+						Type:     schema.TypeBool,
+						Required: true,
+					},
+					"serverside_template_injection": {
+						Type:     schema.TypeBool,
+						Required: true,
 					},
 				},
 			},
 		},
-		"user_agents": {
+		"general_policies": {
 			Type:     schema.TypeList,
 			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"block_invalid_user_agents": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"block_unknown_user_agents": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
+					},
+					"http_method_validation": {
+						Type:     schema.TypeBool,
+						Required: true,
 					},
 				},
 			},
-		},
-		"csrf": {
-			Type:     schema.TypeBool,
-			Optional: true,
 		},
 		"traffic_sources": {
 			Type:     schema.TypeList,
@@ -1001,27 +1031,35 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 				Schema: map[string]*schema.Schema{
 					"via_tor_nodes": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"via_proxy_networks": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"via_hosting_services": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"via_vpn": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"convicted_bot_traffic": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
-					"suspicious_traffic_by_local_ip_format": {
+					"traffic_from_suspicious_nat_ranges": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
+					},
+					"external_reputation_block_list": {
+						Type:     schema.TypeBool,
+						Required: true,
+					},
+					"traffic_via_cdn": {
+						Type:     schema.TypeBool,
+						Required: true,
 					},
 				},
 			},
@@ -1033,26 +1071,22 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 				Schema: map[string]*schema.Schema{
 					"force_browser_validation_on_traffic_anomalies": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"challenge_automated_clients": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"challenge_headless_browsers": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"anti_scraping": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 				},
 			},
-		},
-		"spam_and_abuse_form": {
-			Type:     schema.TypeBool,
-			Optional: true,
 		},
 		"behavioral_waf": {
 			Type:     schema.TypeList,
@@ -1061,23 +1095,23 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 				Schema: map[string]*schema.Schema{
 					"spam_protection": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"block_probing_and_forced_browsing": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"obfuscated_attacks_and_zeroday_mitigation": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"repeated_violations": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"bruteforce_protection": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 				},
 			},
@@ -1087,33 +1121,37 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
+					"wordpress_waf_ruleset": {
+						Type:     schema.TypeBool,
+						Required: true,
+					},
 					"whitelist_wordpress": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"whitelist_modx": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"whitelist_drupal": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"whitelist_joomla": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
-					"whitelist_magneto": {
+					"whitelist_magento": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"whitelist_origin_ip": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 					"whitelist_umbraco": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 				},
 			},
@@ -1125,7 +1163,7 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 				Schema: map[string]*schema.Schema{
 					"internet_archive_bot": {
 						Type:     schema.TypeBool,
-						Optional: true,
+						Required: true,
 					},
 				},
 			},
