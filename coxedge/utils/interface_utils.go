@@ -17,3 +17,7 @@ func ConvertListInterfaceToStringArray(orig interface{}) []string {
 func BoolAddr(x bool) *bool {
 	return &x
 }
+
+func StringAddr(x string) *string {
+	return &x
+}

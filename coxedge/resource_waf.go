@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 	"strings"
 )
 
@@ -96,121 +97,6 @@ func resourceWAFSettingsDelete(ctx context.Context, d *schema.ResourceData, m in
 	return diag.Errorf("Cannot delete WAF")
 }
 
-func convertResourceDataToWAFSettingsCreateAPIObject(ctx context.Context, d *schema.ResourceData) apiclient.WAFSettings {
-	//Create update cdnSettings struct
-	updatedWAFSettings := apiclient.WAFSettings{
-		EnvironmentName:       d.Get("environment_name").(string),
-		Id:                    d.Get("site_id").(string),
-		StackId:               d.Get("stack_id").(string),
-		Domain:                d.Get("domain").(string),
-		MonitoringModeEnabled: utils.BoolAddr(d.Get("monitoring_mode_enabled").(bool)),
-	}
-
-	updatedWAFSettings.APIUrls = []string{}
-	for _, val := range d.Get("api_urls").([]interface{}) {
-		updatedWAFSettings.APIUrls = append(updatedWAFSettings.APIUrls, val.(string))
-	}
-
-	for _, entryRaw := range d.Get("ddos_settings").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.DdosSettings = apiclient.WAFDdosSettings{
-			GlobalThreshold:         entry["global_threshold"].(int),
-			BurstThreshold:          entry["burst_threshold"].(int),
-			SubSecondBurstThreshold: entry["subsecond_burst_threshold"].(int),
-		}
-	}
-
-	for _, entryRaw := range d.Get("owasp_threats").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.OwaspThreats = apiclient.WAFOwaspThreats{
-			SQLInjection:                        utils.BoolAddr(entry["sql_injection"].(bool)),
-			XSSAttack:                           utils.BoolAddr(entry["xss_attack"].(bool)),
-			ShellShockAttack:                    utils.BoolAddr(entry["shell_shock_attack"].(bool)),
-			RemoteFileInclusion:                 utils.BoolAddr(entry["remote_file_inclusion"].(bool)),
-			ApacheStrutsExploit:                 utils.BoolAddr(entry["apache_struts_exploit"].(bool)),
-			LocalFileInclusion:                  utils.BoolAddr(entry["local_file_inclusion"].(bool)),
-			CommonWebApplicationVulnerabilities: utils.BoolAddr(entry["common_web_application_vulnerabilities"].(bool)),
-			WebShellExecutionAttempt:            utils.BoolAddr(entry["webshell_execution_attempt"].(bool)),
-			ProtocolAttack:                      utils.BoolAddr(entry["protocol_attack"].(bool)),
-			Csrf:                                utils.BoolAddr(entry["csrf"].(bool)),
-			OpenRedirect:                        utils.BoolAddr(entry["open_redirect"].(bool)),
-			ShellInjection:                      utils.BoolAddr(entry["shell_injection"].(bool)),
-			CodeInjection:                       utils.BoolAddr(entry["code_injection"].(bool)),
-			SensitiveDataExposure:               utils.BoolAddr(entry["sensitive_data_exposure"].(bool)),
-			XmlExternalEntity:                   utils.BoolAddr(entry["xml_external_entity"].(bool)),
-			PersonalIdentifiableInfo:            utils.BoolAddr(entry["personal_identifiable_info"].(bool)),
-			ServerSideTemplateInjection:         utils.BoolAddr(entry["serverside_template_injection"].(bool)),
-		}
-	}
-
-	for _, entryRaw := range d.Get("general_policies").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.GeneralPolicies = apiclient.WAFGeneralPolicies{
-			BlockInvalidUserAgents: utils.BoolAddr(entry["block_invalid_user_agents"].(bool)),
-			BlockUnknownUserAgents: utils.BoolAddr(entry["block_unknown_user_agents"].(bool)),
-			HttpMethodValidation:   utils.BoolAddr(entry["http_method_validation"].(bool)),
-		}
-	}
-
-	for _, entryRaw := range d.Get("traffic_sources").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.TrafficSources = apiclient.WAFTrafficSources{
-			ViaTorNodes:                    utils.BoolAddr(entry["via_tor_nodes"].(bool)),
-			ViaProxyNetworks:               utils.BoolAddr(entry["via_proxy_networks"].(bool)),
-			ViaHostingServices:             utils.BoolAddr(entry["via_hosting_services"].(bool)),
-			ViaVpn:                         utils.BoolAddr(entry["via_vpn"].(bool)),
-			ConvictedBotTraffic:            utils.BoolAddr(entry["convicted_bot_traffic"].(bool)),
-			TrafficFromSuspiciousNatRanges: utils.BoolAddr(entry["traffic_from_suspicious_nat_ranges"].(bool)),
-			ExternalReputationBlockList:    utils.BoolAddr(entry["external_reputation_block_list"].(bool)),
-			TrafficViaCDN:                  utils.BoolAddr(entry["traffic_via_cdn"].(bool)),
-		}
-	}
-
-	for _, entryRaw := range d.Get("anti_automation_bot_protection").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.AntiAutomationBotProtection = apiclient.WAFAntiAutomationBotProtection{
-			ForceBrowserValidationOnTrafficAnomalies: utils.BoolAddr(entry["force_browser_validation_on_traffic_anomalies"].(bool)),
-			ChallengeAutomatedClients:                utils.BoolAddr(entry["challenge_automated_clients"].(bool)),
-			ChallengeHeadlessBrowsers:                utils.BoolAddr(entry["challenge_headless_browsers"].(bool)),
-			AntiScraping:                             utils.BoolAddr(entry["anti_scraping"].(bool)),
-		}
-	}
-
-	for _, entryRaw := range d.Get("behavioral_waf").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.BehavioralWaf = apiclient.WAFBehavioralWaf{
-			SpamProtection:                        utils.BoolAddr(entry["spam_protection"].(bool)),
-			BlockProbingAndForcedBrowsing:         utils.BoolAddr(entry["block_probing_and_forced_browsing"].(bool)),
-			ObfuscatedAttacksAndZeroDayMitigation: utils.BoolAddr(entry["obfuscated_attacks_and_zeroday_mitigation"].(bool)),
-			RepeatedViolations:                    utils.BoolAddr(entry["repeated_violations"].(bool)),
-			BruteForceProtection:                  utils.BoolAddr(entry["bruteforce_protection"].(bool)),
-		}
-	}
-
-	for _, entryRaw := range d.Get("cms_protection").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.CmsProtection = apiclient.WAFCmsProtection{
-			WordpressWafRuleset: utils.BoolAddr(entry["wordpress_waf_ruleset"].(bool)),
-			WhiteListWordpress:  utils.BoolAddr(entry["whitelist_wordpress"].(bool)),
-			WhiteListModx:       utils.BoolAddr(entry["whitelist_modx"].(bool)),
-			WhiteListDrupal:     utils.BoolAddr(entry["whitelist_drupal"].(bool)),
-			WhiteListJoomla:     utils.BoolAddr(entry["whitelist_joomla"].(bool)),
-			WhiteMagento:        utils.BoolAddr(entry["whitelist_magento"].(bool)),
-			WhiteListOriginIP:   utils.BoolAddr(entry["whitelist_origin_ip"].(bool)),
-			WhiteListUmbraco:    utils.BoolAddr(entry["whitelist_umbraco"].(bool)),
-		}
-	}
-
-	for _, entryRaw := range d.Get("allow_known_bots").([]interface{}) {
-		entry := entryRaw.(map[string]interface{})
-		updatedWAFSettings.AllowKnownBots = apiclient.WAFAllowKnownBots{
-			InternetArchiveBot: utils.BoolAddr(entry["internet_archive_bot"].(bool)),
-		}
-	}
-
-	return updatedWAFSettings
-}
-
 func convertWAFSettingsAPIObjectToResourceData(d *schema.ResourceData, wafSettings *apiclient.WAFSettings) {
 	//Store the data
 	d.Set("site_id", wafSettings.Id)
@@ -226,9 +112,9 @@ func convertWAFSettingsAPIObjectToResourceData(d *schema.ResourceData, wafSettin
 	ddosSettings[0]["subsecond_burst_threshold"] = wafSettings.DdosSettings.SubSecondBurstThreshold
 	d.Set("ddos_settings", ddosSettings)
 
-	owaspThreats := make([]map[string]bool, 1)
-	owaspThreats[0] = make(map[string]bool)
-	owaspThreats[0]["sql_injection"] = *wafSettings.OwaspThreats.SQLInjection
+	owaspThreats := make([]map[string]interface{}, 1)
+	owaspThreats[0] = make(map[string]interface{})
+	owaspThreats[0]["sql_injection"] = wafSettings.OwaspThreats.SQLInjection
 	owaspThreats[0]["xss_attack"] = *wafSettings.OwaspThreats.XSSAttack
 	owaspThreats[0]["shell_shock_attack"] = *wafSettings.OwaspThreats.ShellShockAttack
 	owaspThreats[0]["remote_file_inclusion"] = *wafSettings.OwaspThreats.RemoteFileInclusion
@@ -299,4 +185,418 @@ func convertWAFSettingsAPIObjectToResourceData(d *schema.ResourceData, wafSettin
 	allowKnownBots[0] = make(map[string]bool)
 	allowKnownBots[0]["internet_archive_bot"] = *wafSettings.AllowKnownBots.InternetArchiveBot
 	d.Set("allow_known_bots", allowKnownBots)
+}
+
+func convertResourceDataToWAFSettingsCreateAPIObject(ctx context.Context, d *schema.ResourceData) apiclient.WAFSettings {
+	//Create update cdnSettings struct
+	updatedWAFSettings := apiclient.WAFSettings{
+		EnvironmentName: d.Get("environment_name").(string),
+		Id:              d.Get("site_id").(string),
+		StackId:         d.Get("stack_id").(string),
+		Domain:          d.Get("domain").(string),
+	}
+
+	monitoringModeEnabled := d.Get("monitoring_mode_enabled").(string)
+	if monitoringModeEnabled != "" {
+		boolValue, _ := strconv.ParseBool(monitoringModeEnabled)
+		updatedWAFSettings.MonitoringModeEnabled = utils.BoolAddr(boolValue)
+	}
+
+	updatedWAFSettings.APIUrls = []string{}
+	for _, val := range d.Get("api_urls").([]interface{}) {
+		updatedWAFSettings.APIUrls = append(updatedWAFSettings.APIUrls, val.(string))
+	}
+
+	for _, entryRaw := range d.Get("ddos_settings").([]interface{}) {
+		entry := entryRaw.(map[string]interface{})
+		updatedWAFSettings.DdosSettings = apiclient.WAFDdosSettings{
+			GlobalThreshold:         entry["global_threshold"].(int),
+			BurstThreshold:          entry["burst_threshold"].(int),
+			SubSecondBurstThreshold: entry["subsecond_burst_threshold"].(int),
+		}
+	}
+
+	for _, entryRaw := range d.Get("owasp_threats").([]interface{}) {
+		updatedWAFSettings.OwaspThreats = mapOswapThreats(entryRaw.(map[string]interface{}))
+	}
+
+	for _, entryRaw := range d.Get("general_policies").([]interface{}) {
+		updatedWAFSettings.GeneralPolicies = mapGeneralPolicies(entryRaw.(map[string]interface{}))
+	}
+
+	for _, entryRaw := range d.Get("traffic_sources").([]interface{}) {
+		updatedWAFSettings.TrafficSources = mapTrafficSources(entryRaw.(map[string]interface{}))
+	}
+
+	for _, entryRaw := range d.Get("anti_automation_bot_protection").([]interface{}) {
+		updatedWAFSettings.AntiAutomationBotProtection = mapAntiAutomationBotProtection(entryRaw.(map[string]interface{}))
+	}
+
+	for _, entryRaw := range d.Get("behavioral_waf").([]interface{}) {
+		updatedWAFSettings.BehavioralWaf = mapBehavioralWAF(entryRaw.(map[string]interface{}))
+	}
+
+	for _, entryRaw := range d.Get("cms_protection").([]interface{}) {
+		updatedWAFSettings.CmsProtection = mapCmsProtection(entryRaw.(map[string]interface{}))
+	}
+
+	for _, entryRaw := range d.Get("allow_known_bots").([]interface{}) {
+		updatedWAFSettings.AllowKnownBots = mapAllowKnownBots(entryRaw.(map[string]interface{}))
+	}
+
+	return updatedWAFSettings
+}
+
+func mapCmsProtection(entry map[string]interface{}) apiclient.WAFCmsProtection {
+	cmsProtection := apiclient.WAFCmsProtection{}
+	for key, value := range entry {
+		if value != "" {
+			switch key {
+			case "wordpress_waf_ruleset":
+				{
+					boolValue, _ := strconv.ParseBool(entry["wordpress_waf_ruleset"].(string))
+					cmsProtection.WordpressWafRuleset = utils.BoolAddr(boolValue)
+				}
+				break
+			case "whitelist_wordpress":
+				{
+					boolValue, _ := strconv.ParseBool(entry["whitelist_wordpress"].(string))
+					cmsProtection.WhiteListWordpress = utils.BoolAddr(boolValue)
+				}
+				break
+			case "whitelist_modx":
+				{
+					boolValue, _ := strconv.ParseBool(entry["whitelist_modx"].(string))
+					cmsProtection.WhiteListModx = utils.BoolAddr(boolValue)
+				}
+				break
+			case "whitelist_drupal":
+				{
+					boolValue, _ := strconv.ParseBool(entry["whitelist_drupal"].(string))
+					cmsProtection.WhiteListDrupal = utils.BoolAddr(boolValue)
+				}
+				break
+			case "whitelist_joomla":
+				{
+					boolValue, _ := strconv.ParseBool(entry["whitelist_joomla"].(string))
+					cmsProtection.WhiteListJoomla = utils.BoolAddr(boolValue)
+				}
+				break
+			case "whitelist_magento":
+				{
+					boolValue, _ := strconv.ParseBool(entry["whitelist_magento"].(string))
+					cmsProtection.WhiteMagento = utils.BoolAddr(boolValue)
+				}
+				break
+			case "whitelist_origin_ip":
+				{
+					boolValue, _ := strconv.ParseBool(entry["whitelist_origin_ip"].(string))
+					cmsProtection.WhiteListOriginIP = utils.BoolAddr(boolValue)
+				}
+				break
+			case "whitelist_umbraco":
+				{
+					boolValue, _ := strconv.ParseBool(entry["whitelist_umbraco"].(string))
+					cmsProtection.WhiteListUmbraco = utils.BoolAddr(boolValue)
+				}
+				break
+			}
+		}
+	}
+	return cmsProtection
+}
+
+func mapBehavioralWAF(entry map[string]interface{}) apiclient.WAFBehavioralWaf {
+	behavioralWaf := apiclient.WAFBehavioralWaf{}
+	for key, value := range entry {
+		if value != "" {
+			switch key {
+			case "spam_protection":
+				{
+					boolValue, _ := strconv.ParseBool(entry["spam_protection"].(string))
+					behavioralWaf.SpamProtection = utils.BoolAddr(boolValue)
+				}
+				break
+			case "block_probing_and_forced_browsing":
+				{
+					boolValue, _ := strconv.ParseBool(entry["block_probing_and_forced_browsing"].(string))
+					behavioralWaf.BlockProbingAndForcedBrowsing = utils.BoolAddr(boolValue)
+				}
+				break
+			case "obfuscated_attacks_and_zeroday_mitigation":
+				{
+					boolValue, _ := strconv.ParseBool(entry["obfuscated_attacks_and_zeroday_mitigation"].(string))
+					behavioralWaf.ObfuscatedAttacksAndZeroDayMitigation = utils.BoolAddr(boolValue)
+				}
+				break
+			case "repeated_violations":
+				{
+					boolValue, _ := strconv.ParseBool(entry["repeated_violations"].(string))
+					behavioralWaf.RepeatedViolations = utils.BoolAddr(boolValue)
+				}
+				break
+			case "bruteforce_protection":
+				{
+					boolValue, _ := strconv.ParseBool(entry["bruteforce_protection"].(string))
+					behavioralWaf.BruteForceProtection = utils.BoolAddr(boolValue)
+				}
+				break
+			}
+		}
+	}
+	return behavioralWaf
+}
+
+func mapAntiAutomationBotProtection(entry map[string]interface{}) apiclient.WAFAntiAutomationBotProtection {
+	antiAutomationBotProtection := apiclient.WAFAntiAutomationBotProtection{}
+	for key, value := range entry {
+		if value != "" {
+			switch key {
+			case "force_browser_validation_on_traffic_anomalies":
+				{
+					boolValue, _ := strconv.ParseBool(entry["force_browser_validation_on_traffic_anomalies"].(string))
+					antiAutomationBotProtection.ForceBrowserValidationOnTrafficAnomalies = utils.BoolAddr(boolValue)
+				}
+				break
+			case "challenge_automated_clients":
+				{
+					boolValue, _ := strconv.ParseBool(entry["challenge_automated_clients"].(string))
+					antiAutomationBotProtection.ChallengeAutomatedClients = utils.BoolAddr(boolValue)
+				}
+				break
+			case "challenge_headless_browsers":
+				{
+					boolValue, _ := strconv.ParseBool(entry["challenge_headless_browsers"].(string))
+					antiAutomationBotProtection.ChallengeHeadlessBrowsers = utils.BoolAddr(boolValue)
+				}
+				break
+			case "anti_scraping":
+				{
+					boolValue, _ := strconv.ParseBool(entry["anti_scraping"].(string))
+					antiAutomationBotProtection.AntiScraping = utils.BoolAddr(boolValue)
+				}
+				break
+			}
+		}
+	}
+	return antiAutomationBotProtection
+}
+
+func mapTrafficSources(entry map[string]interface{}) apiclient.WAFTrafficSources {
+	trafficSources := apiclient.WAFTrafficSources{}
+	for key, value := range entry {
+		if value != "" {
+			switch key {
+			case "via_tor_nodes":
+				{
+					boolValue, _ := strconv.ParseBool(entry["via_tor_nodes"].(string))
+					trafficSources.ViaTorNodes = utils.BoolAddr(boolValue)
+				}
+				break
+			case "via_proxy_networks":
+				{
+					boolValue, _ := strconv.ParseBool(entry["via_proxy_networks"].(string))
+					trafficSources.ViaProxyNetworks = utils.BoolAddr(boolValue)
+				}
+				break
+			case "via_hosting_services":
+				{
+					boolValue, _ := strconv.ParseBool(entry["via_hosting_services"].(string))
+					trafficSources.ViaHostingServices = utils.BoolAddr(boolValue)
+				}
+				break
+			case "via_vpn":
+				{
+					boolValue, _ := strconv.ParseBool(entry["via_vpn"].(string))
+					trafficSources.ViaVpn = utils.BoolAddr(boolValue)
+				}
+				break
+			case "convicted_bot_traffic":
+				{
+					boolValue, _ := strconv.ParseBool(entry["convicted_bot_traffic"].(string))
+					trafficSources.ConvictedBotTraffic = utils.BoolAddr(boolValue)
+				}
+				break
+			case "traffic_from_suspicious_nat_ranges":
+				{
+					boolValue, _ := strconv.ParseBool(entry["traffic_from_suspicious_nat_ranges"].(string))
+					trafficSources.TrafficFromSuspiciousNatRanges = utils.BoolAddr(boolValue)
+				}
+				break
+			case "external_reputation_block_list":
+				{
+					boolValue, _ := strconv.ParseBool(entry["external_reputation_block_list"].(string))
+					trafficSources.ExternalReputationBlockList = utils.BoolAddr(boolValue)
+				}
+				break
+			case "traffic_via_cdn":
+				{
+					boolValue, _ := strconv.ParseBool(entry["traffic_via_cdn"].(string))
+					trafficSources.TrafficViaCDN = utils.BoolAddr(boolValue)
+				}
+				break
+			}
+		}
+	}
+	return trafficSources
+}
+
+func mapOswapThreats(entry map[string]interface{}) apiclient.WAFOwaspThreats {
+	oswapThreats := apiclient.WAFOwaspThreats{}
+	for key, value := range entry {
+		if value != "" {
+			switch key {
+			case "sql_injection":
+				{
+					boolValue, _ := strconv.ParseBool(entry["sql_injection"].(string))
+					oswapThreats.SQLInjection = utils.BoolAddr(boolValue)
+				}
+				break
+			case "xss_attack":
+				{
+					boolValue, _ := strconv.ParseBool(entry["xss_attack"].(string))
+					oswapThreats.XmlExternalEntity = utils.BoolAddr(boolValue)
+				}
+				break
+			case "shell_shock_attack":
+				{
+					boolValue, _ := strconv.ParseBool(entry["shell_shock_attack"].(string))
+					oswapThreats.ShellShockAttack = utils.BoolAddr(boolValue)
+				}
+				break
+			case "remote_file_inclusion":
+				{
+					boolValue, _ := strconv.ParseBool(entry["remote_file_inclusion"].(string))
+					oswapThreats.RemoteFileInclusion = utils.BoolAddr(boolValue)
+				}
+				break
+			case "apache_struts_exploit":
+				{
+					boolValue, _ := strconv.ParseBool(entry["apache_struts_exploit"].(string))
+					oswapThreats.ApacheStrutsExploit = utils.BoolAddr(boolValue)
+				}
+				break
+			case "local_file_inclusion":
+				{
+					boolValue, _ := strconv.ParseBool(entry["local_file_inclusion"].(string))
+					oswapThreats.LocalFileInclusion = utils.BoolAddr(boolValue)
+				}
+				break
+			case "common_web_application_vulnerabilities":
+				{
+					boolValue, _ := strconv.ParseBool(entry["common_web_application_vulnerabilities"].(string))
+					oswapThreats.CommonWebApplicationVulnerabilities = utils.BoolAddr(boolValue)
+				}
+				break
+			case "webshell_execution_attempt":
+				{
+					boolValue, _ := strconv.ParseBool(entry["webshell_execution_attempt"].(string))
+					oswapThreats.WebShellExecutionAttempt = utils.BoolAddr(boolValue)
+				}
+				break
+			case "protocol_attack":
+				{
+					boolValue, _ := strconv.ParseBool(entry["protocol_attack"].(string))
+					oswapThreats.ProtocolAttack = utils.BoolAddr(boolValue)
+				}
+				break
+			case "csrf":
+				{
+					boolValue, _ := strconv.ParseBool(entry["csrf"].(string))
+					oswapThreats.ProtocolAttack = utils.BoolAddr(boolValue)
+				}
+				break
+			case "open_redirect":
+				{
+					boolValue, _ := strconv.ParseBool(entry["open_redirect"].(string))
+					oswapThreats.OpenRedirect = utils.BoolAddr(boolValue)
+				}
+				break
+			case "shell_injection":
+				{
+					boolValue, _ := strconv.ParseBool(entry["shell_injection"].(string))
+					oswapThreats.ShellInjection = utils.BoolAddr(boolValue)
+				}
+				break
+			case "code_injection":
+				{
+					boolValue, _ := strconv.ParseBool(entry["code_injection"].(string))
+					oswapThreats.CodeInjection = utils.BoolAddr(boolValue)
+				}
+				break
+			case "sensitive_data_exposure":
+				{
+					boolValue, _ := strconv.ParseBool(entry["sensitive_data_exposure"].(string))
+					oswapThreats.SensitiveDataExposure = utils.BoolAddr(boolValue)
+				}
+				break
+			case "xml_external_entity":
+				{
+					boolValue, _ := strconv.ParseBool(entry["xml_external_entity"].(string))
+					oswapThreats.XmlExternalEntity = utils.BoolAddr(boolValue)
+				}
+				break
+			case "personal_identifiable_info":
+				{
+					boolValue, _ := strconv.ParseBool(entry["personal_identifiable_info"].(string))
+					oswapThreats.PersonalIdentifiableInfo = utils.BoolAddr(boolValue)
+				}
+				break
+			case "serverside_template_injection":
+				{
+					boolValue, _ := strconv.ParseBool(entry["serverside_template_injection"].(string))
+					oswapThreats.ServerSideTemplateInjection = utils.BoolAddr(boolValue)
+				}
+				break
+			}
+		}
+	}
+	return oswapThreats
+}
+
+func mapGeneralPolicies(entry map[string]interface{}) apiclient.WAFGeneralPolicies {
+	generalPolicy := apiclient.WAFGeneralPolicies{}
+	for key, value := range entry {
+		if value != "" {
+			switch key {
+			case "block_invalid_user_agents":
+				{
+					boolValue, _ := strconv.ParseBool(entry["block_invalid_user_agents"].(string))
+					generalPolicy.BlockInvalidUserAgents = utils.BoolAddr(boolValue)
+					//updatedWAFSettings.GeneralPolicies.BlockInvalidUserAgents = utils.BoolAddr(boolValue)
+				}
+				break
+			case "block_unknown_user_agents":
+				{
+					boolValue, _ := strconv.ParseBool(entry["block_unknown_user_agents"].(string))
+					generalPolicy.BlockUnknownUserAgents = utils.BoolAddr(boolValue)
+				}
+				break
+			case "http_method_validation":
+				{
+					boolValue, _ := strconv.ParseBool(entry["http_method_validation"].(string))
+					generalPolicy.HttpMethodValidation = utils.BoolAddr(boolValue)
+				}
+				break
+			}
+		}
+	}
+	return generalPolicy
+}
+
+func mapAllowKnownBots(entry map[string]interface{}) apiclient.WAFAllowKnownBots {
+	allowKnownBots := apiclient.WAFAllowKnownBots{}
+	for key, value := range entry {
+		if value != "" {
+			switch key {
+			case "internet_archive_bot":
+				{
+					boolValue, _ := strconv.ParseBool(entry["internet_archive_bot"].(string))
+					allowKnownBots.InternetArchiveBot = utils.BoolAddr(boolValue)
+				}
+				break
+			}
+		}
+	}
+	return allowKnownBots
 }

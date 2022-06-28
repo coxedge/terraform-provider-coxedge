@@ -5,7 +5,13 @@
  */
 package coxedge
 
-import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+import (
+	"fmt"
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
+)
 
 func getOrganizationSetSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
@@ -878,8 +884,9 @@ func getCDNPurgeResourceSchema() map[string]*schema.Schema {
 func getWAFSettingsSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"environment_name": {
-			Type:     schema.TypeString,
-			Required: true,
+			Type:        schema.TypeString,
+			Required:    true,
+			Description: "Environment name ",
 		},
 		"site_id": {
 			Type:     schema.TypeString,
@@ -921,8 +928,22 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			},
 		},
 		"monitoring_mode_enabled": {
-			Type:     schema.TypeBool,
-			Required: true,
+			Type:     schema.TypeString,
+			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"owasp_threats": {
 			Type:     schema.TypeList,
@@ -930,76 +951,328 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"sql_injection": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"xss_attack": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"shell_shock_attack": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"remote_file_inclusion": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"wordpress_waf_ruleset": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"apache_struts_exploit": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"local_file_inclusion": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"common_web_application_vulnerabilities": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"webshell_execution_attempt": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"protocol_attack": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"csrf": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"open_redirect": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"shell_injection": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"code_injection": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"sensitive_data_exposure": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"xml_external_entity": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"personal_identifiable_info": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"serverside_template_injection": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 				},
 			},
@@ -1010,16 +1283,58 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"block_invalid_user_agents": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"block_unknown_user_agents": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"http_method_validation": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 				},
 			},
@@ -1030,36 +1345,148 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"via_tor_nodes": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"via_proxy_networks": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"via_hosting_services": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"via_vpn": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"convicted_bot_traffic": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"traffic_from_suspicious_nat_ranges": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"external_reputation_block_list": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"traffic_via_cdn": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 				},
 			},
@@ -1070,20 +1497,76 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"force_browser_validation_on_traffic_anomalies": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"challenge_automated_clients": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"challenge_headless_browsers": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"anti_scraping": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 				},
 			},
@@ -1094,24 +1577,94 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"spam_protection": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"block_probing_and_forced_browsing": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"obfuscated_attacks_and_zeroday_mitigation": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"repeated_violations": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"bruteforce_protection": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 				},
 			},
@@ -1122,36 +1675,148 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"wordpress_waf_ruleset": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"whitelist_wordpress": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"whitelist_modx": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"whitelist_drupal": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"whitelist_joomla": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"whitelist_magento": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"whitelist_origin_ip": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 					"whitelist_umbraco": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 				},
 			},
@@ -1162,8 +1827,22 @@ func getWAFSettingsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"internet_archive_bot": {
-						Type:     schema.TypeBool,
-						Required: true,
+						Type:     schema.TypeString,
+						Optional: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							_, err := strconv.ParseBool(value)
+							if err != nil {
+								diag := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+								}
+								diags = append(diags, diag)
+							}
+							return diags
+						},
 					},
 				},
 			},
