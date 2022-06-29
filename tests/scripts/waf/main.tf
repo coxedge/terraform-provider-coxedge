@@ -11,6 +11,9 @@ provider "coxedge" {
   key = "[INSERT API KEY HERE]"
 }
 
+#do import existing resource, do run below script
+#terraform import coxedge_waf_settings.testing <site_id>:<environment_name>
+
 resource "coxedge_waf_settings" "testing" {
   site_id                 = "352cdc1e-c071-49ad-bddd-371094880507"
   environment_name        = "test-codecraft"
