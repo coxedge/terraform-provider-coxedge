@@ -425,7 +425,131 @@ type WAFCmsProtection struct {
 	WhiteListUmbraco    *bool `json:"whiteListUmbraco,omitempty"`
 }
 type WAFAllowKnownBots struct {
-	InternetArchiveBot *bool `json:"Internet Archive Bot,omitempty"`
+	AcquiaUptime                      *bool `json:"Acquia Uptime,omitempty"`
+	AddSearchBot                      *bool `json:"AddSearch Bot,omitempty"`
+	AdestraBot                        *bool `json:"Adestra bot,omitempty"`
+	AdjustServers                     *bool `json:"Adjust Servers,omitempty"`
+	AhrefsBot                         *bool `json:"Ahrefs Bot,omitempty"`
+	AlertaBot                         *bool `json:"Alerta Bot,omitempty"`
+	AlexaIaArchiver                   *bool `json:"Alexa ia archiver,omitempty"`
+	AlexaTechnologies                 *bool `json:"Alexa technologies,omitempty"`
+	AmazonRoute53HealthCheckService   *bool `json:"Amazon Route53 Health Check Service,omitempty"`
+	Applebot                          *bool `json:"Applebot,omitempty"`
+	AppleNewsBot                      *bool `json:"AppleNewsBot,omitempty"`
+	AskJeevesBot                      *bool `json:"Ask Jeeves bot,omitempty"`
+	AudistoBot                        *bool `json:"Audisto Bot,omitempty"`
+	BaiduSpiderBot                    *bool `json:"Baidu Spider bot,omitempty"`
+	BaiduSpiderJapanBot               *bool `json:"Baidu Spider Japan bot,omitempty"`
+	BinaryCanary                      *bool `json:"BinaryCanary,omitempty"`
+	BitbucketWebhook                  *bool `json:"Bitbucket webhook,omitempty"`
+	BlekkoScoutJetBot                 *bool `json:"Blekko ScoutJet bot,omitempty"`
+	ChromeCompressionProxy            *bool `json:"Chrome Compression Proxy,omitempty"`
+	Coccocbot                         *bool `json:"Coccocbot,omitempty"`
+	CookieBot                         *bool `json:"CookieBot,omitempty"`
+	Cybersource                       *bool `json:"Cybersource,omitempty"`
+	DaumoaBot                         *bool `json:"Daumoa bot,omitempty"`
+	DetectifyScanner                  *bool `json:"Detectify Scanner,omitempty"`
+	DigiCertDCVBot                    *bool `json:"DigiCert DCV Bot,omitempty"`
+	DotmicDotBotCommercial            *bool `json:"Dotmic DotBot - Commercial,omitempty"`
+	DuckDuckGoBot                     *bool `json:"DuckDuckGo bot,omitempty"`
+	FacebookExternalHitBot            *bool `json:"Facebook External Hit bot,omitempty"`
+	FeederCo                          *bool `json:"Feeder.co,omitempty"`
+	FeedPress                         *bool `json:"FeedPress,omitempty"`
+	FeedWind                          *bool `json:"FeedWind,omitempty"`
+	FreshpingMonitoring               *bool `json:"Freshping Monitoring,omitempty"`
+	Geckoboard                        *bool `json:"Geckoboard,omitempty"`
+	GhostInspector                    *bool `json:"GhostInspector,omitempty"`
+	Gomez                             *bool `json:"Gomez,omitempty"`
+	GooJapanBot                       *bool `json:"goo Japan bot,omitempty"`
+	GoogleAdsBot                      *bool `json:"Google ads bot,omitempty"`
+	GoogleBot                         *bool `json:"Google bot,omitempty"`
+	GoogleCloudMonitoringBot          *bool `json:"Google Cloud Monitoring bot,omitempty"`
+	GoogleFeedFetcherBot              *bool `json:"Google FeedFetcher bot,omitempty"`
+	GoogleImageBot                    *bool `json:"Google Image bot,omitempty"`
+	GoogleImageProxy                  *bool `json:"Google Image Proxy,omitempty"`
+	GoogleMediapartnersBot            *bool `json:"Google Mediapartners bot,omitempty"`
+	GoogleMobileAdsBot                *bool `json:"Google Mobile Ads Bot,omitempty"`
+	GoogleNewsBot                     *bool `json:"Google News bot,omitempty"`
+	GooglePageSpeedInsights           *bool `json:"Google Page Speed Insights,omitempty"`
+	GoogleStructuredDataTestingTool   *bool `json:"Google Structured Data Testing Tool ,omitempty"`
+	GoogleVerificationBot             *bool `json:"Google verification bot,omitempty"`
+	GoogleVideoBot                    *bool `json:"Google Video bot,omitempty"`
+	GoogleWebLight                    *bool `json:"Google Web Light,omitempty"`
+	GrapeshotBotCommercial            *bool `json:"Grapeshot bot - Commercial,omitempty"`
+	GreeJapanBot                      *bool `json:"Gree Japan bot,omitempty"`
+	HetrixTools                       *bool `json:"Hetrix Tools,omitempty"`
+	HiPay                             *bool `json:"HiPay,omitempty"`
+	HyperspinBot                      *bool `json:"Hyperspin Bot,omitempty"`
+	IASCrawlerCommercial              *bool `json:"IAS crawler - Commercial,omitempty"`
+	InternetArchiveBot                *bool `json:"Internet Archive Bot,omitempty"`
+	JetpackBot                        *bool `json:"Jetpack bot,omitempty"`
+	JikeSpiderBot                     *bool `json:"JikeSpider bot,omitempty"`
+	JWordJapanBot                     *bool `json:"JWord Japan bot,omitempty"`
+	KAKAOUserAgent                    *bool `json:"KAKAO UserAgent,omitempty"`
+	KyotoTohokuCrawler                *bool `json:"Kyoto Tohoku Crawler,omitempty"`
+	LandauMediaSpider                 *bool `json:"Landau Media Spider,omitempty"`
+	LetsEncrypt                       *bool `json:"Lets Encrypt,omitempty"`
+	LineJapanBot                      *bool `json:"Line Japan bot,omitempty"`
+	LinkedInBot                       *bool `json:"LinkedIn bot,omitempty"`
+	LivedoorJapanBot                  *bool `json:"Livedoor Japan bot,omitempty"`
+	MailRuBot                         *bool `json:"Mail.ru Bot,omitempty"`
+	ManageWP                          *bool `json:"ManageWP,omitempty"`
+	MicrosoftBingBot                  *bool `json:"Microsoft Bing bot,omitempty"`
+	MicrosoftBingPreviewBot           *bool `json:"Microsoft Bing Preview bot,omitempty"`
+	MicrosoftMSNBot                   *bool `json:"Microsoft MSN bot,omitempty"`
+	MicrosoftSkypeBot                 *bool `json:"Microsoft Skype bot,omitempty"`
+	MixiJapanBot                      *bool `json:"Mixi Japan bot,omitempty"`
+	MobageJapanBot                    *bool `json:"Mobage Japan bot,omitempty"`
+	NaverYetiBot                      *bool `json:"Naver Yeti bot,omitempty"`
+	NewRelicBot                       *bool `json:"New Relic bot,omitempty"`
+	OCNJapanBot                       *bool `json:"OCN Japan bot,omitempty"`
+	PanoptaBot                        *bool `json:"Panopta bot,omitempty"`
+	ParseLyScraper                    *bool `json:"parse.ly scraper,omitempty"`
+	PayPalIPN                         *bool `json:"PayPal IPN,omitempty"`
+	PetalBot                          *bool `json:"Petal bot,omitempty"`
+	Pingdom                           *bool `json:"Pingdom,omitempty"`
+	PinterestBot                      *bool `json:"Pinterest Bot,omitempty"`
+	QwantifyBot                       *bool `json:"Qwantify bot,omitempty"`
+	RogerBot                          *bool `json:"Roger bot,omitempty"`
+	SagePay                           *bool `json:"SagePay,omitempty"`
+	SectigoBot                        *bool `json:"Sectigo Bot,omitempty"`
+	SemrushBot                        *bool `json:"Semrush Bot,omitempty"`
+	ServerDensityServiceMonitoringBot *bool `json:"Server Density Service Monitoring bot,omitempty"`
+	SeznamBot                         *bool `json:"Seznam bot,omitempty"`
+	ShareaholicBot                    *bool `json:"Shareaholic Bot,omitempty"`
+	Site24X7Bot                       *bool `json:"Site24X7 Bot,omitempty"`
+	SiteimproveBot                    *bool `json:"Siteimprove bot,omitempty"`
+	SiteLockSpider                    *bool `json:"SiteLock Spider,omitempty"`
+	SlackBot                          *bool `json:"Slack bot,omitempty"`
+	SogouBot                          *bool `json:"Sogou bot,omitempty"`
+	SosoSpiderBot                     *bool `json:"Soso Spider bot,omitempty"`
+	Spatineo                          *bool `json:"Spatineo,omitempty"`
+	SpringBot                         *bool `json:"Spring Bot,omitempty"`
+	Stackify                          *bool `json:"Stackify,omitempty"`
+	StatusCakeBot                     *bool `json:"StatusCake bot,omitempty"`
+	Stripe                            *bool `json:"Stripe,omitempty"`
+	SucuriUptimeMonitorBot            *bool `json:"Sucuri Uptime Monitor Bot,omitempty"`
+	TelegramBot                       *bool `json:"Telegram Bot,omitempty"`
+	TestomatoBot                      *bool `json:"Testomato Bot,omitempty"`
+	TheFindCrawler                    *bool `json:"TheFind Crawler,omitempty"`
+	TwitterBot                        *bool `json:"Twitter bot,omitempty"`
+	UptimeRobot                       *bool `json:"Uptime Robot,omitempty"`
+	VkontakteExternalHitBot           *bool `json:"Vkontakte External Hit bot,omitempty"`
+	W3C                               *bool `json:"W3C,omitempty"`
+	WordfenceCentral                  *bool `json:"Wordfence Central,omitempty"`
+	Workato                           *bool `json:"Workato,omitempty"`
+	XMLSitemaps                       *bool `json:"xml-sitemaps,omitempty"`
+	YahooInktomiSlurpBot              *bool `json:"Yahoo Inktomi Slurp bot,omitempty"`
+	YahooJapanBot                     *bool `json:"Yahoo Japan bot,omitempty"`
+	YahooLinkPreview                  *bool `json:"Yahoo Link Preview,omitempty"`
+	YahooSeekerBot                    *bool `json:"Yahoo Seeker bot,omitempty"`
+	YahooSlurpBot                     *bool `json:"Yahoo Slurp bot,omitempty"`
+	YandexBot                         *bool `json:"Yandex bot,omitempty"`
+	YisouSpiderCommercial             *bool `json:"YisouSpider - Commercial,omitempty"`
+	YodaoBot                          *bool `json:"Yodao bot,omitempty"`
+	ZendeskBot                        *bool `json:"Zendesk Bot,omitempty"`
+	ZohoBot                           *bool `json:"Zoho bot,omitempty"`
+	ZumBot                            *bool `json:"Zum Bot,omitempty"`
 }
 
 type WrappedWAFSettings struct {
