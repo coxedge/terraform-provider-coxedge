@@ -6,3 +6,4 @@ tests/terraform.log
 tests/.terraform
 terraform-provider
 tests/**/terraform.tfstate*
+tests/**/*.bak
