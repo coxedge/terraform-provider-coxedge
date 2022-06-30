@@ -38,7 +38,6 @@ func resourceWAFSettingsCreate(ctx context.Context, d *schema.ResourceData, m in
 
 	//Run Update since you do not "create" these
 	resourceWAFSettingsUpdate(ctx, d, m)
-	//resourceWAFSettingsRead(ctx, d, m)
 	return diags
 }
 
@@ -60,7 +59,6 @@ func resourceWAFSettingsRead(ctx context.Context, d *schema.ResourceData, m inte
 	resourceId := d.Id()
 	//Get the resource
 	wafSettings, err := coxEdgeClient.GetWAFSettings(d.Get("environment_name").(string), resourceId)
-	//wafSettings, err := coxEdgeClient.GetWAFSettings("test-codecraft", resourceId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

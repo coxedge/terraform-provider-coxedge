@@ -249,12 +249,12 @@ type OriginSettings struct {
 	StackId                  string               `json:"stackId,omitempty"`
 	ScopeConfigurationId     string               `json:"scopeConfigurationId,omitempty"`
 	Domain                   string               `json:"domain,omitempty"`
-	WebSocketsEnabled        bool                 `json:"webSocketsEnabled,omitempty"`
-	SSLValidationEnabled     bool                 `json:"sslValidationEnabled,omitempty"`
+	WebSocketsEnabled        *bool                `json:"webSocketsEnabled,omitempty"`
+	SSLValidationEnabled     *bool                `json:"sslValidationEnabled,omitempty"`
 	PullProtocol             string               `json:"pullProtocol,omitempty"`
 	HostHeader               string               `json:"hostHeader,omitempty"`
 	Origin                   OriginSettingsOrigin `json:"origin,omitempty"`
-	BackupOriginEnabled      bool                 `json:"backupOriginEnabled,omitempty"`
+	BackupOriginEnabled      *bool                `json:"backupOriginEnabled,omitempty"`
 	BackupOriginExcludeCodes []string             `json:"backupOriginExcludeCodes,omitempty"`
 	BackupOrigin             OriginSettingsOrigin `json:"backupOrigin,omitempty"`
 }

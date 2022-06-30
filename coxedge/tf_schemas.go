@@ -620,14 +620,40 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"websockets_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
-			Default:  false,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"ssl_validation_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
-			Default:  false,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"pull_protocol": {
 			Type:     schema.TypeString,
@@ -646,9 +672,22 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"backup_origin_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
-			Default:  false,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"backup_origin": {
 			Type:     schema.TypeList,

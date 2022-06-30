@@ -8,8 +8,10 @@ package coxedge
 import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
+	"coxedge/terraform-provider/coxedge/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -31,11 +33,12 @@ func resourceOriginSettingsCreate(ctx context.Context, d *schema.ResourceData, m
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Call the API
-	resourceOriginSettingsUpdate(ctx, d, m)
+	//Convert resource data to API object
+	updatedOriginSettings := convertResourceDataToOriginSettingsCreateAPIObject(d)
+	d.SetId(updatedOriginSettings.Id)
 
-	//Save the ID
-	d.SetId(d.Get("site_id").(string))
+	//Run Update since you do not "create" these
+	resourceOriginSettingsUpdate(ctx, d, m)
 
 	return diags
 }
@@ -117,15 +120,32 @@ func convertResourceDataToOriginSettingsCreateAPIObject(d *schema.ResourceData) 
 	//Create update originSettings struct
 	updatedOriginSettings := apiclient.OriginSettings{
 		EnvironmentName:      d.Get("environment_name").(string),
-		Id:                   d.Get("id").(string),
+		Id:                   d.Get("site_id").(string),
 		StackId:              d.Get("stack_id").(string),
 		ScopeConfigurationId: d.Get("scope_configuration_id").(string),
 		Domain:               d.Get("domain").(string),
-		WebSocketsEnabled:    d.Get("websockets_enabled").(bool),
-		SSLValidationEnabled: d.Get("ssl_validation_enabled").(bool),
 		PullProtocol:         d.Get("pull_protocol").(string),
 		HostHeader:           d.Get("host_header").(string),
-		BackupOriginEnabled:  d.Get("backup_origin_enabled").(bool),
+	}
+
+	webSocketEnabled := d.Get("websockets_enabled").(string)
+	if webSocketEnabled != "" {
+		boolValue, _ := strconv.ParseBool(webSocketEnabled)
+		updatedOriginSettings.WebSocketsEnabled = utils.BoolAddr(boolValue)
+	}
+
+	ssValidationEnabled := d.Get("ssl_validation_enabled").(string)
+	if ssValidationEnabled != "" {
+		boolValue, _ := strconv.ParseBool(ssValidationEnabled)
+		updatedOriginSettings.SSLValidationEnabled = utils.BoolAddr(boolValue)
+	}
+
+	backupOriginEnabledValue := false
+	backupOriginEnabled := d.Get("backup_origin_enabled").(string)
+	if backupOriginEnabled != "" {
+		boolValue, _ := strconv.ParseBool(backupOriginEnabled)
+		backupOriginEnabledValue = boolValue
+		updatedOriginSettings.BackupOriginEnabled = utils.BoolAddr(boolValue)
 	}
 
 	//Convert Backup Origin Codes
@@ -148,19 +168,16 @@ func convertResourceDataToOriginSettingsCreateAPIObject(d *schema.ResourceData) 
 		updatedOriginSettings.Origin = origin
 	}
 
-	if updatedOriginSettings.BackupOriginEnabled {
+	if backupOriginEnabledValue {
 		//Convert origin
 		for _, originSpecRaw := range d.Get("backup_origin").([]interface{}) {
 			originSpec := originSpecRaw.(map[string]interface{})
 			origin := apiclient.OriginSettingsOrigin{
 				Id:                    originSpec["id"].(string),
 				Address:               originSpec["address"].(string),
-				AuthMethod:            originSpec["auth_method"].(string),
-				Username:              originSpec["username"].(string),
-				Password:              originSpec["password"].(string),
 				CommonCertificateName: originSpec["common_certificate_name"].(string),
 			}
-			updatedOriginSettings.Origin = origin
+			updatedOriginSettings.BackupOrigin = origin
 		}
 	}
 
@@ -172,8 +189,8 @@ func convertOriginSettingsAPIObjectToResourceData(d *schema.ResourceData, origin
 	d.Set("stack_id", originSettings.StackId)
 	d.Set("scope_configuration_id", originSettings.ScopeConfigurationId)
 	d.Set("domain", originSettings.Domain)
-	d.Set("websockets_enabled", originSettings.WebSocketsEnabled)
-	d.Set("ssl_validation_enabled", originSettings.SSLValidationEnabled)
+	d.Set("websockets_enabled", strconv.FormatBool(*originSettings.WebSocketsEnabled))
+	d.Set("ssl_validation_enabled", strconv.FormatBool(*originSettings.SSLValidationEnabled))
 	d.Set("pull_protocol", originSettings.PullProtocol)
 	d.Set("host_header", originSettings.HostHeader)
 	origin := make([]map[string]string, 1)
@@ -185,6 +202,6 @@ func convertOriginSettingsAPIObjectToResourceData(d *schema.ResourceData, origin
 	origin[0]["password"] = originSettings.Origin.Password
 	origin[0]["common_certificate_name"] = originSettings.Origin.CommonCertificateName
 	d.Set("origin", origin)
-	d.Set("backup_origin_enabled", originSettings.BackupOriginEnabled)
+	d.Set("backup_origin_enabled", strconv.FormatBool(*originSettings.BackupOriginEnabled))
 	d.Set("backup_origin_exclude_codes", originSettings.BackupOriginExcludeCodes)
 }
