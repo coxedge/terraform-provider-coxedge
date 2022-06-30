@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "coxedge" {
-  key = "SyJwzYaeVylQmtOrPJkq2A=="
+  key = "[INSERT API KEY HERE]"
 }
 
 #do import existing resource, do run below script

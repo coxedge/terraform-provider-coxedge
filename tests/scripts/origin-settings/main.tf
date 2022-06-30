@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "coxedge" {
-  key = "SyJwzYaeVylQmtOrPJkq2A=="
+  key = "[INSERT API KEY HERE]"
 }
 
 resource "coxedge_origin_setting" "testing" {
