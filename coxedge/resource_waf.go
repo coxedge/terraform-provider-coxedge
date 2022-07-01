@@ -38,6 +38,7 @@ func resourceWAFSettingsCreate(ctx context.Context, d *schema.ResourceData, m in
 
 	//Run Update since you do not "create" these
 	resourceWAFSettingsUpdate(ctx, d, m)
+
 	return diags
 }
 

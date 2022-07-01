@@ -296,27 +296,29 @@ type WrappedDeliveryDomains struct {
 //CDNSettings
 type CDNSettings struct {
 	EnvironmentName               string   `json:"-"`
-	SiteId                        string   `json:"-"`
+	SiteId                        string   `json:"siteId,omitempty"`
+	Id                            string   `json:"siteId,omitempty"`
 	CacheExpirePolicy             string   `json:"cacheExpirePolicy,omitempty"`
 	CacheTtl                      int      `json:"cacheTtl,omitempty"`
 	QueryStringControl            string   `json:"queryStringControl,omitempty"`
 	CustomCachedQueryStrings      []string `json:"customCachedQueryStrings,omitempty"`
-	DynamicCachingByHeaderEnabled bool     `json:"dynamicCachingByHeaderEnabled,omitempty"`
-	CustomCacheHeaders            []string `json:"customCacheHeaders,omitempty"`
-	GzipCompressionEnabled        bool     `json:"gzipCompressionEnabled,omitempty"`
+	DynamicCachingByHeaderEnabled *bool    `json:"dynamicCachingByHeaderEnabled,omitempty"`
+	CustomCacheHeaders            []string `json:"customCachedHeaders,omitempty"`
+	GzipCompressionEnabled        *bool    `json:"gzipCompressionEnabled,omitempty"`
 	GzipCompressionLevel          int      `json:"gzipCompressionLevel,omitempty"`
-	ContentPersistenceEnabled     bool     `json:"contentPersistenceEnabled,omitempty"`
+	ContentPersistenceEnabled     *bool    `json:"contentPersistenceEnabled,omitempty"`
 	MaximumStaleFileTtl           int      `json:"maximumStaleFileTtl,omitempty"`
-	VaryHeaderEnabled             bool     `json:"varyHeaderEnabled,omitempty"`
+	VaryHeaderEnabled             *bool    `json:"varyHeaderEnabled,omitempty"`
 	BrowserCacheTtl               int      `json:"browserCacheTtl,omitempty"`
-	CorsHeaderEnabled             bool     `json:"corsHeaderEnabled,omitempty"`
+	CorsHeaderEnabled             *bool    `json:"corsHeaderEnabled,omitempty"`
 	AllowedCorsOrigins            string   `json:"allowedCorsOrigins,omitempty"`
 	OriginsToAllowCors            []string `json:"originsToAllowCors,omitempty"`
-	Http2SupportEnabled           bool     `json:"http2SupportEnabled,omitempty"`
+	Http2SupportEnabled           *bool    `json:"http2SupportEnabled,omitempty"`
+	Http2ServerPushEnabled        *bool    `json:"http2ServerPushEnabled,omitempty"`
 	LinkHeader                    string   `json:"linkHeader,omitempty"`
-	CanonicalHeaderEnabled        bool     `json:"canonicalHeaderEnabled,omitempty"`
+	CanonicalHeaderEnabled        *bool    `json:"canonicalHeaderEnabled,omitempty"`
 	CanonicalHeader               string   `json:"canonicalHeader,omitempty"`
-	UrlCachingEnabled             bool     `json:"urlCachingEnabled,omitempty"`
+	UrlCachingEnabled             *bool    `json:"urlCachingEnabled,omitempty"`
 	UrlCachingTtl                 int      `json:"urlCachingTtl,omitempty"`
 }
 

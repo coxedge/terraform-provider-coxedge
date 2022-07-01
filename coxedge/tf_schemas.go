@@ -743,7 +743,6 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 		"cache_expire_policy": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "",
 		},
 		"cache_ttl": {
 			Type:     schema.TypeInt,
@@ -762,8 +761,22 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"dynamic_caching_by_header_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"custom_cached_headers": {
 			Type: schema.TypeList,
@@ -773,32 +786,88 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"gzip_compression_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"gzip_compression_level": {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
 		"content_persistence_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"maximum_stale_file_ttl": {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
 		"vary_header_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"browser_cache_ttl": {
 			Type:     schema.TypeInt,
 			Optional: true,
 		},
 		"cors_header_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"allowed_cors_origins": {
 			Type:     schema.TypeString,
@@ -812,28 +881,84 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"http2_support_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"http2_server_push_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"link_header": {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
 		"canonical_header_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"canonical_header": {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
 		"url_caching_enabled": {
-			Type:     schema.TypeBool,
+			Type:     schema.TypeString,
 			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				_, err := strconv.ParseBool(value)
+				if err != nil {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not %q", value, "Boolean value"),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"url_caching_ttl": {
 			Type:     schema.TypeInt,

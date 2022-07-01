@@ -38,7 +38,7 @@ func (c *Client) GetCDNSettings(environmentName string, id string) (*CDNSettings
 }
 
 //UpdateCDNSettings Update a cdnSettings
-func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSettings) (*CDNSettings, error) {
+func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSettings) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newCDNSettings)
 	if err != nil {
@@ -47,7 +47,7 @@ func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSetti
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
-	request, err := http.NewRequest("PUT",
+	request, err := http.NewRequest("PATCH",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newCDNSettings.EnvironmentName+"/cdnsettings/"+cdnSettingsId,
 		bReader,
 	)
@@ -58,12 +58,12 @@ func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSetti
 		return nil, err
 	}
 	//Return struct
-	var wrappedAPIStruct WrappedCDNSettings
+	var wrappedAPIStruct TaskStatusResponse
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err
 	}
-	return &wrappedAPIStruct.Data, nil
+	return &wrappedAPIStruct, nil
 }
 
 func (c *Client) PurgeCDN(environmentName string, siteId string, options CDNPurgeOptions) (*TaskStatusResponse, error) {
