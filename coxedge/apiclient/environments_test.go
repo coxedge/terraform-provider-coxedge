@@ -68,7 +68,7 @@ func TestGetEnvironment(t *testing.T) {
 }
 
 func TestEnvironmentDelete(t *testing.T) {
-	err := apiClient.DeleteEnvironment(createdEnvironmentId)
+	err := apiClient.DeleteEnvironment("")
 	if err != nil {
 		t.Error(err)
 	}
