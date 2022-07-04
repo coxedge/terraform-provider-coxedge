@@ -13,5 +13,5 @@ func TestUpdateCDNSettings(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("Got %v cdn", res.Http2SupportEnabled)
+	t.Logf("Got %v cdn", res.TaskId)
 }

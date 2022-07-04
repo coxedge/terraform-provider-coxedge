@@ -66,9 +66,6 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, m inte
 
 	convertEnvironmentAPIObjectToResourceData(d, environment)
 
-	//Update state
-	resourceEnvironmentRead(ctx, d, m)
-
 	return diags
 }
 
@@ -103,13 +100,11 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, m in
 
 	//Get the resource ID
 	resourceId := d.Id()
-
 	//Delete the Environment
 	err := coxEdgeClient.DeleteEnvironment(resourceId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
 	// From Docs: d.SetId("") is automatically called assuming delete returns no errors, but
 	// it is added here for explicitness.
 	d.SetId("")
