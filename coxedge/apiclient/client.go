@@ -12,8 +12,11 @@ import (
 	"time"
 )
 
-const CoxEdgeAPIBase = "https://portal.coxedge.com/api/v1"
+const CoxEdgeAPIBase = "https://portal.coxedge.com/api/v2"
 const CoxEdgeServiceCode = "edge-services"
+
+//const CoxEdgeAPIBase = "https://cox.uat.cloudmc.io/api/v2"
+//const CoxEdgeServiceCode = "stackpath-cox-uat"
 
 type Client struct {
 	apiKey     string

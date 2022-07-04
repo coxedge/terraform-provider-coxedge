@@ -233,7 +233,10 @@ func mapResourceAllowKnownBots(allowKnownBots []map[string]interface{}, wafSetti
 	allowKnownBots[0]["google_mobile_ads_bot"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GoogleMobileAdsBot)
 	allowKnownBots[0]["google_news_bot"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GoogleNewsBot)
 	allowKnownBots[0]["google_page_speed_insights"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GooglePageSpeedInsights)
-	allowKnownBots[0]["google_structured_data_testing_tool"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GoogleStructuredDataTestingTool)
+	//todo need to remove this condition once UAT and Prod response matched
+	if wafSettings.AllowKnownBots.GoogleStructuredDataTestingTool != nil {
+		allowKnownBots[0]["google_structured_data_testing_tool"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GoogleStructuredDataTestingTool)
+	}
 	allowKnownBots[0]["google_verification_bot"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GoogleVerificationBot)
 	allowKnownBots[0]["google_video_bot"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GoogleVideoBot)
 	allowKnownBots[0]["google_web_light"] = strconv.FormatBool(*wafSettings.AllowKnownBots.GoogleWebLight)

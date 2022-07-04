@@ -473,7 +473,7 @@ type WAFAllowKnownBots struct {
 	GoogleMobileAdsBot                *bool `json:"Google Mobile Ads Bot,omitempty"`
 	GoogleNewsBot                     *bool `json:"Google News bot,omitempty"`
 	GooglePageSpeedInsights           *bool `json:"Google Page Speed Insights,omitempty"`
-	GoogleStructuredDataTestingTool   *bool `json:"Google Structured Data Testing Tool ,omitempty"`
+	GoogleStructuredDataTestingTool   *bool `json:"Google Structured Data Testing Tool,omitempty"`
 	GoogleVerificationBot             *bool `json:"Google verification bot,omitempty"`
 	GoogleVideoBot                    *bool `json:"Google Video bot,omitempty"`
 	GoogleWebLight                    *bool `json:"Google Web Light,omitempty"`
