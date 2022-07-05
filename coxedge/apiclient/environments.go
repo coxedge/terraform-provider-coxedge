@@ -17,11 +17,21 @@ type EnvironmentCreateRequest struct {
 	ServiceConnection IdOnlyHelper `json:"serviceConnection,omitempty"`
 	Organization      IdOnlyHelper `json:"organization,omitempty"`
 	Membership        string       `json:"membership,omitempty"`
-	Roles             []struct {
-		Name      string         `json:"name,omitempty"`
-		Users     []IdOnlyHelper `json:"users,omitempty"`
-		IsDefault bool           `json:"isDefault,omitempty"`
-	} `json:"roles,omitempty"`
+	Roles             []Role       `json:"roles,omitempty"`
+	//Roles             []struct {
+	//	Name      string         `json:"name,omitempty"`
+	//	Users     []IdOnlyHelper `json:"users,omitempty"`
+	//	IsDefault bool           `json:"isDefault,omitempty"`
+	//} `json:"roles,omitempty"`
+}
+
+type EnvironmentMembershipRequest struct {
+	Membership string `json:"membership,omitempty"`
+}
+
+type EnvironmentMembersRequest struct {
+	User IdOnlyHelper `json:"user,omitempty"`
+	Role IdOnlyHelper `json:"role,omitempty"`
 }
 
 //GetEnvironments Get Environments in account
@@ -104,6 +114,58 @@ func (c *Client) UpdateEnvironment(EnvironmentId string, newEnvironment Environm
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PUT", CoxEdgeAPIBase+"/environments/"+EnvironmentId, bReader)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct WrappedEnvironment
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+//UpdateEnvironmentMembership Update a Environment membership
+func (c *Client) UpdateEnvironmentMembership(EnvironmentId string, newEnvironment EnvironmentMembershipRequest) (*Environment, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(newEnvironment)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("PUT", CoxEdgeAPIBase+"/environments/"+EnvironmentId+"/membership", bReader)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct WrappedEnvironment
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+//UpdateEnvironmentMember Update a Environment members
+func (c *Client) UpdateEnvironmentMember(EnvironmentId string, newEnvironment EnvironmentMembersRequest) (*Environment, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(newEnvironment)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST", CoxEdgeAPIBase+"/environments/"+EnvironmentId+"/members", bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)

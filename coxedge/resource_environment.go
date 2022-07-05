@@ -32,14 +32,20 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, m in
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-
 	//Convert resource data to API Object
-	newEnvironment := convertResourceDataToEnvironmentCreateAPIObject(d)
-
+	newEnvironment := convertResourceDataToEnvironmentCreateAPIObject(ctx, d)
 	//Call the API
 	createdEnvironment, err := coxEdgeClient.CreateEnvironment(newEnvironment)
 	if err != nil {
 		return diag.FromErr(err)
+	}
+	time.Sleep(time.Second * 10)
+	if _, hasMembershipValue := d.GetOk("membership"); hasMembershipValue {
+		membership := convertResourceDataToEnvironmentMembership(d)
+		_, err = coxEdgeClient.UpdateEnvironmentMembership(createdEnvironment.Id, membership)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	//Save the ID
@@ -77,7 +83,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, m in
 	resourceId := d.Id()
 
 	//Convert resource data to API object
-	updatedEnvironment := convertResourceDataToEnvironmentCreateAPIObject(d)
+	updatedEnvironment := convertResourceDataToEnvironmentCreateAPIObject(ctx, d)
 
 	//Call the API
 	_, err := coxEdgeClient.UpdateEnvironment(resourceId, updatedEnvironment)
@@ -112,7 +118,17 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, m in
 	return diags
 }
 
-func convertResourceDataToEnvironmentCreateAPIObject(d *schema.ResourceData) apiclient.EnvironmentCreateRequest {
+func convertResourceDataToEnvironmentMembership(d *schema.ResourceData) apiclient.EnvironmentMembershipRequest {
+	updatedEnvironment := apiclient.EnvironmentMembershipRequest{}
+	//Optional values
+	membershipValue, hasMembershipValue := d.GetOk("membership")
+	if hasMembershipValue {
+		updatedEnvironment.Membership = membershipValue.(string)
+	}
+	return updatedEnvironment
+}
+
+func convertResourceDataToEnvironmentCreateAPIObject(ctx context.Context, d *schema.ResourceData) apiclient.EnvironmentCreateRequest {
 	//Create update environment struct
 	updatedEnvironment := apiclient.EnvironmentCreateRequest{
 		EnvironmentName: d.Get("name").(string),
@@ -122,32 +138,28 @@ func convertResourceDataToEnvironmentCreateAPIObject(d *schema.ResourceData) api
 			Id: d.Get("service_connection_id").(string),
 		},
 	}
-
-	//Optional values
-	membershipValue, hasMembershipValue := d.GetOk("membership")
-	if hasMembershipValue {
-		updatedEnvironment.Membership = membershipValue.(string)
-	}
-
 	rolesValue, hasRolesValue := d.GetOk("roles")
 	if hasRolesValue {
-		for _, rawRole := range rolesValue.([]map[string]interface{}) {
+		var roles []apiclient.Role
+		for _, rawRole := range rolesValue.([]interface{}) {
+			rr := rawRole.(map[string]interface{})
 			newRole := apiclient.Role{
-				Name:      rawRole["name"].(string),
-				IsDefault: rawRole["is_default"].(bool),
+				Name:      rr["name"].(string),
+				IsDefault: rr["is_default"].(bool),
 			}
 			//Check for user assignments
-			usersValues, hasUsersValues := rawRole["users"]
+			usersValues, hasUsersValues := rr["users"]
 			if hasUsersValues {
 				newRole.Users = []apiclient.IdOnlyHelper{}
-				for _, rawUser := range usersValues.([]map[string]interface{}) {
-					idOnlyHelper := apiclient.IdOnlyHelper{Id: rawUser["id"].(string)}
+				for _, rawUser := range usersValues.([]interface{}) {
+					idOnlyHelper := apiclient.IdOnlyHelper{Id: rawUser.(string)}
 					newRole.Users = append(newRole.Users, idOnlyHelper)
 				}
 			}
+			roles = append(roles, newRole)
 		}
+		updatedEnvironment.Roles = roles
 	}
-
 	return updatedEnvironment
 }
 
