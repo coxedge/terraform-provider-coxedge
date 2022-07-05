@@ -244,28 +244,43 @@ func convertResourceDataToCDNSettingsCreateAPIObject(d *schema.ResourceData) api
 
 func convertCDNSettingsAPIObjectToResourceData(d *schema.ResourceData, cdnSettings *apiclient.CDNSettings) {
 	//Store the data
-	//d.Set("environment_name", cdnSettings.EnvironmentName)
 	d.Set("site_id", cdnSettings.Id)
 	d.Set("cache_expire_policy", cdnSettings.CacheExpirePolicy)
 	d.Set("cache_ttl", cdnSettings.CacheTtl)
 	d.Set("query_string_control", cdnSettings.QueryStringControl)
 	d.Set("custom_cached_query_strings", cdnSettings.CustomCachedQueryStrings)
-	d.Set("dynamic_caching_by_header_enabled", strconv.FormatBool(*cdnSettings.DynamicCachingByHeaderEnabled))
+	if cdnSettings.DynamicCachingByHeaderEnabled != nil {
+		d.Set("dynamic_caching_by_header_enabled", strconv.FormatBool(*cdnSettings.DynamicCachingByHeaderEnabled))
+	}
 	d.Set("custom_cached_headers", cdnSettings.CustomCacheHeaders)
 	d.Set("gzip_compression_enabled", cdnSettings.GzipCompressionEnabled)
 	d.Set("gzip_compression_level", cdnSettings.GzipCompressionLevel)
-	d.Set("content_persistence_enabled", strconv.FormatBool(*cdnSettings.ContentPersistenceEnabled))
+	if cdnSettings.ContentPersistenceEnabled != nil {
+		d.Set("content_persistence_enabled", strconv.FormatBool(*cdnSettings.ContentPersistenceEnabled))
+	}
 	d.Set("maximum_stale_file_ttl", cdnSettings.MaximumStaleFileTtl)
-	d.Set("vary_header_enabled", strconv.FormatBool(*cdnSettings.VaryHeaderEnabled))
+	if cdnSettings.VaryHeaderEnabled != nil {
+		d.Set("vary_header_enabled", strconv.FormatBool(*cdnSettings.VaryHeaderEnabled))
+	}
 	d.Set("browser_cache_ttl", cdnSettings.BrowserCacheTtl)
-	d.Set("cors_header_enabled", strconv.FormatBool(*cdnSettings.CorsHeaderEnabled))
+	if cdnSettings.CorsHeaderEnabled != nil {
+		d.Set("cors_header_enabled", strconv.FormatBool(*cdnSettings.CorsHeaderEnabled))
+	}
 	d.Set("allowed_cors_origins", cdnSettings.AllowedCorsOrigins)
 	d.Set("origins_to_allow_cors", cdnSettings.OriginsToAllowCors)
-	d.Set("http2_support_enabled", strconv.FormatBool(*cdnSettings.Http2SupportEnabled))
-	d.Set("http2_server_push_enabled", strconv.FormatBool(*cdnSettings.Http2ServerPushEnabled))
+	if cdnSettings.Http2SupportEnabled != nil {
+		d.Set("http2_support_enabled", strconv.FormatBool(*cdnSettings.Http2SupportEnabled))
+	}
+	if cdnSettings.Http2ServerPushEnabled != nil {
+		d.Set("http2_server_push_enabled", strconv.FormatBool(*cdnSettings.Http2ServerPushEnabled))
+	}
 	d.Set("link_header", cdnSettings.LinkHeader)
-	d.Set("canonical_header_enabled", strconv.FormatBool(*cdnSettings.CanonicalHeaderEnabled))
+	if cdnSettings.CanonicalHeaderEnabled != nil {
+		d.Set("canonical_header_enabled", strconv.FormatBool(*cdnSettings.CanonicalHeaderEnabled))
+	}
 	d.Set("canonical_header", cdnSettings.CanonicalHeader)
-	d.Set("url_caching_enabled", strconv.FormatBool(*cdnSettings.UrlCachingEnabled))
+	if cdnSettings.UrlCachingEnabled != nil {
+		d.Set("url_caching_enabled", strconv.FormatBool(*cdnSettings.UrlCachingEnabled))
+	}
 	d.Set("url_caching_ttl", cdnSettings.UrlCachingTtl)
 }
