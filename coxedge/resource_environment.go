@@ -90,6 +90,13 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, m in
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	if _, hasMembershipValue := d.GetOk("membership"); hasMembershipValue {
+		membership := convertResourceDataToEnvironmentMembership(d)
+		_, err = coxEdgeClient.UpdateEnvironmentMembership(resourceId, membership)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	//Set last_updated
 	d.Set("last_updated", time.Now().Format(time.RFC850))
