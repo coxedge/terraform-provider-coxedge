@@ -16,8 +16,7 @@ func resourceDeliveryDomain() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: resourceDeliveryDomainCreate,
 		ReadContext:   resourceDeliveryDomainRead,
-		//TODO: Implement
-		//UpdateContext: resourceDeliveryDomainUpdate,
+		UpdateContext: resourceDeliveryDomainUpdate,
 		DeleteContext: resourceDeliveryDomainDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -36,8 +35,9 @@ func resourceDeliveryDomainCreate(ctx context.Context, d *schema.ResourceData, m
 	//Convert resource data to API Object
 	newDeliveryDomain := convertResourceDataToDeliveryDomainCreateAPIObject(d)
 
+	resourceId := d.Get("site_id").(string)
 	//Call the API
-	createdDeliveryDomain, err := coxEdgeClient.CreateDeliveryDomain(newDeliveryDomain)
+	createdDeliveryDomain, err := coxEdgeClient.CreateDeliveryDomain(resourceId, newDeliveryDomain)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -72,33 +72,12 @@ func resourceDeliveryDomainRead(ctx context.Context, d *schema.ResourceData, m i
 
 	convertDeliveryDomainAPIObjectToResourceData(d, deliveryDomain)
 
-	//Update state
-	resourceDeliveryDomainRead(ctx, d, m)
-
 	return diags
 }
 
-/*func resourceDeliveryDomainUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	//Get the API Client
-	coxEdgeClient := m.(apiclient.Client)
-
-	//Get the resource ID
-	resourceId := d.Id()
-
-	//Convert resource data to API object
-	updatedDeliveryDomain := convertResourceDataToDeliveryDomainCreateAPIObject(d)
-
-	//Call the API
-	_, err := coxEdgeClient.UpdateDeliveryDomain(resourceId, updatedDeliveryDomain)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	//Set last_updated
-	d.Set("last_updated", time.Now().Format(time.RFC850))
-
-	return resourceDeliveryDomainRead(ctx, d, m)
-}*/
+func resourceDeliveryDomainUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	return diag.Errorf("no option to update delivery domain - remove terraform state files to create new one")
+}
 
 func resourceDeliveryDomainDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type

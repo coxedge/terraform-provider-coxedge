@@ -721,12 +721,14 @@ func getDeliveryDomainSchema() map[string]*schema.Schema {
 		"environment_name": {
 			Type:     schema.TypeString,
 			Required: true,
-			ForceNew: true,
 		},
 		"domain": {
 			Type:     schema.TypeString,
 			Required: true,
-			ForceNew: true,
+		},
+		"site_id": {
+			Type:     schema.TypeString,
+			Required: true,
 		},
 	}
 }

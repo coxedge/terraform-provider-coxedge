@@ -66,7 +66,7 @@ func (c *Client) GetDeliveryDomain(environmentName string, id string) (*Delivery
 }
 
 //CreateDeliveryDomain Create the deliveryDomain
-func (c *Client) CreateDeliveryDomain(newDeliveryDomain DeliveryDomainCreateRequest) (*TaskStatusResponse, error) {
+func (c *Client) CreateDeliveryDomain(siteId string, newDeliveryDomain DeliveryDomainCreateRequest) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newDeliveryDomain)
 	if err != nil {
@@ -76,7 +76,7 @@ func (c *Client) CreateDeliveryDomain(newDeliveryDomain DeliveryDomainCreateRequ
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newDeliveryDomain.EnvironmentName+"/deliverydomains",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newDeliveryDomain.EnvironmentName+"/deliverydomains?siteId="+siteId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
