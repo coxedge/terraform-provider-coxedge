@@ -4264,7 +4264,7 @@ func getFirewallRuleSchema() map[string]*schema.Schema {
 		},
 		"ip_end": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 	}
 }

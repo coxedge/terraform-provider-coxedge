@@ -564,14 +564,13 @@ type WrappedWAFSettingsSet struct {
 
 //Firewall Rule
 type FirewallRule struct {
-	Action          string `json:"action,omitempty"`
-	Enabled         bool   `json:"enabled,omitempty"`
-	Id              string `json:"id,omitempty"`
-	IpEnd           string `json:"ipEnd,omitempty"`
-	IpStart         string `json:"ipStart,omitempty"`
-	Name            string `json:"name,omitempty"`
-	SiteId          string `json:"siteId,omitempty"`
-	EnvironmentName string `json:"-"`
+	Action  string `json:"action,omitempty"`
+	Enabled bool   `json:"enabled,omitempty"`
+	Id      string `json:"id,omitempty"`
+	IpEnd   string `json:"ipEnd,omitempty"`
+	IpStart string `json:"ipStart,omitempty"`
+	Name    string `json:"name,omitempty"`
+	SiteId  string `json:"siteId,omitempty"`
 }
 
 type WrappedFirewallRule struct {

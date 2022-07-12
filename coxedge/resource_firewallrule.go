@@ -37,7 +37,7 @@ func resourceFirewallRuleCreate(ctx context.Context, d *schema.ResourceData, m i
 	newFirewallRule := convertResourceDataToFirewallRuleCreateAPIObject(d)
 
 	//Call the API
-	createdFirewallRule, err := coxEdgeClient.CreateFirewallRule(newFirewallRule.EnvironmentName, newFirewallRule)
+	createdFirewallRule, err := coxEdgeClient.CreateFirewallRule(d.Get("environment_name").(string), newFirewallRule)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -72,9 +72,6 @@ func resourceFirewallRuleRead(ctx context.Context, d *schema.ResourceData, m int
 
 	convertFirewallRuleAPIObjectToResourceData(d, firewallRule)
 
-	//Update state
-	resourceFirewallRuleRead(ctx, d, m)
-
 	return diags
 }
 
@@ -89,7 +86,7 @@ func resourceFirewallRuleUpdate(ctx context.Context, d *schema.ResourceData, m i
 	updatedFirewallRule := convertResourceDataToFirewallRuleCreateAPIObject(d)
 
 	//Call the API
-	_, err := coxEdgeClient.UpdateFirewallRule(updatedFirewallRule.EnvironmentName, resourceId, updatedFirewallRule)
+	_, err := coxEdgeClient.UpdateFirewallRule(d.Get("environment_name").(string), resourceId, updatedFirewallRule)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -126,14 +123,13 @@ func resourceFirewallRuleDelete(ctx context.Context, d *schema.ResourceData, m i
 func convertResourceDataToFirewallRuleCreateAPIObject(d *schema.ResourceData) apiclient.FirewallRule {
 	//Create update firewallRule struct
 	updatedFirewallRule := apiclient.FirewallRule{
-		Action:          d.Get("action").(string),
-		Enabled:         d.Get("enabled").(bool),
-		Id:              d.Get("id").(string),
-		IpEnd:           d.Get("ip_end").(string),
-		IpStart:         d.Get("ip_start").(string),
-		Name:            d.Get("name").(string),
-		SiteId:          d.Get("site_id").(string),
-		EnvironmentName: d.Get("environment_name").(string),
+		Action:  d.Get("action").(string),
+		Enabled: d.Get("enabled").(bool),
+		Id:      d.Get("id").(string),
+		IpEnd:   d.Get("ip_end").(string),
+		IpStart: d.Get("ip_start").(string),
+		Name:    d.Get("name").(string),
+		SiteId:  d.Get("site_id").(string),
 	}
 
 	return updatedFirewallRule
