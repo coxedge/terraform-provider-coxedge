@@ -23,12 +23,12 @@ resource "coxedge_workload" "test" {
   name = "demo-container-2"
   environment_name = "demo_env"
   type = "CONTAINER"
-  image = "ubuntu:latest"
+  image = "bitnami/nginx"
   specs = "SP-2"
   deployment {
     name = "test"
     enable_autoscaling = false
     pops = ["BTR"]
-    instances_per_pop = 3
+    instances_per_pop = 1
   }
 }

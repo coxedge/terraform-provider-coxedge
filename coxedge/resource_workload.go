@@ -158,12 +158,12 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 
 	//Convert ports
 	for _, entry := range d.Get("ports").([]interface{}) {
-		convertedEntry := entry.(map[string]string)
+		convertedEntry := entry.(map[string]interface{})
 		portSpec := apiclient.WorkloadPort{
-			Protocol:       convertedEntry["protocol"],
-			PublicPort:     convertedEntry["public_port"],
-			PublicPortDesc: convertedEntry["public_port_desc"],
-			PublicPortSrc:  convertedEntry["public_port_src"],
+			Protocol:       convertedEntry["protocol"].(string),
+			PublicPort:     convertedEntry["public_port"].(string),
+			PublicPortDesc: convertedEntry["public_port_desc"].(string),
+			PublicPortSrc:  convertedEntry["public_port_src"].(string),
 		}
 		updatedWorkload.Ports = append(updatedWorkload.Ports, portSpec)
 	}

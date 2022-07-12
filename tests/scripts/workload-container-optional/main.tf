@@ -33,6 +33,6 @@ resource "coxedge_workload" "test" {
     name               = "test"
     enable_autoscaling = false
     pops               = ["LAS"]
-    instances_per_pop  = 2
+    instances_per_pop  = 1
   }
 }
