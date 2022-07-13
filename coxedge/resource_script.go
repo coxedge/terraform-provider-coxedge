@@ -38,7 +38,10 @@ func resourceScriptCreate(ctx context.Context, d *schema.ResourceData, m interfa
 	newScript := convertResourceDataToScriptCreateAPIObject(d)
 
 	//Call the API
-	createdScript, err := coxEdgeClient.CreateScript(newScript)
+	createdScript, err := coxEdgeClient.CreateScript(
+		d.Get("site_id").(string),
+		d.Get("environment_name").(string),
+		newScript)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -68,15 +71,12 @@ func resourceScriptRead(ctx context.Context, d *schema.ResourceData, m interface
 	resourceId := d.Id()
 
 	//Get the resource
-	script, err := coxEdgeClient.GetScript(resourceId)
+	script, err := coxEdgeClient.GetScript(resourceId, d.Get("site_id").(string), d.Get("environment_name").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	convertScriptAPIObjectToResourceData(d, script)
-
-	//Update state
-	resourceScriptRead(ctx, d, m)
 
 	return diags
 }
@@ -92,7 +92,10 @@ func resourceScriptUpdate(ctx context.Context, d *schema.ResourceData, m interfa
 	updatedScript := convertResourceDataToScriptCreateAPIObject(d)
 
 	//Call the API
-	updateScriptResponse, err := coxEdgeClient.UpdateScript(resourceId, updatedScript)
+	updateScriptResponse, err := coxEdgeClient.UpdateScript(resourceId,
+		d.Get("site_id").(string),
+		d.Get("environment_name").(string),
+		updatedScript)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -119,7 +122,7 @@ func resourceScriptDelete(ctx context.Context, d *schema.ResourceData, m interfa
 	resourceId := d.Id()
 
 	//Delete the Script
-	err := coxEdgeClient.DeleteScript(resourceId)
+	err := coxEdgeClient.DeleteScript(resourceId, d.Get("site_id").(string), d.Get("environment_name").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -134,9 +137,8 @@ func resourceScriptDelete(ctx context.Context, d *schema.ResourceData, m interfa
 func convertResourceDataToScriptCreateAPIObject(d *schema.ResourceData) apiclient.ScriptCreateRequest {
 	//Create update script struct
 	updatedScript := apiclient.ScriptCreateRequest{
-		SiteId: d.Get("site_id").(string),
-		Name:   d.Get("name").(string),
-		Code:   d.Get("code").(string),
+		Name: d.Get("name").(string),
+		Code: d.Get("code").(string),
 	}
 
 	//Convert Backup Origin Codes

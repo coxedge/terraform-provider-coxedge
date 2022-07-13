@@ -4283,6 +4283,10 @@ func getScriptSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"name": {
 			Type:     schema.TypeString,
 			Required: true,
