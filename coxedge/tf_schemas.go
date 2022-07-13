@@ -502,6 +502,38 @@ func getSiteSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
+		"operation": {
+			Type:     schema.TypeString,
+			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				val := false
+				switch value {
+				case "enable_cdn":
+					val = true
+				case "disable_cdn":
+					val = true
+				case "enable_waf":
+					val = true
+				case "disable_waf":
+					val = true
+				case "enable_scripts":
+					val = true
+				case "disable_scripts":
+					val = true
+				}
+				if !val {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("opertaion field: %q should be either one of following - enable_cdn, disable_cdn, enable_waf, disable_waf, enable_scripts, disable_scripts", value),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
+		},
 		//Computed properties
 		"id": {
 			Type:     schema.TypeString,

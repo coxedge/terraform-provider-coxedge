@@ -101,18 +101,11 @@ func (c *Client) CreateSite(newSite SiteCreateRequest) (*TaskStatusResponse, err
 }
 
 //UpdateSite Update a site
-func (c *Client) UpdateSite(siteId string, newSite SiteCreateRequest) (*TaskStatusResponse, error) {
-	//Marshal the request
-	jsonBytes, err := json.Marshal(newSite)
-	if err != nil {
-		return nil, err
-	}
-	//Wrap bytes in reader
-	bReader := bytes.NewReader(jsonBytes)
+func (c *Client) UpdateSite(siteId string, environmentName string, operationValue string) (*TaskStatusResponse, error) {
 	//Create the request
-	request, err := http.NewRequest("PUT",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newSite.EnvironmentName+"/sites/"+siteId,
-		bReader,
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites/"+siteId+"?operation="+operationValue,
+		nil,
 	)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request

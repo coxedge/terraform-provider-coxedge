@@ -32,7 +32,6 @@ func resourceSiteCreate(ctx context.Context, d *schema.ResourceData, m interface
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-
 	//Convert resource data to API Object
 	newSite := convertResourceDataToSiteCreateAPIObject(d)
 
@@ -83,19 +82,25 @@ func resourceSiteUpdate(ctx context.Context, d *schema.ResourceData, m interface
 	//Get the resource ID
 	resourceId := d.Id()
 
-	//Convert resource data to API object
-	updatedSite := convertResourceDataToSiteCreateAPIObject(d)
-
-	//Call the API
-	_, err := coxEdgeClient.UpdateSite(resourceId, updatedSite)
-	if err != nil {
-		return diag.FromErr(err)
+	value, hasValue := d.GetOk("operation")
+	if hasValue {
+		//Call the API
+		_, err := coxEdgeClient.UpdateSite(resourceId, d.Get("environment_name").(string), value.(string))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		//Set last_updated
+		d.Set("last_updated", time.Now().Format(time.RFC850))
+		return resourceSiteRead(ctx, d, m)
 	}
-
-	//Set last_updated
-	d.Set("last_updated", time.Now().Format(time.RFC850))
-
-	return resourceSiteRead(ctx, d, m)
+	var diags diag.Diagnostics
+	diag := diag.Diagnostic{
+		Severity: diag.Error,
+		Summary:  " Missing required argument for Update",
+		Detail:   "The argument \"operation\" is required for update Site, but no definition was found",
+	}
+	diags = append(diags, diag)
+	return diags
 }
 
 func resourceSiteDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
