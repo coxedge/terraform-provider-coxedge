@@ -512,16 +512,22 @@ func getSiteSchema() map[string]*schema.Schema {
 				switch value {
 				case "enable_cdn":
 					val = true
+					break
 				case "disable_cdn":
 					val = true
+					break
 				case "enable_waf":
 					val = true
+					break
 				case "disable_waf":
 					val = true
+					break
 				case "enable_scripts":
 					val = true
+					break
 				case "disable_scripts":
 					val = true
+					break
 				}
 				if !val {
 					diag := diag.Diagnostic{

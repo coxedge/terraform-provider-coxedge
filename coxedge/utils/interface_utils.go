@@ -5,6 +5,8 @@
  */
 package utils
 
+import "strconv"
+
 func ConvertListInterfaceToStringArray(orig interface{}) []string {
 	interfaceList := orig.([]interface{})
 	stringList := make([]string, len(interfaceList))
@@ -20,4 +22,11 @@ func BoolAddr(x bool) *bool {
 
 func StringAddr(x string) *string {
 	return &x
+}
+
+func CheckAndConvertBool(val *bool) string {
+	if val != nil {
+		return strconv.FormatBool(*val)
+	}
+	return "false"
 }
