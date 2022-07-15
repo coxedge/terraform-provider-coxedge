@@ -20,12 +20,85 @@ func getOrganizationSetSchema() map[string]*schema.Schema {
 			Computed: true,
 			Optional: true,
 		},
-		"organizations": &schema.Schema{
+		"organizations": {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: getOrganizationSchema(),
 			},
+		},
+	}
+}
+
+func getOrganizationBillingInfoSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organizations_billing_info": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getOrganizationBillingInfoSchema(),
+			},
+		},
+	}
+}
+
+func getOrganizationBillingInfoSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"billing_provider_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"card_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"card_masked_number": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"card_name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"card_exp": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"billing_address_line_one": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"billing_address_line_two": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"billing_address_city": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"billing_address_province": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"billing_address_postal_code": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"billing_address_postal_country": {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 	}
 }
@@ -87,6 +160,43 @@ func getEnvironmentSetSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: getEnvironmentSchema(),
 			},
+		},
+	}
+}
+
+func getRolesSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"roles": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getRolesSchema(),
+			},
+		},
+	}
+}
+
+func getRolesSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"is_system": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"default_scope": {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 	}
 }

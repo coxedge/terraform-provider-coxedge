@@ -90,6 +90,37 @@ type WrappedOrganization struct {
 	Data Organization `json:"data"`
 }
 
+type OrganizationBillingInfo struct {
+	Id                       string       `json:"id,omitempty"`
+	Organization             IdOnlyHelper `json:"organization,omitempty"`
+	BillingProvider          IdOnlyHelper `json:"billingProvider,omitempty"`
+	CardType                 string       `json:"cardType,omitempty"`
+	CardMaskedNumber         string       `json:"cardMaskedNumber,omitempty"`
+	CardName                 string       `json:"cardName,omitempty"`
+	CardExp                  string       `json:"cardExp,omitempty"`
+	BillingAddressLineOne    string       `json:"billingAddressLineOne,omitempty"`
+	BillingAddressLineTwo    string       `json:"billingAddressLineTwo,omitempty"`
+	BillingAddressCity       string       `json:"billingAddressCity,omitempty"`
+	BillingAddressProvince   string       `json:"billingAddressProvince,omitempty"`
+	BillingAddressPostalCode string       `json:"billingAddressPostalCode,omitempty"`
+	BillingAddressCountry    string       `json:"billingAddressCountry,omitempty"`
+}
+
+type WrappedOrganizationBillingInfo struct {
+	Data OrganizationBillingInfo `json:"data"`
+}
+
+type Roles struct {
+	Id           string `json:"id,omitempty"`
+	Name         string `json:"name,omitempty"`
+	IsSystem     bool   `json:"isSystem,omitempty"`
+	DefaultScope string `json:"defaultScope,omitempty"`
+}
+
+type WrappedRolesData struct {
+	Data []Roles `json:"data"`
+}
+
 type User struct {
 	Id           string             `json:"id,omitempty"`
 	UserName     string             `json:"userName,omitempty"`

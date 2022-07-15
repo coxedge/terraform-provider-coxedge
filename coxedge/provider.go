@@ -22,10 +22,12 @@ func Provider() *schema.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"coxedge_organizations":   dataSourceOrganization(),
-			"coxedge_environments":    dataSourceEnvironment(),
-			"coxedge_images":          dataSourceImage(),
-			"coxedge_origin_settings": dataSourceOriginSetting(),
+			"coxedge_organizations":              dataSourceOrganization(),
+			"coxedge_organizations_billing_info": dataSourceOrganizationBillingInfo(),
+			"coxedge_environments":               dataSourceEnvironment(),
+			"coxedge_images":                     dataSourceImage(),
+			"coxedge_origin_settings":            dataSourceOriginSetting(),
+			"coxedge_roles":                      dataSourceRoles(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"coxedge_cdn_purge":           resourceCDNPurgeResource(),

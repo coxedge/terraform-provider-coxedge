@@ -52,3 +52,24 @@ func (c *Client) GetOrganization(id string) (*Organization, error) {
 	}
 	return &wrappedAPIStruct.Data, nil
 }
+
+func (c *Client) GetOrganizationBillingInfo(id string) (*OrganizationBillingInfo, error) {
+	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/organizations/"+id+"/billing_info", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+
+	fmt.Println(string(respBytes))
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedOrganizationBillingInfo
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
