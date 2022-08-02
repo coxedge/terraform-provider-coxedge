@@ -35,8 +35,9 @@ func resourceSiteCreate(ctx context.Context, d *schema.ResourceData, m interface
 	//Convert resource data to API Object
 	newSite := convertResourceDataToSiteCreateAPIObject(d)
 
+	organizationId := d.Get("organization_id").(string)
 	//Call the API
-	createdSite, err := coxEdgeClient.CreateSite(newSite)
+	createdSite, err := coxEdgeClient.CreateSite(newSite, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -62,9 +63,9 @@ func resourceSiteRead(ctx context.Context, d *schema.ResourceData, m interface{}
 
 	//Get the resource ID
 	resourceId := d.Id()
-
+	organizationId := d.Get("organization_id").(string)
 	//Get the resource
-	site, err := coxEdgeClient.GetSite(d.Get("environment_name").(string), resourceId)
+	site, err := coxEdgeClient.GetSite(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -81,11 +82,11 @@ func resourceSiteUpdate(ctx context.Context, d *schema.ResourceData, m interface
 
 	//Get the resource ID
 	resourceId := d.Id()
-
+	organizationId := d.Get("organization_id").(string)
 	value, hasValue := d.GetOk("operation")
 	if hasValue {
 		//Call the API
-		_, err := coxEdgeClient.UpdateSite(resourceId, d.Get("environment_name").(string), value.(string))
+		_, err := coxEdgeClient.UpdateSite(resourceId, d.Get("environment_name").(string), value.(string), organizationId)
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -112,9 +113,9 @@ func resourceSiteDelete(ctx context.Context, d *schema.ResourceData, m interface
 
 	//Get the resource ID
 	resourceId := d.Id()
-
+	organizationId := d.Get("organization_id").(string)
 	//Delete the Site
-	err := coxEdgeClient.DeleteSite(d.Get("environment_name").(string), resourceId)
+	err := coxEdgeClient.DeleteSite(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

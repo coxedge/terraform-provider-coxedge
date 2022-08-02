@@ -11,6 +11,7 @@ provider "coxedge" {
 }
 
 resource "coxedge_site" "testing" {
+  organization_id  = "<organization_id>"
   environment_name = "test"
   domain           = "www.rpgfan.com"
   hostname         = "199.250.204.212"
