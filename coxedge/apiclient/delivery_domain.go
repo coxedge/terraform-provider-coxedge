@@ -17,9 +17,9 @@ type DeliveryDomainCreateRequest struct {
 }
 
 //GetDeliveryDomains Get deliveryDomains in account
-func (c *Client) GetDeliveryDomains(environmentName string) ([]DeliveryDomain, error) {
+func (c *Client) GetDeliveryDomains(environmentName string, organizationId string) ([]DeliveryDomain, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -40,10 +40,10 @@ func (c *Client) GetDeliveryDomains(environmentName string) ([]DeliveryDomain, e
 }
 
 //GetDeliveryDomain Get deliveryDomain in account by id
-func (c *Client) GetDeliveryDomain(environmentName string, id string) (*DeliveryDomain, error) {
+func (c *Client) GetDeliveryDomain(environmentName string, id string, organizationId string) (*DeliveryDomain, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -66,7 +66,7 @@ func (c *Client) GetDeliveryDomain(environmentName string, id string) (*Delivery
 }
 
 //CreateDeliveryDomain Create the deliveryDomain
-func (c *Client) CreateDeliveryDomain(siteId string, newDeliveryDomain DeliveryDomainCreateRequest) (*TaskStatusResponse, error) {
+func (c *Client) CreateDeliveryDomain(siteId string, newDeliveryDomain DeliveryDomainCreateRequest, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newDeliveryDomain)
 	if err != nil {
@@ -76,7 +76,7 @@ func (c *Client) CreateDeliveryDomain(siteId string, newDeliveryDomain DeliveryD
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newDeliveryDomain.EnvironmentName+"/deliverydomains?siteId="+siteId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newDeliveryDomain.EnvironmentName+"/deliverydomains?siteId="+siteId+"&org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -95,10 +95,10 @@ func (c *Client) CreateDeliveryDomain(siteId string, newDeliveryDomain DeliveryD
 }
 
 //DeleteDeliveryDomain Delete deliveryDomain in account by id
-func (c *Client) DeleteDeliveryDomain(environmentName string, id string) error {
+func (c *Client) DeleteDeliveryDomain(environmentName string, id string, organizationId string) error {
 	//Create the request
 	request, err := http.NewRequest("DELETE",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliverydomains/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {

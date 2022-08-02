@@ -13,6 +13,7 @@ provider "coxedge" {
 
 
 resource "coxedge_delivery_domain" "testing" {
+  organization_id  = "<organization_id>"
   environment_name = "<environment name>"
   domain           = "<domain name>"
   site_id          = "<site-id>"

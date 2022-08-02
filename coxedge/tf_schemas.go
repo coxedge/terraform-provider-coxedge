@@ -870,6 +870,10 @@ func getDeliveryDomainSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"stack_id": {
 			Type:     schema.TypeString,
 			Computed: true,

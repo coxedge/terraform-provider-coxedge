@@ -36,8 +36,9 @@ func resourceDeliveryDomainCreate(ctx context.Context, d *schema.ResourceData, m
 	newDeliveryDomain := convertResourceDataToDeliveryDomainCreateAPIObject(d)
 
 	resourceId := d.Get("site_id").(string)
+	organizationId := d.Get("organization_id").(string)
 	//Call the API
-	createdDeliveryDomain, err := coxEdgeClient.CreateDeliveryDomain(resourceId, newDeliveryDomain)
+	createdDeliveryDomain, err := coxEdgeClient.CreateDeliveryDomain(resourceId, newDeliveryDomain, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -63,9 +64,10 @@ func resourceDeliveryDomainRead(ctx context.Context, d *schema.ResourceData, m i
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Get the resource
-	deliveryDomain, err := coxEdgeClient.GetDeliveryDomain(d.Get("environment_name").(string), resourceId)
+	deliveryDomain, err := coxEdgeClient.GetDeliveryDomain(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -88,9 +90,10 @@ func resourceDeliveryDomainDelete(ctx context.Context, d *schema.ResourceData, m
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Delete the DeliveryDomain
-	err := coxEdgeClient.DeleteDeliveryDomain(d.Get("environment_name").(string), resourceId)
+	err := coxEdgeClient.DeleteDeliveryDomain(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
