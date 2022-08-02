@@ -11,12 +11,13 @@ provider "coxedge" {
   key = "[INSERT API KEY HERE]"
 }
 
-#do import existing resource, do run below script
-#terraform import coxedge_cdn_settings.testing <site_id>:<environment_name>
+#to import existing resource, do run below script
+#terraform import coxedge_cdn_settings.testing <site_id>:<environment_name>:<organization_id>
 
 resource "coxedge_cdn_settings" "testing" {
-  site_id                           = "d348165c-3a8c-4904-8001-3e3d183a8643"
-  environment_name                  = "test"
+  organization_id                   = "<organization_id>"
+  site_id                           = "<site_id>"
+  environment_name                  = "<environment_name>"
   cache_expire_policy               = "SPECIFY_CDN_TTL"
   cache_ttl                         = "60"
   custom_cached_query_strings       = ["customQuery"]

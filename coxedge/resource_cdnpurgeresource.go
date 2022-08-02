@@ -33,12 +33,12 @@ func resourceCDNPurgeResourceCreate(ctx context.Context, d *schema.ResourceData,
 
 	//Convert resource data to API Object
 	newCDNPurgeResource := convertResourceDataToCDNPurgeResourceCreateAPIObject(d)
-
 	//Call the API
 	createdCDNPurgeResource, err := coxEdgeClient.PurgeCDN(
 		d.Get("environment_name").(string),
 		d.Get("site_id").(string),
 		newCDNPurgeResource,
+		d.Get("organization_id").(string),
 	)
 	if err != nil {
 		return diag.FromErr(err)

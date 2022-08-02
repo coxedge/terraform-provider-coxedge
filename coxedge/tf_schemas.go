@@ -891,6 +891,10 @@ func getDeliveryDomainSchema() map[string]*schema.Schema {
 
 func getCDNSettingsSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"site_id": {
 			Type:     schema.TypeString,
 			Required: true,
@@ -1128,6 +1132,11 @@ func getCDNSettingsSchema() map[string]*schema.Schema {
 
 func getCDNPurgeResourceSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+			ForceNew: true,
+		},
 		"site_id": {
 			Type:     schema.TypeString,
 			Required: true,

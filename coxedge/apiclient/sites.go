@@ -23,9 +23,9 @@ type SiteCreateRequest struct {
 }
 
 //GetSites Get sites in account
-func (c *Client) GetSites(environmentName string) ([]Site, error) {
+func (c *Client) GetSites(environmentName string, organizationId string) ([]Site, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -46,10 +46,10 @@ func (c *Client) GetSites(environmentName string) ([]Site, error) {
 }
 
 //GetSite Get site in account by id
-func (c *Client) GetSite(environmentName string, id string) (*Site, error) {
+func (c *Client) GetSite(environmentName string, id string, organizationId string) (*Site, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -72,7 +72,7 @@ func (c *Client) GetSite(environmentName string, id string) (*Site, error) {
 }
 
 //CreateSite Create the site
-func (c *Client) CreateSite(newSite SiteCreateRequest) (*TaskStatusResponse, error) {
+func (c *Client) CreateSite(newSite SiteCreateRequest, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newSite)
 	if err != nil {
@@ -82,7 +82,7 @@ func (c *Client) CreateSite(newSite SiteCreateRequest) (*TaskStatusResponse, err
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newSite.EnvironmentName+"/sites",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newSite.EnvironmentName+"/sites?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -101,10 +101,10 @@ func (c *Client) CreateSite(newSite SiteCreateRequest) (*TaskStatusResponse, err
 }
 
 //UpdateSite Update a site
-func (c *Client) UpdateSite(siteId string, environmentName string, operationValue string) (*TaskStatusResponse, error) {
+func (c *Client) UpdateSite(siteId string, environmentName string, operationValue string, organizationId string) (*TaskStatusResponse, error) {
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites/"+siteId+"?operation="+operationValue,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites/"+siteId+"?org_id="+organizationId+"&operation="+operationValue,
 		nil,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -123,10 +123,10 @@ func (c *Client) UpdateSite(siteId string, environmentName string, operationValu
 }
 
 //DeleteSite Delete site in account by id
-func (c *Client) DeleteSite(environmentName string, id string) error {
+func (c *Client) DeleteSite(environmentName string, id string, organizationId string) error {
 	//Create the request
 	request, err := http.NewRequest("DELETE",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/sites/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {

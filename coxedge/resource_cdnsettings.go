@@ -51,12 +51,14 @@ func resourceCDNSettingsRead(ctx context.Context, d *schema.ResourceData, m inte
 		keys := strings.Split(d.Id(), ":")
 		d.SetId(keys[0])
 		d.Set("environment_name", keys[1])
+		d.Set("organization_id", keys[2])
 	}
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 	//Get the resource
-	cdnSettings, err := coxEdgeClient.GetCDNSettings(d.Get("environment_name").(string), resourceId)
+	cdnSettings, err := coxEdgeClient.GetCDNSettings(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -72,9 +74,9 @@ func resourceCDNSettingsUpdate(ctx context.Context, d *schema.ResourceData, m in
 
 	//Convert resource data to API object
 	updatedCDNSettings := convertResourceDataToCDNSettingsCreateAPIObject(d)
-
+	organizationId := d.Get("organization_id").(string)
 	//Call the API
-	taskResp, err := coxEdgeClient.UpdateCDNSettings(updatedCDNSettings.Id, updatedCDNSettings)
+	taskResp, err := coxEdgeClient.UpdateCDNSettings(updatedCDNSettings.Id, updatedCDNSettings, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

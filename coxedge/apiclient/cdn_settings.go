@@ -12,10 +12,10 @@ import (
 )
 
 //GetCDNSettings Get cdnSettings in account by id
-func (c *Client) GetCDNSettings(environmentName string, id string) (*CDNSettings, error) {
+func (c *Client) GetCDNSettings(environmentName string, id string, organizationId string) (*CDNSettings, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/cdnsettings/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/cdnsettings/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -38,7 +38,7 @@ func (c *Client) GetCDNSettings(environmentName string, id string) (*CDNSettings
 }
 
 //UpdateCDNSettings Update a cdnSettings
-func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSettings) (*TaskStatusResponse, error) {
+func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSettings, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newCDNSettings)
 	if err != nil {
@@ -48,7 +48,7 @@ func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSetti
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PATCH",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newCDNSettings.EnvironmentName+"/cdnsettings/"+cdnSettingsId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newCDNSettings.EnvironmentName+"/cdnsettings/"+cdnSettingsId+"?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -66,7 +66,7 @@ func (c *Client) UpdateCDNSettings(cdnSettingsId string, newCDNSettings CDNSetti
 	return &wrappedAPIStruct, nil
 }
 
-func (c *Client) PurgeCDN(environmentName string, siteId string, options CDNPurgeOptions) (*TaskStatusResponse, error) {
+func (c *Client) PurgeCDN(environmentName string, siteId string, options CDNPurgeOptions, organizationId string) (*TaskStatusResponse, error) {
 	//Derive the operation type
 	operationType := "purge"
 	if len(options.Items) == 0 {
@@ -81,7 +81,7 @@ func (c *Client) PurgeCDN(environmentName string, siteId string, options CDNPurg
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PUT",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/cdnsettings/"+siteId+"?operation="+operationType,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/cdnsettings/"+siteId+"?org_id="+organizationId+"&operation="+operationType,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
