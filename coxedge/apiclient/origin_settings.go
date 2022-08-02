@@ -13,10 +13,10 @@ import (
 )
 
 //GetOriginSettings Get originSettings in account by id
-func (c *Client) GetOriginSettings(environmentName string, id string) (*OriginSettings, error) {
+func (c *Client) GetOriginSettings(environmentName string, id string, organizationId string) (*OriginSettings, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/originsettings/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/originsettings/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -44,7 +44,7 @@ func (c *Client) CreateOriginSettings(newOriginSettings OriginSettings) (*Origin
 }
 
 //UpdateOriginSettings Update a originSettings
-func (c *Client) UpdateOriginSettings(originSettingsId string, newOriginSettings OriginSettings) (*OriginSettings, error) {
+func (c *Client) UpdateOriginSettings(originSettingsId string, newOriginSettings OriginSettings, organizationId string) (*OriginSettings, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newOriginSettings)
 	if err != nil {
@@ -54,7 +54,7 @@ func (c *Client) UpdateOriginSettings(originSettingsId string, newOriginSettings
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PATCH",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newOriginSettings.EnvironmentName+"/originsettings/"+originSettingsId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newOriginSettings.EnvironmentName+"/originsettings/"+originSettingsId+"?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")

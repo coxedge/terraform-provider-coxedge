@@ -710,6 +710,10 @@ func getOriginSettingSetSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"origin_settings": &schema.Schema{
 			Type:     schema.TypeList,
 			Computed: true,
@@ -755,6 +759,10 @@ func getOriginSettingsSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 			Optional: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
 		},
 		"site_id": {
 			Type:     schema.TypeString,

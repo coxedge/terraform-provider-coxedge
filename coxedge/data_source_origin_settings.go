@@ -27,8 +27,9 @@ func dataSourceOriginSettingRead(ctx context.Context, d *schema.ResourceData, m 
 
 	requestedId := d.Get("id").(string)
 	requestedEnv := d.Get("environment_name").(string)
+	organizationId := d.Get("organization_id").(string)
 	if requestedId != "" && requestedEnv != "" {
-		org, err := coxEdgeClient.GetOriginSettings(requestedEnv, requestedId)
+		org, err := coxEdgeClient.GetOriginSettings(requestedEnv, requestedId, organizationId)
 		if err != nil {
 			return diag.FromErr(err)
 		}

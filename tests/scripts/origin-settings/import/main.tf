@@ -12,7 +12,7 @@ provider "coxedge" {
 }
 
 #do import existing resource, do run below script
-#terraform import coxedge_origin_setting.testing <site_id>:<environment_name>
+#terraform import coxedge_origin_setting.testing <site_id>:<environment_name>:<organization_id>
 resource "coxedge_origin_setting" "testing" {
 }
 

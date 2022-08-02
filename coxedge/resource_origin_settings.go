@@ -51,18 +51,20 @@ func resourceOriginSettingsRead(ctx context.Context, d *schema.ResourceData, m i
 	var diags diag.Diagnostics
 
 	//check the id comes with id & environment_name, then split the value -> in case of importing the resource
-	//format is <site_id>:<environment_name>
+	//format is <site_id>:<environment_name>:<organization_id>
 	if strings.Contains(d.Id(), ":") {
 		keys := strings.Split(d.Id(), ":")
 		d.SetId(keys[0])
 		d.Set("environment_name", keys[1])
+		d.Set("organization_id", keys[2])
 	}
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Get the resource
-	originSettings, err := coxEdgeClient.GetOriginSettings(d.Get("environment_name").(string), resourceId)
+	originSettings, err := coxEdgeClient.GetOriginSettings(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -80,9 +82,9 @@ func resourceOriginSettingsUpdate(ctx context.Context, d *schema.ResourceData, m
 
 	//Convert resource data to API object
 	updatedOriginSettings := convertResourceDataToOriginSettingsCreateAPIObject(d)
-
+	organizationId := d.Get("organization_id").(string)
 	//Call the API
-	_, err := coxEdgeClient.UpdateOriginSettings(resourceId, updatedOriginSettings)
+	_, err := coxEdgeClient.UpdateOriginSettings(resourceId, updatedOriginSettings, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
