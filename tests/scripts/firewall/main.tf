@@ -12,6 +12,7 @@ provider "coxedge" {
 }
 
 resource "coxedge_firewall_rule" "testing" {
+  organization_id  = "<organization_id>"
   environment_name = "<environment name>"
   site_id          = "<site-id>"
   action           = "ALLOW"

@@ -12,8 +12,8 @@ import (
 )
 
 //GetFirewallRules Get FirewallRules in account
-func (c *Client) GetFirewallRules(environmentName string, siteId string) ([]FirewallRule, error) {
-	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules?siteId="+siteId, nil)
+func (c *Client) GetFirewallRules(environmentName string, siteId string, organizationId string) ([]FirewallRule, error) {
+	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules?siteId="+siteId+"&org_id="+organizationId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -32,9 +32,9 @@ func (c *Client) GetFirewallRules(environmentName string, siteId string) ([]Fire
 }
 
 //GetFirewallRule Get FirewallRule in account by id
-func (c *Client) GetFirewallRule(environmentName string, siteId string, id string) (*FirewallRule, error) {
+func (c *Client) GetFirewallRule(environmentName string, siteId string, id string, organizationId string) (*FirewallRule, error) {
 	//Create the request
-	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules/"+id+"?siteId="+siteId, nil)
+	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules/"+id+"?siteId="+siteId+"&org_id="+organizationId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (c *Client) GetFirewallRule(environmentName string, siteId string, id strin
 }
 
 //CreateFirewallRule Create the FirewallRule
-func (c *Client) CreateFirewallRule(environmentName string, newFirewallRule FirewallRule) (*TaskStatusResponse, error) {
+func (c *Client) CreateFirewallRule(environmentName string, newFirewallRule FirewallRule, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newFirewallRule)
 	if err != nil {
@@ -64,7 +64,7 @@ func (c *Client) CreateFirewallRule(environmentName string, newFirewallRule Fire
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
-	request, err := http.NewRequest("POST", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules?siteId="+newFirewallRule.SiteId, bReader)
+	request, err := http.NewRequest("POST", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules?siteId="+newFirewallRule.SiteId+"&org_id="+organizationId, bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)
@@ -81,7 +81,7 @@ func (c *Client) CreateFirewallRule(environmentName string, newFirewallRule Fire
 }
 
 //UpdateFirewallRule Update a FirewallRule
-func (c *Client) UpdateFirewallRule(environmentName string, firewallRuleId string, newFirewallRule FirewallRule) (*TaskStatusResponse, error) {
+func (c *Client) UpdateFirewallRule(environmentName string, firewallRuleId string, newFirewallRule FirewallRule, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newFirewallRule)
 	if err != nil {
@@ -90,7 +90,7 @@ func (c *Client) UpdateFirewallRule(environmentName string, firewallRuleId strin
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
-	request, err := http.NewRequest("PUT", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules/"+firewallRuleId+"?siteId="+newFirewallRule.SiteId, bReader)
+	request, err := http.NewRequest("PUT", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules/"+firewallRuleId+"?siteId="+newFirewallRule.SiteId+"&org_id="+organizationId, bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)
@@ -107,9 +107,9 @@ func (c *Client) UpdateFirewallRule(environmentName string, firewallRuleId strin
 }
 
 //DeleteFirewallRule Delete FirewallRule in account by id
-func (c *Client) DeleteFirewallRule(environmentName string, siteId string, id string) error {
+func (c *Client) DeleteFirewallRule(environmentName string, siteId string, id string, organizationId string) error {
 	//Create the request
-	request, err := http.NewRequest("DELETE", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules/"+id+"?siteId="+siteId, nil)
+	request, err := http.NewRequest("DELETE", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/firewallrules/"+id+"?siteId="+siteId+"&org_id="+organizationId, nil)
 	if err != nil {
 		return err
 	}

@@ -36,8 +36,9 @@ func resourceFirewallRuleCreate(ctx context.Context, d *schema.ResourceData, m i
 	//Convert resource data to API Object
 	newFirewallRule := convertResourceDataToFirewallRuleCreateAPIObject(d)
 
+	organizationId := d.Get("organization_id").(string)
 	//Call the API
-	createdFirewallRule, err := coxEdgeClient.CreateFirewallRule(d.Get("environment_name").(string), newFirewallRule)
+	createdFirewallRule, err := coxEdgeClient.CreateFirewallRule(d.Get("environment_name").(string), newFirewallRule, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -63,9 +64,9 @@ func resourceFirewallRuleRead(ctx context.Context, d *schema.ResourceData, m int
 
 	//Get the resource ID
 	resourceId := d.Id()
-
+	organizationId := d.Get("organization_id").(string)
 	//Get the resource
-	firewallRule, err := coxEdgeClient.GetFirewallRule(d.Get("environment_name").(string), d.Get("site_id").(string), resourceId)
+	firewallRule, err := coxEdgeClient.GetFirewallRule(d.Get("environment_name").(string), d.Get("site_id").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -84,9 +85,9 @@ func resourceFirewallRuleUpdate(ctx context.Context, d *schema.ResourceData, m i
 
 	//Convert resource data to API object
 	updatedFirewallRule := convertResourceDataToFirewallRuleCreateAPIObject(d)
-
+	organizationId := d.Get("organization_id").(string)
 	//Call the API
-	_, err := coxEdgeClient.UpdateFirewallRule(d.Get("environment_name").(string), resourceId, updatedFirewallRule)
+	_, err := coxEdgeClient.UpdateFirewallRule(d.Get("environment_name").(string), resourceId, updatedFirewallRule, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -106,9 +107,9 @@ func resourceFirewallRuleDelete(ctx context.Context, d *schema.ResourceData, m i
 
 	//Get the resource ID
 	resourceId := d.Id()
-
+	organizationId := d.Get("organization_id").(string)
 	//Delete the FirewallRule
-	err := coxEdgeClient.DeleteFirewallRule(d.Get("environment_name").(string), d.Get("site_id").(string), resourceId)
+	err := coxEdgeClient.DeleteFirewallRule(d.Get("environment_name").(string), d.Get("site_id").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
