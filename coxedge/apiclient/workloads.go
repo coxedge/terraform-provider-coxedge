@@ -35,9 +35,9 @@ type WorkloadCreateRequest struct {
 }
 
 //GetWorkloads Get workloads in account
-func (c *Client) GetWorkloads(environmentName string) ([]Workload, error) {
+func (c *Client) GetWorkloads(environmentName string, organizationId string) ([]Workload, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/workloads",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/workloads?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -58,10 +58,10 @@ func (c *Client) GetWorkloads(environmentName string) ([]Workload, error) {
 }
 
 //GetWorkload Get workload in account by id
-func (c *Client) GetWorkload(environmentName string, id string) (*Workload, error) {
+func (c *Client) GetWorkload(environmentName string, id string, organizationId string) (*Workload, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/workloads/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/workloads/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -84,7 +84,7 @@ func (c *Client) GetWorkload(environmentName string, id string) (*Workload, erro
 }
 
 //CreateWorkload Create the workload
-func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest) (*TaskStatusResponse, error) {
+func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newWorkload)
 	if err != nil {
@@ -94,7 +94,7 @@ func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest) (*TaskStatusR
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newWorkload.EnvironmentName+"/workloads",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newWorkload.EnvironmentName+"/workloads?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -113,7 +113,7 @@ func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest) (*TaskStatusR
 }
 
 //UpdateWorkload Update a workload
-func (c *Client) UpdateWorkload(workloadId string, newWorkload WorkloadCreateRequest) (*TaskStatusResponse, error) {
+func (c *Client) UpdateWorkload(workloadId string, newWorkload WorkloadCreateRequest, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newWorkload)
 	if err != nil {
@@ -123,7 +123,7 @@ func (c *Client) UpdateWorkload(workloadId string, newWorkload WorkloadCreateReq
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PUT",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newWorkload.EnvironmentName+"/workloads/"+workloadId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newWorkload.EnvironmentName+"/workloads/"+workloadId+"?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -142,10 +142,10 @@ func (c *Client) UpdateWorkload(workloadId string, newWorkload WorkloadCreateReq
 }
 
 //DeleteWorkload Delete workload in account by id
-func (c *Client) DeleteWorkload(environmentName string, id string) error {
+func (c *Client) DeleteWorkload(environmentName string, id string, organizationId string) error {
 	//Create the request
 	request, err := http.NewRequest("DELETE",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/workloads/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/workloads/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {

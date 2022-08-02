@@ -46,8 +46,10 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 		}
 	}
 
+	organizationId := d.Get("organization_id").(string)
+
 	//Call the API
-	createdWorkload, err := coxEdgeClient.CreateWorkload(newWorkload)
+	createdWorkload, err := coxEdgeClient.CreateWorkload(newWorkload, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -75,9 +77,10 @@ func resourceWorkloadRead(ctx context.Context, d *schema.ResourceData, m interfa
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Get the resource
-	workload, err := coxEdgeClient.GetWorkload(d.Get("environment_name").(string), resourceId)
+	workload, err := coxEdgeClient.GetWorkload(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -97,9 +100,10 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 
 	//Convert resource data to API object
 	updatedWorkload := convertResourceDataToWorkloadCreateAPIObject(d)
+	organizationId := d.Get("organization_id").(string)
 
 	//Call the API
-	_, err := coxEdgeClient.UpdateWorkload(resourceId, updatedWorkload)
+	_, err := coxEdgeClient.UpdateWorkload(resourceId, updatedWorkload, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -119,9 +123,10 @@ func resourceWorkloadDelete(ctx context.Context, d *schema.ResourceData, m inter
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Delete the Workload
-	err := coxEdgeClient.DeleteWorkload(d.Get("environment_name").(string), resourceId)
+	err := coxEdgeClient.DeleteWorkload(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

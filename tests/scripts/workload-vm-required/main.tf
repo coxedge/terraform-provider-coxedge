@@ -22,6 +22,7 @@ output "envs" {
 # VM Workloads
 resource "coxedge_workload" "test" {
   name               = "test2"
+  organization_id  = "<organization_id>"
   environment_name   = data.coxedge_environments.test.environments[0].name
   type               = "VM"
   image              = "stackpath-edge/ubuntu-1804-bionic:v202104291427"

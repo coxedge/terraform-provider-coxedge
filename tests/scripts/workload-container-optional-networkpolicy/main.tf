@@ -13,6 +13,7 @@ provider "coxedge" {
 
 resource "coxedge_workload" "test" {
   name             = "demo-container-1"
+  organization_id  = "<organization_id>"
   environment_name = "<environment name>"
   type             = "CONTAINER"
   image            = "bitnami/nginx"

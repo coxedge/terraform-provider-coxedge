@@ -21,6 +21,7 @@ output "envs" {
 # Workloads
 resource "coxedge_workload" "test" {
   name = "demo-container-2"
+  organization_id  = "<organization_id>"
   environment_name = "demo_env"
   type = "CONTAINER"
   image = "bitnami/nginx"
