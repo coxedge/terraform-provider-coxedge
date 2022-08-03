@@ -18,9 +18,9 @@ type ScriptCreateRequest struct {
 }
 
 //GetScripts Get Scripts in account
-func (c *Client) GetScripts(siteId string, environmentName string) ([]Script, error) {
+func (c *Client) GetScripts(siteId string, environmentName string, organizationId string) ([]Script, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts?siteId="+siteId, nil)
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts?siteId="+siteId+"&org_id="+organizationId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -39,10 +39,10 @@ func (c *Client) GetScripts(siteId string, environmentName string) ([]Script, er
 }
 
 //GetScript Get Script in account by id
-func (c *Client) GetScript(id string, siteId string, environmentName string) (*Script, error) {
+func (c *Client) GetScript(id string, siteId string, environmentName string, organizationId string) (*Script, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts/"+id+"?siteId="+siteId, nil)
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts/"+id+"?siteId="+siteId+"&org_id="+organizationId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (c *Client) GetScript(id string, siteId string, environmentName string) (*S
 }
 
 //CreateScript Create the Script
-func (c *Client) CreateScript(siteId string, environmentName string, newScript ScriptCreateRequest) (*TaskStatusResponse, error) {
+func (c *Client) CreateScript(siteId string, environmentName string, newScript ScriptCreateRequest, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newScript)
 	if err != nil {
@@ -73,7 +73,7 @@ func (c *Client) CreateScript(siteId string, environmentName string, newScript S
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts?siteId="+siteId, bReader)
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts?siteId="+siteId+"&org_id="+organizationId, bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)
@@ -90,7 +90,7 @@ func (c *Client) CreateScript(siteId string, environmentName string, newScript S
 }
 
 //UpdateScript Update a Script
-func (c *Client) UpdateScript(id string, siteId string, environmentName string, newScript ScriptCreateRequest) (*TaskStatusResponse, error) {
+func (c *Client) UpdateScript(id string, siteId string, environmentName string, newScript ScriptCreateRequest, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newScript)
 	if err != nil {
@@ -100,7 +100,7 @@ func (c *Client) UpdateScript(id string, siteId string, environmentName string, 
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PUT",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts/"+id+"?siteId="+siteId, bReader)
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts/"+id+"?siteId="+siteId+"&org_id="+organizationId, bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)
@@ -117,10 +117,10 @@ func (c *Client) UpdateScript(id string, siteId string, environmentName string, 
 }
 
 //DeleteScript Delete Script in account by id
-func (c *Client) DeleteScript(id string, siteId string, environmentName string) error {
+func (c *Client) DeleteScript(id string, siteId string, environmentName string, organizationId string) error {
 	//Create the request
 	request, err := http.NewRequest("DELETE",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts/"+id+"?siteId="+siteId, nil)
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/scripts/"+id+"?siteId="+siteId+"&org_id="+organizationId, nil)
 	if err != nil {
 		return err
 	}

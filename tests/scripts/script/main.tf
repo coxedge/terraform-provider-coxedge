@@ -12,6 +12,7 @@ provider "coxedge" {
 }
 
 resource "coxedge_script" "testing" {
+  organization_id  = "<organization_id>"
   site_id          = "<site-id>"
   environment_name = "<environment_name>"
   name             = "script-test"

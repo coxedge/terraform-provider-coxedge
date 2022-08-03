@@ -41,7 +41,8 @@ func resourceScriptCreate(ctx context.Context, d *schema.ResourceData, m interfa
 	createdScript, err := coxEdgeClient.CreateScript(
 		d.Get("site_id").(string),
 		d.Get("environment_name").(string),
-		newScript)
+		newScript,
+		d.Get("organization_id").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -71,7 +72,10 @@ func resourceScriptRead(ctx context.Context, d *schema.ResourceData, m interface
 	resourceId := d.Id()
 
 	//Get the resource
-	script, err := coxEdgeClient.GetScript(resourceId, d.Get("site_id").(string), d.Get("environment_name").(string))
+	script, err := coxEdgeClient.GetScript(resourceId,
+		d.Get("site_id").(string),
+		d.Get("environment_name").(string),
+		d.Get("organization_id").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -95,7 +99,8 @@ func resourceScriptUpdate(ctx context.Context, d *schema.ResourceData, m interfa
 	updateScriptResponse, err := coxEdgeClient.UpdateScript(resourceId,
 		d.Get("site_id").(string),
 		d.Get("environment_name").(string),
-		updatedScript)
+		updatedScript,
+		d.Get("organization_id").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -122,7 +127,10 @@ func resourceScriptDelete(ctx context.Context, d *schema.ResourceData, m interfa
 	resourceId := d.Id()
 
 	//Delete the Script
-	err := coxEdgeClient.DeleteScript(resourceId, d.Get("site_id").(string), d.Get("environment_name").(string))
+	err := coxEdgeClient.DeleteScript(resourceId,
+		d.Get("site_id").(string),
+		d.Get("environment_name").(string),
+		d.Get("organization_id").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
