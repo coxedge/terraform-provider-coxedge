@@ -1227,6 +1227,10 @@ func getCDNPurgeResourceSchema() map[string]*schema.Schema {
 
 func getWAFSettingsSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"environment_name": {
 			Type:        schema.TypeString,
 			Required:    true,

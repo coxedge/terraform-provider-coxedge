@@ -12,11 +12,12 @@ provider "coxedge" {
 }
 
 #do import existing resource, do run below script
-#terraform import coxedge_waf_settings.testing <site_id>:<environment_name>
+#terraform import coxedge_waf_settings.testing <site_id>:<environment_name>:<organization_id>
 
 resource "coxedge_waf_settings" "testing" {
-  site_id                 = "352cdc1e-c071-49ad-bddd-371094880507"
-  environment_name        = "test-codecraft"
+  organization_id         = "<organization_id>"
+  site_id                 = "<site_id>"
+  environment_name        = "<environment_name>"
   domain                  = "cc.cox.com"
   monitoring_mode_enabled = "false"
   api_urls                = [

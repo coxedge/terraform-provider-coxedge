@@ -50,16 +50,20 @@ func resourceWAFSettingsRead(ctx context.Context, d *schema.ResourceData, m inte
 	var diags diag.Diagnostics
 
 	//check the id comes with id & environment_name, then split the value -> in case of importing the resource
-	//format is <site_id>:<environment_name>
+	//format is <site_id>:<environment_name>:<organization_id>
 	if strings.Contains(d.Id(), ":") {
 		keys := strings.Split(d.Id(), ":")
 		d.SetId(keys[0])
 		d.Set("environment_name", keys[1])
+		d.Set("organization_id", keys[2])
 	}
 	//Get the resource ID
 	resourceId := d.Id()
+
 	//Get the resource
-	wafSettings, err := coxEdgeClient.GetWAFSettings(d.Get("environment_name").(string), resourceId)
+	wafSettings, err := coxEdgeClient.GetWAFSettings(d.Get("environment_name").(string),
+		resourceId,
+		d.Get("organization_id").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -75,7 +79,7 @@ func resourceWAFSettingsUpdate(ctx context.Context, d *schema.ResourceData, m in
 	updatedWAFSettings := convertResourceDataToWAFSettingsCreateAPIObject(d)
 
 	//Call the API
-	taskResp, err := coxEdgeClient.UpdateWAFSettings(updatedWAFSettings.Id, updatedWAFSettings)
+	taskResp, err := coxEdgeClient.UpdateWAFSettings(updatedWAFSettings.Id, updatedWAFSettings, d.Get("organization_id").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}

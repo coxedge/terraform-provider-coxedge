@@ -12,10 +12,10 @@ import (
 )
 
 //GetWAFSettings Get wafSettings in account by id
-func (c *Client) GetWAFSettings(environmentName string, id string) (*WAFSettings, error) {
+func (c *Client) GetWAFSettings(environmentName string, id string, organizationId string) (*WAFSettings, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/wafsettings/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/wafsettings/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
@@ -38,7 +38,7 @@ func (c *Client) GetWAFSettings(environmentName string, id string) (*WAFSettings
 }
 
 //UpdateWAFSettings Update a wafSettings
-func (c *Client) UpdateWAFSettings(wafSettingsId string, newWAFSettings WAFSettings) (*TaskStatusResponse, error) {
+func (c *Client) UpdateWAFSettings(wafSettingsId string, newWAFSettings WAFSettings, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newWAFSettings)
 	if err != nil {
@@ -48,7 +48,7 @@ func (c *Client) UpdateWAFSettings(wafSettingsId string, newWAFSettings WAFSetti
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PATCH",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newWAFSettings.EnvironmentName+"/wafsettings/"+wafSettingsId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newWAFSettings.EnvironmentName+"/wafsettings/"+wafSettingsId+"?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
