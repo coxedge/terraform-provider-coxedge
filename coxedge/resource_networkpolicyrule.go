@@ -36,8 +36,10 @@ func resourceNetworkPolicyRuleCreate(ctx context.Context, d *schema.ResourceData
 	//Convert resource data to API Object
 	newNetworkPolicyRule := convertResourceDataToNetworkPolicyRuleCreateAPIObject(d)
 
+	organizationId := d.Get("organization_id").(string)
+
 	//Call the API
-	createdNetworkPolicyRule, err := coxEdgeClient.CreateNetworkPolicyRule(newNetworkPolicyRule)
+	createdNetworkPolicyRule, err := coxEdgeClient.CreateNetworkPolicyRule(newNetworkPolicyRule, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -57,9 +59,10 @@ func resourceNetworkPolicyRuleRead(ctx context.Context, d *schema.ResourceData, 
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Get the resource
-	networkPolicyRule, err := coxEdgeClient.GetNetworkPolicyRule(d.Get("environment_name").(string), resourceId)
+	networkPolicyRule, err := coxEdgeClient.GetNetworkPolicyRule(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -76,12 +79,13 @@ func resourceNetworkPolicyRuleUpdate(ctx context.Context, d *schema.ResourceData
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Convert resource data to API object
 	updatedNetworkPolicyRule := convertResourceDataToNetworkPolicyRuleCreateAPIObject(d)
 
 	//Call the API
-	updatedRule, err := coxEdgeClient.UpdateNetworkPolicyRule(resourceId, updatedNetworkPolicyRule)
+	updatedRule, err := coxEdgeClient.UpdateNetworkPolicyRule(resourceId, updatedNetworkPolicyRule, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -103,9 +107,10 @@ func resourceNetworkPolicyRuleDelete(ctx context.Context, d *schema.ResourceData
 
 	//Get the resource ID
 	resourceId := d.Id()
+	organizationId := d.Get("organization_id").(string)
 
 	//Delete the NetworkPolicyRule
-	err := coxEdgeClient.DeleteNetworkPolicyRule(d.Get("environment_name").(string), resourceId)
+	err := coxEdgeClient.DeleteNetworkPolicyRule(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

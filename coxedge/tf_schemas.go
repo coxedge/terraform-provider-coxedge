@@ -540,6 +540,10 @@ func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"environment_name": {
 			Type:     schema.TypeString,
 			Required: true,

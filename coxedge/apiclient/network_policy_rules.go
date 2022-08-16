@@ -23,9 +23,10 @@ type NetworkPolicyRuleCreateRequest struct {
 }
 
 //GetNetworkPolicyRules Get networkPolicyRules in account
-func (c *Client) GetNetworkPolicyRules(environmentName string) ([]NetworkPolicyRule, error) {
+func (c *Client) GetNetworkPolicyRules(environmentName string, organizationId string) ([]NetworkPolicyRule, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules", nil)
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules"+"?org_id="+organizationId,
+		nil)
 	if err != nil {
 		return nil, err
 	}
@@ -44,10 +45,10 @@ func (c *Client) GetNetworkPolicyRules(environmentName string) ([]NetworkPolicyR
 }
 
 //GetNetworkPolicyRule Get networkPolicyRule in account by id
-func (c *Client) GetNetworkPolicyRule(environmentName string, id string) (*NetworkPolicyRule, error) {
+func (c *Client) GetNetworkPolicyRule(environmentName string, id string, organizationId string) (*NetworkPolicyRule, error) {
 	//Create the request
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules/"+id+"?org_id="+organizationId,
 		nil)
 	if err != nil {
 		return nil, err
@@ -69,7 +70,7 @@ func (c *Client) GetNetworkPolicyRule(environmentName string, id string) (*Netwo
 }
 
 //CreateNetworkPolicyRule Create the networkPolicyRule
-func (c *Client) CreateNetworkPolicyRule(newNetworkPolicyRule NetworkPolicyRuleCreateRequest) (*NetworkPolicyRule, error) {
+func (c *Client) CreateNetworkPolicyRule(newNetworkPolicyRule NetworkPolicyRuleCreateRequest, organizationId string) (*NetworkPolicyRule, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newNetworkPolicyRule)
 	if err != nil {
@@ -79,7 +80,7 @@ func (c *Client) CreateNetworkPolicyRule(newNetworkPolicyRule NetworkPolicyRuleC
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -98,7 +99,7 @@ func (c *Client) CreateNetworkPolicyRule(newNetworkPolicyRule NetworkPolicyRuleC
 }
 
 //UpdateNetworkPolicyRule Update a networkPolicyRule
-func (c *Client) UpdateNetworkPolicyRule(networkPolicyRuleId string, newNetworkPolicyRule NetworkPolicyRuleCreateRequest) (*NetworkPolicyRule, error) {
+func (c *Client) UpdateNetworkPolicyRule(networkPolicyRuleId string, newNetworkPolicyRule NetworkPolicyRuleCreateRequest, organizationId string) (*NetworkPolicyRule, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newNetworkPolicyRule)
 	if err != nil {
@@ -108,7 +109,7 @@ func (c *Client) UpdateNetworkPolicyRule(networkPolicyRuleId string, newNetworkP
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("PUT",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules/"+networkPolicyRuleId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules/"+networkPolicyRuleId+"?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
@@ -127,10 +128,10 @@ func (c *Client) UpdateNetworkPolicyRule(networkPolicyRuleId string, newNetworkP
 }
 
 //DeleteNetworkPolicyRule Delete networkPolicyRule in account by id
-func (c *Client) DeleteNetworkPolicyRule(environmentName string, id string) error {
+func (c *Client) DeleteNetworkPolicyRule(environmentName string, id string, organizationId string) error {
 	//Create the request
 	request, err := http.NewRequest("DELETE",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules/"+id,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/networkpolicyrules/"+id+"?org_id="+organizationId,
 		nil,
 	)
 	if err != nil {
