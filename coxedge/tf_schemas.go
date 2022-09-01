@@ -530,7 +530,7 @@ func getImageSetSchema() map[string]*schema.Schema {
 	}
 }
 
-func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
+func getNetworkPolicyRuleSchemas() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"id": {
 			Type:     schema.TypeString,
@@ -579,6 +579,71 @@ func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
 		"port_range": {
 			Type:     schema.TypeString,
 			Required: true,
+		},
+	}
+}
+
+func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"network_policy": {
+			Type:     schema.TypeList,
+			Required: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"id": {
+						Type:     schema.TypeString,
+						Computed: true,
+					},
+					"workload_id": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"network_policy_id": {
+						Type:     schema.TypeString,
+						Computed: true,
+					},
+					"description": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"type": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"source": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"action": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"protocol": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"port_range": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+				},
+			},
 		},
 	}
 }

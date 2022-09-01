@@ -44,8 +44,27 @@ func resourceNetworkPolicyRuleCreate(ctx context.Context, d *schema.ResourceData
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
-	d.SetId(createdNetworkPolicyRule.Id)
+	for _, created := range createdNetworkPolicyRule {
+		d.SetId(created.Id)
+		//d.Set("network_policy.network_policy_id", created.Id)
+	}
+	networkPolicy := make([]map[string]interface{}, len(createdNetworkPolicyRule), len(createdNetworkPolicyRule))
+	for i, policy := range createdNetworkPolicyRule {
+		item := make(map[string]interface{})
+		item["id"] = policy.Id
+		item["workload_id"] = policy.WorkloadId
+		item["description"] = policy.Description
+		item["network_policy_id"] = policy.NetworkPolicyId
+		item["type"] = policy.Type
+		item["source"] = policy.Source
+		item["action"] = policy.Action
+		item["protocol"] = policy.Protocol
+		item["port_range"] = policy.PortRange
+		networkPolicy[i] = item
+
+	}
+	d.SetId(time.Now().String())
+	d.Set("network_policy", networkPolicy)
 
 	return diags
 }
@@ -126,13 +145,20 @@ func convertResourceDataToNetworkPolicyRuleCreateAPIObject(d *schema.ResourceDat
 	//Create update networkPolicyRule struct
 	updatedNetworkPolicyRule := apiclient.NetworkPolicyRuleCreateRequest{
 		EnvironmentName: d.Get("environment_name").(string),
-		WorkloadId:      d.Get("workload_id").(string),
-		Description:     d.Get("description").(string),
-		Protocol:        d.Get("protocol").(string),
-		Type:            d.Get("type").(string),
-		Action:          d.Get("action").(string),
-		Source:          d.Get("source").(string),
-		PortRange:       d.Get("port_range").(string),
+	}
+	for _, entry := range d.Get("network_policy").([]interface{}) {
+		convertedEntry := entry.(map[string]interface{})
+		networkObj := apiclient.NetworkPolicyList{
+			EnvironmentName: d.Get("environment_name").(string),
+			WorkloadId:      convertedEntry["workload_id"].(string),
+			Description:     convertedEntry["description"].(string),
+			Protocol:        convertedEntry["protocol"].(string),
+			Type:            convertedEntry["type"].(string),
+			Action:          convertedEntry["action"].(string),
+			Source:          convertedEntry["source"].(string),
+			PortRange:       convertedEntry["port_range"].(string),
+		}
+		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
 	}
 
 	return updatedNetworkPolicyRule
@@ -149,4 +175,5 @@ func convertNetworkPolicyRuleAPIObjectToResourceData(d *schema.ResourceData, net
 	d.Set("action", networkPolicyRule.Action)
 	d.Set("source", networkPolicyRule.Source)
 	d.Set("port_range", networkPolicyRule.PortRange)
+
 }

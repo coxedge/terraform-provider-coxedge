@@ -12,6 +12,11 @@ import (
 )
 
 type NetworkPolicyRuleCreateRequest struct {
+	EnvironmentName string              `json:"-"`
+	NetworkPolicy   []NetworkPolicyList `json:"network_policy"`
+}
+
+type NetworkPolicyList struct {
 	EnvironmentName string `json:"-"`
 	WorkloadId      string `json:"workloadId"`
 	Description     string `json:"description"`
@@ -70,32 +75,37 @@ func (c *Client) GetNetworkPolicyRule(environmentName string, id string, organiz
 }
 
 //CreateNetworkPolicyRule Create the networkPolicyRule
-func (c *Client) CreateNetworkPolicyRule(newNetworkPolicyRule NetworkPolicyRuleCreateRequest, organizationId string) (*NetworkPolicyRule, error) {
+func (c *Client) CreateNetworkPolicyRule(newNetworkPolicyRule NetworkPolicyRuleCreateRequest, organizationId string) ([]NetworkPolicyRule, error) {
+	var networkResponse []NetworkPolicyRule
 	//Marshal the request
-	jsonBytes, err := json.Marshal(newNetworkPolicyRule)
-	if err != nil {
-		return nil, err
+	for _, entry := range newNetworkPolicyRule.NetworkPolicy {
+		jsonBytes, err := json.Marshal(entry)
+		if err != nil {
+			return nil, err
+		}
+		//Wrap bytes in reader
+		bReader := bytes.NewReader(jsonBytes)
+		//Create the request
+		request, err := http.NewRequest("POST",
+			CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules?org_id="+organizationId,
+			bReader,
+		)
+		request.Header.Set("Content-Type", "application/json")
+		//Execute request
+		respBytes, err := c.doRequest(request)
+		if err != nil {
+			return nil, err
+		}
+		//Return struct
+		var wrappedAPIStruct WrappedNetworkPolicyRule
+		err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+		if err != nil {
+			return nil, err
+		}
+		networkResponse = append(networkResponse, wrappedAPIStruct.Data)
 	}
-	//Wrap bytes in reader
-	bReader := bytes.NewReader(jsonBytes)
-	//Create the request
-	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+newNetworkPolicyRule.EnvironmentName+"/networkpolicyrules?org_id="+organizationId,
-		bReader,
-	)
-	request.Header.Set("Content-Type", "application/json")
-	//Execute request
-	respBytes, err := c.doRequest(request)
-	if err != nil {
-		return nil, err
-	}
-	//Return struct
-	var wrappedAPIStruct WrappedNetworkPolicyRule
-	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
-	if err != nil {
-		return nil, err
-	}
-	return &wrappedAPIStruct.Data, nil
+	return networkResponse, nil
+
 }
 
 //UpdateNetworkPolicyRule Update a networkPolicyRule
