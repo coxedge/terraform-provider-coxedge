@@ -44,10 +44,6 @@ func resourceNetworkPolicyRuleCreate(ctx context.Context, d *schema.ResourceData
 		return diag.FromErr(err)
 	}
 
-	for _, created := range createdNetworkPolicyRule {
-		d.SetId(created.Id)
-		//d.Set("network_policy.network_policy_id", created.Id)
-	}
 	networkPolicy := make([]map[string]interface{}, len(createdNetworkPolicyRule), len(createdNetworkPolicyRule))
 	for i, policy := range createdNetworkPolicyRule {
 		item := make(map[string]interface{})
@@ -63,7 +59,7 @@ func resourceNetworkPolicyRuleCreate(ctx context.Context, d *schema.ResourceData
 		networkPolicy[i] = item
 
 	}
-	d.SetId(time.Now().String())
+	d.SetId(newNetworkPolicyRule.NetworkPolicy[0].WorkloadId)
 	d.Set("network_policy", networkPolicy)
 
 	return diags
@@ -81,13 +77,14 @@ func resourceNetworkPolicyRuleRead(ctx context.Context, d *schema.ResourceData, 
 	organizationId := d.Get("organization_id").(string)
 
 	//Get the resource
-	networkPolicyRule, err := coxEdgeClient.GetNetworkPolicyRule(d.Get("environment_name").(string), resourceId, organizationId)
+	//networkPolicyRule, err := coxEdgeClient.GetNetworkPolicyRule(d.Get("environment_name").(string), resourceId, organizationId)
+	networkPolicyRule, err := coxEdgeClient.GetNetworkPolicyRuleWorkload(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	//Update state
-	convertNetworkPolicyRuleAPIObjectToResourceData(d, networkPolicyRule)
+	convertNetworkPolicyRuleWorkloadAPIObjectToResourceData(d, networkPolicyRule)
 
 	return diags
 }
@@ -112,7 +109,7 @@ func resourceNetworkPolicyRuleUpdate(ctx context.Context, d *schema.ResourceData
 	//Set last_updated
 	d.Set("last_updated", time.Now().Format(time.RFC850))
 	//Set new id
-	d.SetId(updatedRule.Id)
+	d.SetId(updatedRule[0].WorkloadId)
 
 	return resourceNetworkPolicyRuleRead(ctx, d, m)
 }
@@ -128,8 +125,27 @@ func resourceNetworkPolicyRuleDelete(ctx context.Context, d *schema.ResourceData
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 
+	updatedNetworkPolicyRule := apiclient.NetworkPolicyRuleCreateRequest{
+		EnvironmentName: d.Get("environment_name").(string),
+	}
+	for _, entry := range d.Get("network_policy").([]interface{}) {
+		convertedEntry := entry.(map[string]interface{})
+		networkObj := apiclient.NetworkPolicyList{
+			EnvironmentName: d.Get("environment_name").(string),
+			Id:              convertedEntry["id"].(string),
+			WorkloadId:      convertedEntry["workload_id"].(string),
+			Description:     convertedEntry["description"].(string),
+			Protocol:        convertedEntry["protocol"].(string),
+			Type:            convertedEntry["type"].(string),
+			Action:          convertedEntry["action"].(string),
+			Source:          convertedEntry["source"].(string),
+			PortRange:       convertedEntry["port_range"].(string),
+		}
+		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
+	}
+
 	//Delete the NetworkPolicyRule
-	err := coxEdgeClient.DeleteNetworkPolicyRule(d.Get("environment_name").(string), resourceId, organizationId)
+	err := coxEdgeClient.DeleteNetworkPolicyRule(d.Get("environment_name").(string), resourceId, organizationId, updatedNetworkPolicyRule)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -150,6 +166,7 @@ func convertResourceDataToNetworkPolicyRuleCreateAPIObject(d *schema.ResourceDat
 		convertedEntry := entry.(map[string]interface{})
 		networkObj := apiclient.NetworkPolicyList{
 			EnvironmentName: d.Get("environment_name").(string),
+			Id:              convertedEntry["id"].(string),
 			WorkloadId:      convertedEntry["workload_id"].(string),
 			Description:     convertedEntry["description"].(string),
 			Protocol:        convertedEntry["protocol"].(string),
@@ -176,4 +193,23 @@ func convertNetworkPolicyRuleAPIObjectToResourceData(d *schema.ResourceData, net
 	d.Set("source", networkPolicyRule.Source)
 	d.Set("port_range", networkPolicyRule.PortRange)
 
+}
+
+func convertNetworkPolicyRuleWorkloadAPIObjectToResourceData(d *schema.ResourceData, networkPolicyRule []apiclient.NetworkPolicyRule) {
+	networkPolicy := make([]map[string]interface{}, len(networkPolicyRule), len(networkPolicyRule))
+	for i, policy := range networkPolicyRule {
+		item := make(map[string]interface{})
+		item["id"] = policy.Id
+		item["workload_id"] = policy.WorkloadId
+		item["description"] = policy.Description
+		item["network_policy_id"] = policy.NetworkPolicyId
+		item["type"] = policy.Type
+		item["source"] = policy.Source
+		item["action"] = policy.Action
+		item["protocol"] = policy.Protocol
+		item["port_range"] = policy.PortRange
+		networkPolicy[i] = item
+
+	}
+	d.Set("network_policy", networkPolicy)
 }

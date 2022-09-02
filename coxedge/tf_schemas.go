@@ -609,6 +609,7 @@ func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
 					"id": {
 						Type:     schema.TypeString,
 						Computed: true,
+						Optional: true,
 					},
 					"workload_id": {
 						Type:     schema.TypeString,

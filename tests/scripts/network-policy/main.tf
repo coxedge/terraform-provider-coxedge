@@ -10,24 +10,33 @@ terraform {
 provider "coxedge" {
 }
 
-data "coxedge_organizations" "techops_org" {
-
-}
-
 resource "coxedge_network_policy_rule" "testing" {
-  organization_id  = "<organization_id>"
-  environment_name = "netbox"
-  work{
-    workload_id      = "11d23a49-0abe-4acc-8f55-12577ef382c5"
-    description      = "terraupdate"
-    protocol         = "TCP"
-    type             = "INBOUND"
-    action           = "ALLOW"
-    source           = "0.0.0.0/0"
-    port_range       = "30000-33001"
+  organization_id  = "<organization id>"
+  environment_name = "test-codecraft"
+  network_policy {
+    workload_id = "<workload Id>"
+    # add id for update
+    #    id          = "5a1839d3-234c-4a1b-b5fa-82e5dfd2ec36/INBOUND/1080815577/0"
+    description = "inbound-1-s"
+    protocol    = "TCP"
+    type        = "INBOUND"
+    action      = "ALLOW"
+    source      = "0.0.0.0/32"
+    port_range  = "30000-33001"
+  }
+  network_policy {
+    workload_id = "<workload Id>"
+    # add id for update
+    #id          = "5a1839d3-234c-4a1b-b5fa-82e5dfd2ec36/INBOUND/-2053391905/0"
+    description = "inbound-2-update"
+    protocol    = "TCP"
+    type        = "INBOUND"
+    action      = "ALLOW"
+    source      = "0.0.0.0/2"
+    port_range  = "30000-33001"
   }
 }
 
-output "policy_id" {
-  value = coxedge_network_policy_rule.testing.id
+output "policy" {
+  value = coxedge_network_policy_rule.testing.network_policy
 }
