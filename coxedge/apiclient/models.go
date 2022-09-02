@@ -203,6 +203,19 @@ type WrappedWorkload struct {
 	Data Workload `json:"data"`
 }
 
+type WorkloadInstance struct {
+	StackId         string `json:"stackId"`
+	WorkloadId      string `json:"workloadId"`
+	Name            string `json:"name"`
+	IPAddress       string `json:"ipAddress"`
+	PublicIPAddress string `json:"publicIpAddress"`
+	Location        string `json:"location"`
+	CreatedDate     string `json:"createdDate"`
+	StartedDate     string `json:"startedDate"`
+	Id              string `json:"id"`
+	Status          string `json:"status"`
+}
+
 //Network Policy Rules
 type NetworkPolicyRule struct {
 	Id              string `json:"id,omitempty"`
@@ -215,6 +228,9 @@ type NetworkPolicyRule struct {
 	Action          string `json:"action,omitempty"`
 	Protocol        string `json:"protocol,omitempty"`
 	PortRange       string `json:"portRange,omitempty"`
+}
+type WrapperWorkloadInstances struct {
+	Data []WorkloadInstance
 }
 
 type WrappedNetworkPolicyRule struct {

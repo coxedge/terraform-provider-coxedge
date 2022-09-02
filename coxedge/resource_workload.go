@@ -62,7 +62,7 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
 	return diags
@@ -75,7 +75,7 @@ func resourceWorkloadRead(ctx context.Context, d *schema.ResourceData, m interfa
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 
@@ -95,7 +95,7 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Convert resource data to API object
@@ -121,7 +121,7 @@ func resourceWorkloadDelete(ctx context.Context, d *schema.ResourceData, m inter
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 

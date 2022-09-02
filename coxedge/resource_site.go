@@ -48,7 +48,7 @@ func resourceSiteCreate(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
 	return diags
@@ -61,7 +61,7 @@ func resourceSiteRead(ctx context.Context, d *schema.ResourceData, m interface{}
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 	//Get the resource
@@ -80,7 +80,7 @@ func resourceSiteUpdate(ctx context.Context, d *schema.ResourceData, m interface
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 	value, hasValue := d.GetOk("operation")
@@ -111,7 +111,7 @@ func resourceSiteDelete(ctx context.Context, d *schema.ResourceData, m interface
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 	//Delete the Site

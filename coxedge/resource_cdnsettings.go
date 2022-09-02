@@ -54,7 +54,7 @@ func resourceCDNSettingsRead(ctx context.Context, d *schema.ResourceData, m inte
 		d.Set("organization_id", keys[2])
 	}
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 	//Get the resource

@@ -55,7 +55,7 @@ func resourceScriptCreate(ctx context.Context, d *schema.ResourceData, m interfa
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
 	return diags
@@ -68,7 +68,7 @@ func resourceScriptRead(ctx context.Context, d *schema.ResourceData, m interface
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Get the resource
@@ -89,7 +89,7 @@ func resourceScriptUpdate(ctx context.Context, d *schema.ResourceData, m interfa
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Convert resource data to API object
@@ -123,7 +123,7 @@ func resourceScriptDelete(ctx context.Context, d *schema.ResourceData, m interfa
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Delete the Script

@@ -72,7 +72,7 @@ func resourceNetworkPolicyRuleRead(ctx context.Context, d *schema.ResourceData, 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 
@@ -93,7 +93,7 @@ func resourceNetworkPolicyRuleUpdate(ctx context.Context, d *schema.ResourceData
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 
@@ -121,7 +121,7 @@ func resourceNetworkPolicyRuleDelete(ctx context.Context, d *schema.ResourceData
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 

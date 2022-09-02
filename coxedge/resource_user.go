@@ -42,7 +42,7 @@ func resourceUserCreate(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(createdUser.Id)
 
 	return diags
@@ -55,7 +55,7 @@ func resourceUserRead(ctx context.Context, d *schema.ResourceData, m interface{}
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Get the resource
@@ -74,7 +74,7 @@ func resourceUserUpdate(ctx context.Context, d *schema.ResourceData, m interface
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Convert resource data to API object
@@ -99,7 +99,7 @@ func resourceUserDelete(ctx context.Context, d *schema.ResourceData, m interface
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Delete the User

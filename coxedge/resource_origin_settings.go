@@ -59,7 +59,7 @@ func resourceOriginSettingsRead(ctx context.Context, d *schema.ResourceData, m i
 		d.Set("organization_id", keys[2])
 	}
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 
@@ -77,7 +77,7 @@ func resourceOriginSettingsUpdate(ctx context.Context, d *schema.ResourceData, m
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Convert resource data to API object
@@ -102,7 +102,7 @@ func resourceOriginSettingsDelete(ctx context.Context, d *schema.ResourceData, m
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Delete the OriginSettings

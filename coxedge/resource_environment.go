@@ -48,7 +48,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, m in
 		}
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(createdEnvironment.Id)
 
 	return diags
@@ -61,7 +61,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, m inte
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Get the resource
@@ -79,7 +79,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, m in
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Convert resource data to API object
@@ -111,7 +111,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, m in
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	//Delete the Environment
 	err := coxEdgeClient.DeleteEnvironment(resourceId)

@@ -57,7 +57,7 @@ func resourceWAFSettingsRead(ctx context.Context, d *schema.ResourceData, m inte
 		d.Set("environment_name", keys[1])
 		d.Set("organization_id", keys[2])
 	}
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Get the resource

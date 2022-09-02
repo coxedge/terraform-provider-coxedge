@@ -44,7 +44,7 @@ func resourceCDNPurgeResourceCreate(ctx context.Context, d *schema.ResourceData,
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(createdCDNPurgeResource.TaskId)
 
 	return diags

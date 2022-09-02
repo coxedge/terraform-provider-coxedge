@@ -164,6 +164,75 @@ func getEnvironmentSetSchema() map[string]*schema.Schema {
 	}
 }
 
+func getWorkloadInstanceSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_instances": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getWorkloadInstanceSchema(),
+			},
+		},
+	}
+}
+
+func getWorkloadInstanceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ip_address": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"public_ip_address": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"location": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"created_date": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"started_date": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
 func getRolesSetSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"id": {

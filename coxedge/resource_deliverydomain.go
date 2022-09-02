@@ -49,7 +49,7 @@ func resourceDeliveryDomainCreate(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
 	return diags
@@ -62,7 +62,7 @@ func resourceDeliveryDomainRead(ctx context.Context, d *schema.ResourceData, m i
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 
@@ -88,7 +88,7 @@ func resourceDeliveryDomainDelete(ctx context.Context, d *schema.ResourceData, m
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 

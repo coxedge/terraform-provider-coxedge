@@ -49,7 +49,7 @@ func resourceFirewallRuleCreate(ctx context.Context, d *schema.ResourceData, m i
 		return diag.FromErr(err)
 	}
 
-	//Save the ID
+	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
 	return diags
@@ -62,7 +62,7 @@ func resourceFirewallRuleRead(ctx context.Context, d *schema.ResourceData, m int
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 	//Get the resource
@@ -80,7 +80,7 @@ func resourceFirewallRuleUpdate(ctx context.Context, d *schema.ResourceData, m i
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 
 	//Convert resource data to API object
@@ -105,7 +105,7 @@ func resourceFirewallRuleDelete(ctx context.Context, d *schema.ResourceData, m i
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
 
-	//Get the resource ID
+	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 	//Delete the FirewallRule
