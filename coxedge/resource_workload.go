@@ -9,10 +9,10 @@ import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
 	"coxedge/terraform-provider/coxedge/utils"
+
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"time"
 )
 
 func resourceWorkload() *schema.Resource {
@@ -103,13 +103,23 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 	organizationId := d.Get("organization_id").(string)
 
 	//Call the API
-	_, err := coxEdgeClient.UpdateWorkload(resourceId, updatedWorkload, organizationId)
+	createdWorkload, err := coxEdgeClient.UpdateWorkload(resourceId, updatedWorkload, organizationId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	tflog.Info(ctx, "Initiated Update. Awaiting task result.")
+
+	//Await
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdWorkload.TaskId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	//Set last_updated
-	d.Set("last_updated", time.Now().Format(time.RFC850))
+	//d.Set("last_updated", time.Now().Format(time.RFC850))
+	//Save the Id
+	d.SetId(taskResult.Data.Result.Id)
 
 	return resourceWorkloadRead(ctx, d, m)
 }
