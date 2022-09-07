@@ -104,6 +104,12 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 
 	//Call the API
 	createdWorkload, err := coxEdgeClient.UpdateWorkload(resourceId, updatedWorkload, organizationId)
+	//Add wait time
+	for _, deployment := range updatedWorkload.Deployments {
+		for i := 0; i < (deployment.InstancesPerPop)*len(deployment.Pops); i++ {
+			time.Sleep(10 * time.Second)
+		}
+	}
 	if err != nil {
 		return diag.FromErr(err)
 	}
