@@ -9,6 +9,7 @@ import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
 	"coxedge/terraform-provider/coxedge/utils"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -115,7 +116,11 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
+	for _, deployment := range updatedWorkload.Deployments {
+		for i := 0; i < (deployment.InstancesPerPop)*len(deployment.Pops); i++ {
+			time.Sleep(20 * time.Second)
+		}
+	}
 	//Set last_updated
 	//d.Set("last_updated", time.Now().Format(time.RFC850))
 	//Save the Id
