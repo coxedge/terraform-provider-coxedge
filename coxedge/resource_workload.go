@@ -9,6 +9,7 @@ import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
 	"coxedge/terraform-provider/coxedge/utils"
+	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -76,6 +77,14 @@ func resourceWorkloadRead(ctx context.Context, d *schema.ResourceData, m interfa
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
+	//check the id comes with id & environment_name, then split the value -> in case of importing the resource
+	//format is <workload_id>:<environment_name>:<organization_id>
+	if strings.Contains(d.Id(), ":") {
+		keys := strings.Split(d.Id(), ":")
+		d.SetId(keys[0])
+		d.Set("environment_name", keys[1])
+		d.Set("organization_id", keys[2])
+	}
 	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
@@ -260,7 +269,7 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		item["cpu_utilization"] = deployment.CPUUtilization
 		deployments[i] = item
 	}
-	d.Set("deployments", deployments)
+	d.Set("deployment", deployments)
 
 	ports := make([]map[string]string, len(workload.Ports), len(workload.Ports))
 	for i, portObj := range workload.Ports {
