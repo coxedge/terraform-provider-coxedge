@@ -10,6 +10,7 @@ import (
 	"coxedge/terraform-provider/coxedge/apiclient"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strings"
 	"time"
 )
 
@@ -71,13 +72,17 @@ func resourceNetworkPolicyRuleRead(ctx context.Context, d *schema.ResourceData, 
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-
+	if strings.Contains(d.Id(), ":") {
+		keys := strings.Split(d.Id(), ":")
+		d.SetId(keys[0])
+		d.Set("environment_name", keys[1])
+		d.Set("organization_id", keys[2])
+	}
 	//Get the resource Id
 	resourceId := d.Id()
 	organizationId := d.Get("organization_id").(string)
 
 	//Get the resource
-	//networkPolicyRule, err := coxEdgeClient.GetNetworkPolicyRule(d.Get("environment_name").(string), resourceId, organizationId)
 	networkPolicyRule, err := coxEdgeClient.GetNetworkPolicyRuleWorkload(d.Get("environment_name").(string), resourceId, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
