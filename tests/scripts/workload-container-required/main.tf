@@ -17,8 +17,11 @@ data "coxedge_environments" "test" {
 output "envs" {
   value = data.coxedge_environments.test
 }
-//to import existing wrokload to terraform state file
+//to import existing workload which is created outside terraform script and to update state file.
 //terraform import coxedge_workload.test <workload_id>:<environment_name>:<organization_id>
+
+//to sync with UI changes.
+//terraform apply --refresh-only
 
 # Workloads
 resource "coxedge_workload" "test" {
