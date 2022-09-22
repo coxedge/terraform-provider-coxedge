@@ -172,6 +172,7 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		Type:                d.Get("type").(string),
 		AddAnyCastIpAddress: d.Get("add_anycast_ip_address").(bool),
 		FirstBootSSHKey:     d.Get("first_boot_ssh_key").(string),
+		UserData:            d.Get("user_data").(string),
 		ContainerEmail:      d.Get("container_email").(string),
 		ContainerServer:     d.Get("container_server").(string),
 		ContainerUsername:   d.Get("container_username").(string),
@@ -256,6 +257,7 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 	d.Set("container_username", workload.ContainerUsername)
 	d.Set("container_server", workload.ContainerServer)
 	d.Set("first_boot_ssh_key", workload.FirstBootSshKey)
+	d.Set("user_data", workload.UserData)
 	//Now the list structures
 	deployments := make([]map[string]interface{}, len(workload.Deployments), len(workload.Deployments))
 	for i, deployment := range workload.Deployments {
