@@ -8,7 +8,7 @@ terraform {
 }
 
 # test account apikey and org id to get billing info in UAT
-# usr: terraformtester002@getnada.com/ pwd: Codecraft@123
+# usr:
 provider "coxedge" {
   key = "Xt93vyn12lJEgXJz4Q/kbw=="
 }

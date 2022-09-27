@@ -26,9 +26,9 @@ provider "coxedge" {
 }
 
 resource "coxedge_origin_setting" "testing" {
-  organization_id             = "<organization_id>"
-  site_id                     = "<site_id>"
-  environment_name            = "<environment_name>"
+  organization_id             = "organization_id"
+  site_id                     = "site_id"
+  environment_name            = "environment_name"
   domain                      = "bluegreen.com"
   websockets_enabled          = "false"
   ssl_validation_enabled      = "false"

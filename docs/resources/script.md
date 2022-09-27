@@ -26,9 +26,9 @@ provider "coxedge" {
 }
 
 resource "coxedge_script" "testing" {
-  organization_id  = "<organization_id>"
-  site_id          = "<site-id>"
-  environment_name = "<environment_name>"
+  organization_id  = "organization_id"
+  site_id          = "site-id"
+  environment_name = "environment_name"
   name             = "script-test"
   routes           = ["v1/api"]
   code             = "sample script test"

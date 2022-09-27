@@ -30,10 +30,10 @@ data "coxedge_organizations" "orgs" {
 }
 
 resource "coxedge_environment" "demo_env" {
-  name = "<name-of-the-environment>"
-  description = "<description-of-the-environment>"
+  name = "name-of-the-environment"
+  description = "description-of-the-environment"
   service_connection_id = "a572df45-56fa-4521-8a66-b63b5ab19c21"
-  organization_id = "<organization-id>"
+  organization_id = "organization-id"
 }
 
 output "env_id" {

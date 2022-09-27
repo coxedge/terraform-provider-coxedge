@@ -27,10 +27,10 @@ provider "coxedge" {
 
 
 resource "coxedge_cdn_purge_resource" "testing" {
-  organization_id  = "<organization_id>"
-  environment_name = "<environment name>"
-  site_id          = "<site-id>"
-  url              = "http://<domain-name>"
+  organization_id  = "organization-id"
+  environment_name = "environment-name"
+  site_id          = "site-id"
+  url              = "http://domain-name"
   recursive        = "true"
   purgeAllDynamic  = "true"
 }

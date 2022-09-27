@@ -26,8 +26,8 @@ provider "coxedge" {
 }
 
 resource "coxedge_site" "testing" {
-  organization_id  = "<organization_id>"
-  environment_name = "<name-of-the-environment>"
+  organization_id  = "organization_id"
+  environment_name = "name-of-the-environment"
   domain           = "www.coxedge.com"
   hostname         = "199.250.204.212"
   services         = [

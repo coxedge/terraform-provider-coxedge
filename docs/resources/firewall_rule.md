@@ -26,9 +26,9 @@ provider "coxedge" {
 }
 
 resource "coxedge_firewall_rule" "testing" {
-  organization_id  = "<organization_id>"
-  environment_name = "<environment name>"
-  site_id          = "<site-id>"
+  organization_id  = "organization_id"
+  environment_name = "environment name"
+  site_id          = "site-id"
   action           = "ALLOW"
   ip_start         = "192.168.0.6"
   name             = "firewall.test.1"
