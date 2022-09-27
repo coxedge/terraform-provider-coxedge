@@ -29,9 +29,9 @@ provider "coxedge" {
 #terraform import coxedge_cdn_settings.testing <site_id>:<environment_name>:<organization_id>
 
 resource "coxedge_cdn_settings" "testing" {
-  organization_id                   = "<organization_id>"
-  site_id                           = "<site_id>"
-  environment_name                  = "<environment_name>"
+  organization_id                   = "organization_id"
+  site_id                           = "site_id"
+  environment_name                  = "environment_name"
   cache_expire_policy               = "SPECIFY_CDN_TTL"
   cache_ttl                         = "60"
   custom_cached_query_strings       = ["customQuery"]
@@ -45,7 +45,7 @@ resource "coxedge_cdn_settings" "testing" {
   browser_cache_ttl                 = "60"
   cors_header_enabled               = "true"
   allowed_cors_origins              = "SPECIFY_ORIGINS"
-  origins_to_allow_cors             = ["www.sai.com"]
+  origins_to_allow_cors             = ["www.smith.com"]
   http2_support_enabled             = "true"
   link_header                       = "my-link-header"
 

@@ -26,13 +26,13 @@ provider "coxedge" {
 }
 
 resource "coxedge_user" "testuser" {
-  user_name = "<name-of-the-user>"
-  first_name = "<first-name-of-the-user>"
-  last_name = "<last-name-of-the-user>"
-  email = "<email-id-of-the-user>"
-  organization_id = "<organization-id>"
+  user_name = "name-of-the-user"
+  first_name = "first-name-of-the-user"
+  last_name = "last-name-of-the-user"
+  email = "email-id-of-the-user"
+  organization_id = "organization-id"
   roles {
-    id = "<role-id>"
+    id = "role-id"
   }
 }
 

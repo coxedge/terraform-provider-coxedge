@@ -40,9 +40,9 @@ output "envs" {
 
 # Workloads
 resource "coxedge_workload" "test" {
-  name             = "<name-of-the-container>"
-  organization_id  = "<organization_id>"
-  environment_name = "<name-of-the-environment>"
+  name             = "name-of-the-container"
+  organization_id  = "organization_id"
+  environment_name = "name-of-the-environment"
   type             = "CONTAINER"
   image            = "bitnami/nginx"
   specs            = "SP-2"
