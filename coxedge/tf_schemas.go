@@ -7,10 +7,11 @@ package coxedge
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"strconv"
 )
 
 func getOrganizationSetSchema() map[string]*schema.Schema {
@@ -481,6 +482,11 @@ func getWorkloadSchema() map[string]*schema.Schema {
 			Optional: true,
 		},
 		"first_boot_ssh_key": {
+			Type:     schema.TypeString,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+			Optional: true,
+		},
+		"user_data": {
 			Type:     schema.TypeString,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 			Optional: true,

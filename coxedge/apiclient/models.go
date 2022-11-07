@@ -152,6 +152,7 @@ type Workload struct {
 	Deployments                 []WorkloadAutoscaleDeployment `json:"deployments,omitempty"`
 	EnvironmentVariables        []WorkloadEnvironmentVariable `json:"environmentVariables,omitempty"`
 	FirstBootSshKey             string                        `json:"firstBootSshKey,omitempty"`
+	UserData                    string                        `json:"userData,omitempty"`
 	Id                          string                        `json:"id,omitempty"`
 	Image                       string                        `json:"image,omitempty"`
 	IsRemoteManagementEnabled   bool                          `json:"isRemoteManagementEnabled,omitempty"`
