@@ -228,7 +228,7 @@ type NetworkPolicyRule struct {
 	Source          []string `json:"source,omitempty"`
 	Action          string   `json:"action,omitempty"`
 	Protocol        string   `json:"protocol,omitempty"`
-	PortRange       string   `json:"portRange,omitempty"`
+	PortRange       []string `json:"portRange,omitempty"`
 }
 type WrapperWorkloadInstances struct {
 	Data []WorkloadInstance

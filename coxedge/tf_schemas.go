@@ -718,8 +718,11 @@ func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
 						Required: true,
 					},
 					"port_range": {
-						Type:     schema.TypeString,
+						Type:     schema.TypeList,
 						Required: true,
+						Elem: &schema.Schema{
+							Type: schema.TypeString,
+						},
 					},
 				},
 			},

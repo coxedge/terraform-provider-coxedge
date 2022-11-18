@@ -17,15 +17,15 @@ type NetworkPolicyRuleCreateRequest struct {
 }
 
 type NetworkPolicyList struct {
-	EnvironmentName string `json:"-"`
-	Id              string `json:"id"`
-	WorkloadId      string `json:"workloadId"`
-	Description     string `json:"description"`
-	Protocol        string `json:"protocol"`
-	Type            string `json:"type"`
-	Action          string `json:"action"`
+	EnvironmentName string   `json:"-"`
+	Id              string   `json:"id"`
+	WorkloadId      string   `json:"workloadId"`
+	Description     string   `json:"description"`
+	Protocol        string   `json:"protocol"`
+	Type            string   `json:"type"`
+	Action          string   `json:"action"`
 	Source          []string `json:"source"`
-	PortRange       string `json:"portRange"`
+	PortRange       []string `json:"portRange"`
 }
 
 //GetNetworkPolicyRules Get networkPolicyRules in account

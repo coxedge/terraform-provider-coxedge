@@ -143,10 +143,12 @@ func resourceNetworkPolicyRuleDelete(ctx context.Context, d *schema.ResourceData
 			Protocol:        convertedEntry["protocol"].(string),
 			Type:            convertedEntry["type"].(string),
 			Action:          convertedEntry["action"].(string),
-			PortRange:       convertedEntry["port_range"].(string),
 		}
 		for _, val := range convertedEntry["source"].([]interface{}) {
 			networkObj.Source = append(networkObj.Source, val.(string))
+		}
+		for _, val := range convertedEntry["port_range"].([]interface{}) {
+			networkObj.PortRange = append(networkObj.PortRange, val.(string))
 		}
 		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
 	}
@@ -179,10 +181,12 @@ func convertResourceDataToNetworkPolicyRuleCreateAPIObject(d *schema.ResourceDat
 			Protocol:        convertedEntry["protocol"].(string),
 			Type:            convertedEntry["type"].(string),
 			Action:          convertedEntry["action"].(string),
-			PortRange:       convertedEntry["port_range"].(string),
 		}
 		for _, val := range convertedEntry["source"].([]interface{}) {
 			networkObj.Source = append(networkObj.Source, val.(string))
+		}
+		for _, val := range convertedEntry["port_range"].([]interface{}) {
+			networkObj.PortRange = append(networkObj.PortRange, val.(string))
 		}
 		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
 	}
