@@ -24,7 +24,7 @@ type NetworkPolicyList struct {
 	Protocol        string `json:"protocol"`
 	Type            string `json:"type"`
 	Action          string `json:"action"`
-	Source          string `json:"source"`
+	Source          []string `json:"source"`
 	PortRange       string `json:"portRange"`
 }
 

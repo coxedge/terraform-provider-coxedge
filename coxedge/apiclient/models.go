@@ -219,16 +219,16 @@ type WorkloadInstance struct {
 
 //Network Policy Rules
 type NetworkPolicyRule struct {
-	Id              string `json:"id,omitempty"`
-	StackId         string `json:"stackId,omitempty"`
-	WorkloadId      string `json:"workloadId,omitempty"`
-	NetworkPolicyId string `json:"networkPolicyId,omitempty"`
-	Description     string `json:"description,omitempty"`
-	Type            string `json:"type,omitempty"`
-	Source          string `json:"source,omitempty"`
-	Action          string `json:"action,omitempty"`
-	Protocol        string `json:"protocol,omitempty"`
-	PortRange       string `json:"portRange,omitempty"`
+	Id              string   `json:"id,omitempty"`
+	StackId         string   `json:"stackId,omitempty"`
+	WorkloadId      string   `json:"workloadId,omitempty"`
+	NetworkPolicyId string   `json:"networkPolicyId,omitempty"`
+	Description     string   `json:"description,omitempty"`
+	Type            string   `json:"type,omitempty"`
+	Source          []string `json:"source,omitempty"`
+	Action          string   `json:"action,omitempty"`
+	Protocol        string   `json:"protocol,omitempty"`
+	PortRange       string   `json:"portRange,omitempty"`
 }
 type WrapperWorkloadInstances struct {
 	Data []WorkloadInstance

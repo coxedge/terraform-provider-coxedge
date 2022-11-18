@@ -143,8 +143,10 @@ func resourceNetworkPolicyRuleDelete(ctx context.Context, d *schema.ResourceData
 			Protocol:        convertedEntry["protocol"].(string),
 			Type:            convertedEntry["type"].(string),
 			Action:          convertedEntry["action"].(string),
-			Source:          convertedEntry["source"].(string),
 			PortRange:       convertedEntry["port_range"].(string),
+		}
+		for _, val := range convertedEntry["source"].([]interface{}) {
+			networkObj.Source = append(networkObj.Source, val.(string))
 		}
 		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
 	}
@@ -177,27 +179,15 @@ func convertResourceDataToNetworkPolicyRuleCreateAPIObject(d *schema.ResourceDat
 			Protocol:        convertedEntry["protocol"].(string),
 			Type:            convertedEntry["type"].(string),
 			Action:          convertedEntry["action"].(string),
-			Source:          convertedEntry["source"].(string),
 			PortRange:       convertedEntry["port_range"].(string),
+		}
+		for _, val := range convertedEntry["source"].([]interface{}) {
+			networkObj.Source = append(networkObj.Source, val.(string))
 		}
 		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
 	}
 
 	return updatedNetworkPolicyRule
-}
-
-func convertNetworkPolicyRuleAPIObjectToResourceData(d *schema.ResourceData, networkPolicyRule *apiclient.NetworkPolicyRule) {
-	//Store the data
-	d.Set("id", networkPolicyRule.Id)
-	d.Set("workload_id", networkPolicyRule.WorkloadId)
-	d.Set("stack_id", networkPolicyRule.StackId)
-	d.Set("description", networkPolicyRule.Description)
-	d.Set("protocol", networkPolicyRule.Protocol)
-	d.Set("type", networkPolicyRule.Type)
-	d.Set("action", networkPolicyRule.Action)
-	d.Set("source", networkPolicyRule.Source)
-	d.Set("port_range", networkPolicyRule.PortRange)
-
 }
 
 func convertNetworkPolicyRuleWorkloadAPIObjectToResourceData(d *schema.ResourceData, networkPolicyRule []apiclient.NetworkPolicyRule) {
@@ -214,7 +204,6 @@ func convertNetworkPolicyRuleWorkloadAPIObjectToResourceData(d *schema.ResourceD
 		item["protocol"] = policy.Protocol
 		item["port_range"] = policy.PortRange
 		networkPolicy[i] = item
-
 	}
 	d.Set("network_policy", networkPolicy)
 }
