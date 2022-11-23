@@ -702,7 +702,7 @@ func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
 						Type:     schema.TypeString,
 						Required: true,
 					},
-					"source": {
+					"source_ips": {
 						Type:     schema.TypeList,
 						Required: true,
 						Elem: &schema.Schema{
@@ -717,7 +717,7 @@ func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
 						Type:     schema.TypeString,
 						Required: true,
 					},
-					"port_range": {
+					"ports": {
 						Type:     schema.TypeList,
 						Required: true,
 						Elem: &schema.Schema{

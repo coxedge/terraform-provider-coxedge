@@ -225,10 +225,10 @@ type NetworkPolicyRule struct {
 	NetworkPolicyId string   `json:"networkPolicyId,omitempty"`
 	Description     string   `json:"description,omitempty"`
 	Type            string   `json:"type,omitempty"`
-	Source          []string `json:"source,omitempty"`
+	SourceIps       []string `json:"sourceIps,omitempty"`
 	Action          string   `json:"action,omitempty"`
 	Protocol        string   `json:"protocol,omitempty"`
-	PortRange       []string `json:"portRange,omitempty"`
+	Ports           []string `json:"ports,omitempty"`
 }
 type WrapperWorkloadInstances struct {
 	Data []WorkloadInstance

@@ -53,10 +53,10 @@ func resourceNetworkPolicyRuleCreate(ctx context.Context, d *schema.ResourceData
 		item["description"] = policy.Description
 		item["network_policy_id"] = policy.NetworkPolicyId
 		item["type"] = policy.Type
-		item["source"] = policy.Source
+		item["source_ips"] = policy.SourceIps
 		item["action"] = policy.Action
 		item["protocol"] = policy.Protocol
-		item["port_range"] = policy.PortRange
+		item["ports"] = policy.Ports
 		networkPolicy[i] = item
 
 	}
@@ -144,11 +144,11 @@ func resourceNetworkPolicyRuleDelete(ctx context.Context, d *schema.ResourceData
 			Type:            convertedEntry["type"].(string),
 			Action:          convertedEntry["action"].(string),
 		}
-		for _, val := range convertedEntry["source"].([]interface{}) {
-			networkObj.Source = append(networkObj.Source, val.(string))
+		for _, val := range convertedEntry["source_ips"].([]interface{}) {
+			networkObj.SourceIps = append(networkObj.SourceIps, val.(string))
 		}
-		for _, val := range convertedEntry["port_range"].([]interface{}) {
-			networkObj.PortRange = append(networkObj.PortRange, val.(string))
+		for _, val := range convertedEntry["ports"].([]interface{}) {
+			networkObj.Ports = append(networkObj.Ports, val.(string))
 		}
 		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
 	}
@@ -182,11 +182,11 @@ func convertResourceDataToNetworkPolicyRuleCreateAPIObject(d *schema.ResourceDat
 			Type:            convertedEntry["type"].(string),
 			Action:          convertedEntry["action"].(string),
 		}
-		for _, val := range convertedEntry["source"].([]interface{}) {
-			networkObj.Source = append(networkObj.Source, val.(string))
+		for _, val := range convertedEntry["source_ips"].([]interface{}) {
+			networkObj.SourceIps = append(networkObj.SourceIps, val.(string))
 		}
-		for _, val := range convertedEntry["port_range"].([]interface{}) {
-			networkObj.PortRange = append(networkObj.PortRange, val.(string))
+		for _, val := range convertedEntry["ports"].([]interface{}) {
+			networkObj.Ports = append(networkObj.Ports, val.(string))
 		}
 		updatedNetworkPolicyRule.NetworkPolicy = append(updatedNetworkPolicyRule.NetworkPolicy, networkObj)
 	}
@@ -203,10 +203,10 @@ func convertNetworkPolicyRuleWorkloadAPIObjectToResourceData(d *schema.ResourceD
 		item["description"] = policy.Description
 		item["network_policy_id"] = policy.NetworkPolicyId
 		item["type"] = policy.Type
-		item["source"] = policy.Source
+		item["source_ips"] = policy.SourceIps
 		item["action"] = policy.Action
 		item["protocol"] = policy.Protocol
-		item["port_range"] = policy.PortRange
+		item["ports"] = policy.Ports
 		networkPolicy[i] = item
 	}
 	d.Set("network_policy", networkPolicy)

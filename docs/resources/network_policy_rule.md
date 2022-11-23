@@ -35,8 +35,8 @@ resource "coxedge_network_policy_rule" "testing" {
     protocol    = "TCP"
     type        = "INBOUND"
     action      = "ALLOW"
-    source      = "0.0.0.0/32"
-    port_range  = "30000-33001"
+    source_ips  = tolist( ["0.0.0.0/2", "0.0.0.0/32"])
+    ports       = tolist( ["80", "30000-33001"])
   }
   network_policy {
     workload_id = "workload Id"
@@ -46,8 +46,8 @@ resource "coxedge_network_policy_rule" "testing" {
     protocol    = "TCP"
     type        = "INBOUND"
     action      = "ALLOW"
-    source      = "0.0.0.0/2"
-    port_range  = "30000-33001"
+    source_ips  = tolist( ["0.0.0.0/2", "0.0.0.0/32"])
+    ports       = tolist( ["80", "30000-33001"])
   }
 }
 
@@ -77,9 +77,9 @@ output "policy" {
 Required:
 
 - `action` (String) - The network policy rule action: ALLOW (allow traffic) or BLOCK (deny traffic).
-- `port_range` (String) - This specifies on which ports traffic will be allowed or denied by this rule. It can be a range of ports separated by a hyphen.
+- `ports` (String List) - This specifies on which ports traffic will be allowed or denied by this rule. It can be a range of ports separated by a hyphen.
 - `protocol` (String) - Supported protocols are: TCP, UDP, TCP_UDP, ESP, AH, ICMP or GRE.
-- `source` (String) - A subnet that will define all the IPs allowed or denied by this rule.
+- `source_ips` (String List) - A subnet that will define all the IPs allowed or denied by this rule.
 - `type` (String) - The type of network policy rule, either INBOUND or OUTBOUND.
 - `workload_id` (String) - The UUID of the workload to which the network policy rule is applied. Corresponds to the first workload ID in the network policy's list of instance selectors.
 

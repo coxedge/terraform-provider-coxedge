@@ -21,8 +21,8 @@ resource "coxedge_network_policy_rule" "testing" {
     protocol    = "TCP"
     type        = "INBOUND"
     action      = "ALLOW"
-    source      = "0.0.0.0/32"
-    port_range  = "30000-33001"
+    source_ips  = tolist( ["0.0.0.0/2", "0.0.0.0/32"])
+    ports       = tolist( ["80", "30000-33001"])
   }
   network_policy {
     workload_id = "<workload Id>"
@@ -32,8 +32,8 @@ resource "coxedge_network_policy_rule" "testing" {
     protocol    = "TCP"
     type        = "INBOUND"
     action      = "ALLOW"
-    source      = "0.0.0.0/2"
-    port_range  = "30000-33001"
+    source_ips  = tolist( ["0.0.0.0/2", "0.0.0.0/32"])
+    ports       = tolist( ["80", "30000-33001"])
   }
 }
 

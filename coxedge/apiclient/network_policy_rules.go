@@ -24,8 +24,8 @@ type NetworkPolicyList struct {
 	Protocol        string   `json:"protocol"`
 	Type            string   `json:"type"`
 	Action          string   `json:"action"`
-	Source          []string `json:"source"`
-	PortRange       []string `json:"portRange"`
+	SourceIps       []string `json:"sourceIps"`
+	Ports           []string `json:"ports"`
 }
 
 //GetNetworkPolicyRules Get networkPolicyRules in account
