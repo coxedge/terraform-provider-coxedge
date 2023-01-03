@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func resourceCDNSettings() *schema.Resource {
@@ -25,6 +26,10 @@ func resourceCDNSettings() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getCDNSettingsSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -81,8 +86,9 @@ func resourceCDNSettingsUpdate(ctx context.Context, d *schema.ResourceData, m in
 		return diag.FromErr(err)
 	}
 
+	timeout := d.Timeout(schema.TimeoutUpdate)
 	//Await
-	_, err = coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, taskResp.TaskId)
+	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, taskResp.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}

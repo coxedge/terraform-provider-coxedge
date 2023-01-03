@@ -27,6 +27,10 @@ func resourceWorkload() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getWorkloadSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -47,7 +51,6 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 			}
 		}
 	}
-
 	organizationId := d.Get("organization_id").(string)
 
 	//Call the API
@@ -58,8 +61,9 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 
 	tflog.Info(ctx, "Initiated Create. Awaiting task result.")
 
+	timeout := d.Timeout(schema.TimeoutCreate)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdWorkload.TaskId)
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdWorkload.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -120,8 +124,9 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 
 	tflog.Info(ctx, "Initiated Update. Awaiting task result.")
 
+	timeout := d.Timeout(schema.TimeoutUpdate)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdWorkload.TaskId)
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdWorkload.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}

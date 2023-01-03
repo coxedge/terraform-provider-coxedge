@@ -53,6 +53,10 @@ resource "coxedge_cdn_settings" "testing" {
   canonical_header         = "my-canonical-header"
   url_caching_enabled      = "true"
   url_caching_ttl          = "300"
+  
+  timeouts {
+    update = "20m"
+  }
 }
 ```
 
@@ -91,6 +95,7 @@ resource "coxedge_cdn_settings" "testing" {
 - `url_caching_enabled` (String) - Whether or not to enable caching of URLs without file extensions.
 - `url_caching_ttl` (Number) - The time to live for the url cache. Only visible if urlCachingEnabled is true.
 - `vary_header_enabled` (String) - Whether or not to enable honoring the vary header in a request.
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while update. Example: update = "20m"
 
 ### Read-Only
 

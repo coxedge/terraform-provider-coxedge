@@ -33,6 +33,10 @@ resource "coxedge_firewall_rule" "testing" {
   ip_start         = "192.168.0.6"
   name             = "firewall.test.1"
   ip_end           = "192.168.0.7"
+  
+  timeouts {
+    create = "20m"
+   }
 }
 ```
 
@@ -54,6 +58,7 @@ resource "coxedge_firewall_rule" "testing" {
 
 - `enabled` (Boolean) - Whether or not the rule is enabled.
 - `ip_end` (String) - The end ip adress for the rule.
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while create. Example: create = "20m"
 
 ### Read-Only
 

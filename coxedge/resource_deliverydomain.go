@@ -10,6 +10,7 @@ import (
 	"coxedge/terraform-provider/coxedge/apiclient"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"time"
 )
 
 func resourceDeliveryDomain() *schema.Resource {
@@ -22,6 +23,9 @@ func resourceDeliveryDomain() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getDeliveryDomainSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -43,8 +47,9 @@ func resourceDeliveryDomainCreate(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
+	timeout := d.Timeout(schema.TimeoutCreate)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdDeliveryDomain.TaskId)
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdDeliveryDomain.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}

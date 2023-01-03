@@ -14,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func resourceWAFSettings() *schema.Resource {
@@ -26,6 +27,10 @@ func resourceWAFSettings() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getWAFSettingsSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -84,8 +89,9 @@ func resourceWAFSettingsUpdate(ctx context.Context, d *schema.ResourceData, m in
 		return diag.FromErr(err)
 	}
 
+	timeout := d.Timeout(schema.TimeoutUpdate)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, taskResp.TaskId)
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, taskResp.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}

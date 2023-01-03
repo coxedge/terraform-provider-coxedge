@@ -52,6 +52,11 @@ resource "coxedge_workload" "test" {
     pops               = ["BTR"]
     instances_per_pop  = 1
   }
+  
+  timeouts { 
+    create = "20m"
+    update = "20m"
+  }
 }
 ```
 
@@ -83,6 +88,7 @@ The following arguments are supported:
 - `ports` (Block List) (see [below for nested schema](#nestedblock--ports))
 - `secret_environment_variables` (Map of String)
 - `slug` (String) - A workload's programmatic name. Workload slugs are used to build its instances names.
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while create / update. Example: create = "20m" / update = "20m"
 
 ### Read-Only
 

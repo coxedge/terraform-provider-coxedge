@@ -84,3 +84,7 @@ func (c *Client) AwaitTaskResolve(upstreamCtx context.Context, taskId string, at
 func (c *Client) AwaitTaskResolveWithDefaults(ctx context.Context, taskId string) (*TaskStatus, error) {
 	return c.AwaitTaskResolve(ctx, taskId, 100, 5*time.Second, 10*time.Minute)
 }
+
+func (c *Client) AwaitTaskResolveWithCustomTimeout(ctx context.Context, taskId string,timeout time.Duration) (*TaskStatus, error) {
+	return c.AwaitTaskResolve(ctx, taskId, 100, 5*time.Second, timeout)
+}

@@ -23,6 +23,9 @@ func resourceSite() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getSiteSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -42,8 +45,9 @@ func resourceSiteCreate(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
+	timeout := d.Timeout(schema.TimeoutCreate)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdSite.TaskId)
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdSite.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}

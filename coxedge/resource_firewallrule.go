@@ -23,6 +23,9 @@ func resourceFirewallRule() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getFirewallRuleSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -43,8 +46,9 @@ func resourceFirewallRuleCreate(ctx context.Context, d *schema.ResourceData, m i
 		return diag.FromErr(err)
 	}
 
+	timeout := d.Timeout(schema.TimeoutCreate)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdFirewallRule.TaskId)
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdFirewallRule.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}

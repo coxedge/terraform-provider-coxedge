@@ -32,6 +32,11 @@ resource "coxedge_script" "testing" {
   name             = "script-test"
   routes           = ["v1/api"]
   code             = "sample script test"
+  
+  timeouts {
+    create = "20m"
+    update = "20m"
+  }
 }
 ```
 
@@ -48,6 +53,9 @@ The following arguments are supported:
 - `organization_id` (String) - The id of the organization.
 - `routes` (List of String) - The routes that incoming requests should respond with a script.
 - `site_id` (String) - The ID of the site that the script belongs to.
+
+### Optional
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while create/update. Example: create="20m" / update = "20m"
 
 ### Read-Only
 

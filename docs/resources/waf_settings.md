@@ -226,6 +226,10 @@ resource "coxedge_waf_settings" "testing" {
     zoho_bot                              = "false"
     zum_bot                               = "false"
   }
+  
+  timeouts {
+    update = "20m"
+  }
 }
 ```
 
@@ -253,6 +257,7 @@ The following arguments are supported:
 - `monitoring_mode_enabled` (String) - If the monitoring mode is enabled.
 - `owasp_threats` (Block List) (see [below for nested schema](#nestedblock--owasp_threats)) - Cox’s core rule set & OWASP’s most critical Web application security risks
 - `traffic_sources` (Block List) (see [below for nested schema](#nestedblock--traffic_sources)) - Real-time threat intelligence for IP addresses, source location, and information on malicious IPs.
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while update. Example: update = "20m"
 
 ### Read-Only
 

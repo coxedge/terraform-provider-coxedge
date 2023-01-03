@@ -39,6 +39,10 @@ resource "coxedge_site" "testing" {
   #  for enabling or disabling CDN, WAF or Serverless Scripting, we need to use "operation" argument
   #  "operation" argument values are - enable_cdn, disable_cdn, enable_waf, disable_waf, enable_scripts, disable_scripts
   #  operation = "enable_scripts"
+  
+  timeouts {
+    create = "20m"
+  }
 }
 
 output "site_id" {
@@ -65,6 +69,7 @@ The following arguments are supported:
 - `auth_method` (String) - The authentication method to communicate with the hostname. Possibles values are NONE or BASIC. If not provided, it will default to NONE unless the username or password is provided. It would then default to BASIC.
 - `password` (String) - The password for the basic authentication. Required if authMethod is BASIC or if the password id provided.
 - `username` (String) - The username for the basic authentication. Required if authMethod is BASIC or if the password id provided.
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while create. Example: create = "20m"
 
 ### Read-Only
 

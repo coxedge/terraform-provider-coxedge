@@ -24,6 +24,10 @@ func resourceScript() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getScriptSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -49,8 +53,9 @@ func resourceScriptCreate(ctx context.Context, d *schema.ResourceData, m interfa
 
 	tflog.Info(ctx, "Initiated Create. Awaiting task result.")
 
+	timeout := d.Timeout(schema.TimeoutCreate)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, createdScript.TaskId)
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdScript.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -105,7 +110,9 @@ func resourceScriptUpdate(ctx context.Context, d *schema.ResourceData, m interfa
 		return diag.FromErr(err)
 	}
 
-	_, err = coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, updateScriptResponse.TaskId)
+	timeout := d.Timeout(schema.TimeoutUpdate)
+	//Await
+	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, updateScriptResponse.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}

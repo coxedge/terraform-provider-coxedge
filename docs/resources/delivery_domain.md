@@ -31,6 +31,10 @@ resource "coxedge_delivery_domain" "testing" {
   environment_name = "environment name"
   domain           = "domain name"
   site_id          = "site-id"
+  
+  timeouts {
+    create = "20m"
+  }
 }
 ```
 
@@ -45,6 +49,9 @@ resource "coxedge_delivery_domain" "testing" {
 - `environment_name` (String) - Name of the environment belonging to the organization.
 - `organization_id` (String) - The id of the organization.
 - `site_id` (String) - The ID of the site that the delivery domain belongs to.
+
+### Optional
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while create. Example: create = "20m"
 
 ### Read-Only
 
