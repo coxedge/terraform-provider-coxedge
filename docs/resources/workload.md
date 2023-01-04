@@ -15,9 +15,9 @@ Example Usage
 terraform {
   required_providers {
     coxedge = {
-      version = "0.1"
-      source  = "coxedge.com/cox/coxedge"
-    }
+      version = "0.4.2"
+      source  = "coxedge/coxedge"
+    
   }
 }
 
@@ -88,7 +88,7 @@ The following arguments are supported:
 - `ports` (Block List) (see [below for nested schema](#nestedblock--ports))
 - `secret_environment_variables` (Map of String)
 - `slug` (String) - A workload's programmatic name. Workload slugs are used to build its instances names.
-- `timeouts` (Block List, Min: 1) - Can pass custom timeout while create / update. Example: create = "20m" / update = "20m"
+- `timeouts` (Block List, Min: 1) - Can pass custom timeout while create / update. Example: create = "20m" / update = "20m" - such as "60m" for 60 minutes, "10s" for ten seconds, or "2h" for two hours
 
 ### Read-Only
 
