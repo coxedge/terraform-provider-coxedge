@@ -7,7 +7,9 @@ description: Network policy rules allows you to control inbound and outbound tra
 ---
 
 # coxedge_network_policy_rule (Resource)
-Network policy rules allows you to control inbound and outbound traffic to your workload.
+Network policy rules allows you to control inbound and outbound traffic to your workload. 
+
+Note: Max 20 network policies can be created per environment.
 
 Example Usage
 ---
