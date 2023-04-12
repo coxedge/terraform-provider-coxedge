@@ -540,6 +540,255 @@ func getWorkloadSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
+		"probe_configuration": {
+			Type:     schema.TypeString,
+			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				val := false
+				if value == "NONE" || value == "LIVENESS" || value == "LIVENESS_AND_READINESS" {
+					val = true
+				}
+				if !val {
+					diagnostic := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "NONE, LIVENESS or LIVENESS_AND_READINESS"),
+					}
+					diags = append(diags, diagnostic)
+				}
+				return diags
+			},
+		},
+		"liveness_probe": {
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"initial_delay_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"timeout_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"period_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"success_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"failure_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"protocol": {
+						Type:     schema.TypeString,
+						Required: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							val := false
+							if value == "TCP_SOCKET" || value == "HTTP_GET" {
+								val = true
+							}
+							if !val {
+								diagnostic := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "TCP_SOCKET or HTTP_GET"),
+								}
+								diags = append(diags, diagnostic)
+							}
+							return diags
+						},
+					},
+					"tcp_socket": {
+						Type:     schema.TypeSet,
+						Optional: true,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+					"http_get": {
+						Type:     schema.TypeSet,
+						Optional: true,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"http_headers": {
+									Type:     schema.TypeList,
+									Optional: true,
+									Elem: &schema.Resource{
+										Schema: map[string]*schema.Schema{
+											"header_name": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+											"header_value": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+										},
+									},
+								},
+								"scheme": {
+									Type:     schema.TypeString,
+									Required: true,
+									ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+										var diags diag.Diagnostics
+										value := i.(string)
+										val := false
+										if value == "HTTPS" || value == "HTTP" {
+											val = true
+										}
+										if !val {
+											diagnostic := diag.Diagnostic{
+												Severity: diag.Error,
+												Summary:  "wrong value",
+												Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "HTTPS or HTTP "),
+											}
+											diags = append(diags, diagnostic)
+										}
+										return diags
+									},
+								},
+								"path": {
+									Type:     schema.TypeString,
+									Required: true,
+								},
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"readiness_probe": {
+			Type:     schema.TypeSet,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"initial_delay_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"timeout_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"period_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"success_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"failure_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"protocol": {
+						Type:     schema.TypeString,
+						Required: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							val := false
+							if value == "TCP_SOCKET" || value == "HTTP_GET" {
+								val = true
+							}
+							if !val {
+								diagnostic := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "TCP_SOCKET or HTTP_GET"),
+								}
+								diags = append(diags, diagnostic)
+							}
+							return diags
+						},
+					},
+					"tcp_socket": {
+						Type:     schema.TypeSet,
+						Optional: true,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+					"http_get": {
+						Type:     schema.TypeSet,
+						Optional: true,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"http_headers": {
+									Type:     schema.TypeList,
+									Optional: true,
+									Elem: &schema.Resource{
+										Schema: map[string]*schema.Schema{
+											"header_name": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+											"header_value": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+										},
+									},
+								},
+								"scheme": {
+									Type:     schema.TypeString,
+									Required: true,
+									ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+										var diags diag.Diagnostics
+										value := i.(string)
+										val := false
+										if value == "HTTPS" || value == "HTTP" {
+											val = true
+										}
+										if !val {
+											diagnostic := diag.Diagnostic{
+												Severity: diag.Error,
+												Summary:  "wrong value",
+												Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "HTTPS or HTTP "),
+											}
+											diags = append(diags, diagnostic)
+										}
+										return diags
+									},
+								},
+								"path": {
+									Type:     schema.TypeString,
+									Required: true,
+								},
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 }
 
