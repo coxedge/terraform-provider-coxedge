@@ -197,6 +197,44 @@ type WorkloadPersistentStorage struct {
 	Size int    `json:"size,omitempty"`
 }
 
+type LivenessProbe struct {
+	InitialDelaySeconds *int       `json:"initialDelaySeconds,omitempty"`
+	TimeoutSeconds      *int       `json:"timeoutSeconds,omitempty"`
+	PeriodSeconds       *int       `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int       `json:"successThreshold,omitempty"`
+	FailureThreshold    *int       `json:"failureThreshold,omitempty"`
+	Protocol            string     `json:"protocol,omitempty"`
+	TcpSocket           *TCPSocket `json:"tcpSocket,omitempty"'`
+	HttpGet             *HTTPGet   `json:"httpGet,omitempty"'`
+}
+
+type ReadinessProbe struct {
+	InitialDelaySeconds *int       `json:"initialDelaySeconds,omitempty"`
+	TimeoutSeconds      *int       `json:"timeoutSeconds,omitempty"`
+	PeriodSeconds       *int       `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int       `json:"successThreshold,omitempty"`
+	FailureThreshold    *int       `json:"failureThreshold,omitempty"`
+	Protocol            string     `json:"protocol,omitempty"`
+	TcpSocket           *TCPSocket `json:"tcpSocket,omitempty"'`
+	HttpGet             *HTTPGet   `json:"httpGet,omitempty"'`
+}
+
+type TCPSocket struct {
+	Port *int `json:"port,omitempty"`
+}
+
+type HTTPGet struct {
+	HttpHeaders []HTTPHeaders `json:"httpHeaders,omitempty"`
+	Scheme      string        `json:"scheme,omitempty"`
+	Path        string        `json:"path,omitempty"`
+	Port        *int          `json:"port,omitempty"`
+}
+
+type HTTPHeaders struct {
+	HeaderName  string `json:"headerName,omitempty"`
+	HeaderValue string `json:"headerValue,omitempty"`
+}
+
 type WrappedWorkloads struct {
 	Data []Workload `json:"data"`
 }

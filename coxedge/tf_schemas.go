@@ -562,8 +562,9 @@ func getWorkloadSchema() map[string]*schema.Schema {
 			},
 		},
 		"liveness_probe": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
+			MaxItems: 1,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"initial_delay_seconds": {
@@ -608,8 +609,9 @@ func getWorkloadSchema() map[string]*schema.Schema {
 						},
 					},
 					"tcp_socket": {
-						Type:     schema.TypeSet,
+						Type:     schema.TypeList,
 						Optional: true,
+						MaxItems: 1,
 						Elem: &schema.Resource{
 							Schema: map[string]*schema.Schema{
 								"port": {
@@ -620,8 +622,9 @@ func getWorkloadSchema() map[string]*schema.Schema {
 						},
 					},
 					"http_get": {
-						Type:     schema.TypeSet,
+						Type:     schema.TypeList,
 						Optional: true,
+						MaxItems: 1,
 						Elem: &schema.Resource{
 							Schema: map[string]*schema.Schema{
 								"http_headers": {
@@ -676,8 +679,9 @@ func getWorkloadSchema() map[string]*schema.Schema {
 			},
 		},
 		"readiness_probe": {
-			Type:     schema.TypeSet,
+			Type:     schema.TypeList,
 			Optional: true,
+			MaxItems: 1,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"initial_delay_seconds": {
@@ -722,8 +726,9 @@ func getWorkloadSchema() map[string]*schema.Schema {
 						},
 					},
 					"tcp_socket": {
-						Type:     schema.TypeSet,
+						Type:     schema.TypeList,
 						Optional: true,
+						MaxItems: 1,
 						Elem: &schema.Resource{
 							Schema: map[string]*schema.Schema{
 								"port": {
@@ -734,8 +739,9 @@ func getWorkloadSchema() map[string]*schema.Schema {
 						},
 					},
 					"http_get": {
-						Type:     schema.TypeSet,
+						Type:     schema.TypeList,
 						Optional: true,
+						MaxItems: 1,
 						Elem: &schema.Resource{
 							Schema: map[string]*schema.Schema{
 								"http_headers": {

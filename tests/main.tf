@@ -12,7 +12,7 @@ provider "coxedge" {
 }
 
 resource "coxedge_workload" "test" {
-  name               = "terr-test2"
+  name               = "terr-test1"
   organization_id    = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
   environment_name   = "test-backend"
   type               = "VM"
@@ -25,18 +25,18 @@ resource "coxedge_workload" "test" {
     pops               = ["LAS"]
     instances_per_pop  = 1
   }
-  probe_configuration = "LIVENESS"
-  #  liveness_probe {
-  #    initial_delay_seconds = 0
-  #    timeout_seconds       = 1
-  #    period_seconds        = 10
-  #    success_threshold     = 1
-  #    failure_threshold     = 3
-  #    protocol              = "TCP_SOCKET"
-  #    tcp_socket {
-  #      port = 22
+  probe_configuration = "LIVENESS_AND_READINESS"
+  #    liveness_probe {
+  #      initial_delay_seconds = 0
+  #      timeout_seconds       = 1
+  #      period_seconds        = 10
+  #      success_threshold     = 1
+  #      failure_threshold     = 3
+  #      protocol              = "TCP_SOCKET"
+  #      tcp_socket {
+  #        port = 22
+  #      }
   #    }
-  #  }
   liveness_probe {
     initial_delay_seconds = 0
     timeout_seconds       = 1
@@ -48,6 +48,23 @@ resource "coxedge_workload" "test" {
       path   = "/health"
       port   = 80
       scheme = "HTTPS"
+      http_headers {
+        header_name  = "authorization"
+        header_value = "123456"
+      }
+    }
+  }
+  readiness_probe {
+    initial_delay_seconds = 0
+    timeout_seconds       = 1
+    period_seconds        = 10
+    success_threshold     = 1
+    failure_threshold     = 3
+    protocol              = "HTTP_GET"
+    http_get {
+      path   = "/ping"
+      port   = 80
+      scheme = "HTTP"
       http_headers {
         header_name  = "authorization"
         header_value = "123456"

@@ -33,6 +33,9 @@ type WorkloadCreateRequest struct {
 	Ports                         []WorkloadPort                `json:"ports,omitempty"`
 	SecretEnvironmentVariables    []WorkloadEnvironmentVariable `json:"secretEnvironmentVariables,omitempty"`
 	Slug                          string                        `json:"slug,omitempty"`
+	ProbeConfiguration            string                        `json:"probeConfiguration,omitempty"`
+	LivenessProbe                 *LivenessProbe                `json:"livenessProbe,omitempty"`
+	ReadinessProbe                *ReadinessProbe               `json:"readinessProbe,omitempty"`
 }
 
 //GetWorkloads Get workloads in account
@@ -85,7 +88,7 @@ func (c *Client) GetWorkload(environmentName string, id string, organizationId s
 }
 
 //CreateWorkload Create the workload
-func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest, organizationId string) (*TaskStatusResponse, error) {
+func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest, organizationId string,) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newWorkload)
 	if err != nil {

@@ -183,6 +183,7 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		ContainerUsername:   d.Get("container_username").(string),
 		ContainerPassword:   d.Get("container_password").(string),
 		Slug:                d.Get("slug").(string),
+		ProbeConfiguration:  d.Get("probe_configuration").(string),
 	}
 
 	//Set commands
@@ -244,6 +245,182 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 			CPUUtilization:     convertedEntry["cpu_utilization"].(int),
 		}
 		updatedWorkload.Deployments = append(updatedWorkload.Deployments, deploymentEntry)
+	}
+
+	if updatedWorkload.ProbeConfiguration == "NONE" {
+		updatedWorkload.LivenessProbe = nil
+		updatedWorkload.ReadinessProbe = nil
+	}
+
+	if updatedWorkload.ProbeConfiguration == "LIVENESS" {
+		updatedWorkload.ReadinessProbe = nil
+
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			delaySeconds := convertedEntryLivenessProbe["initial_delay_seconds"].(int)
+			timeoutSeconds := convertedEntryLivenessProbe["timeout_seconds"].(int)
+			periodSeconds := convertedEntryLivenessProbe["period_seconds"].(int)
+			successThreshold := convertedEntryLivenessProbe["success_threshold"].(int)
+			failureThreshold := convertedEntryLivenessProbe["failure_threshold"].(int)
+			livenessProbe := &apiclient.LivenessProbe{
+				InitialDelaySeconds: &delaySeconds,
+				TimeoutSeconds:      &timeoutSeconds,
+				PeriodSeconds:       &periodSeconds,
+				SuccessThreshold:    &successThreshold,
+				FailureThreshold:    &failureThreshold,
+				Protocol:            convertedEntryLivenessProbe["protocol"].(string),
+			}
+
+			if livenessProbe.Protocol == "TCP_SOCKET" {
+				for _, entry := range convertedEntryLivenessProbe["tcp_socket"].([]interface{}) {
+					convertedEntryTcpSocket := entry.(map[string]interface{})
+					port := convertedEntryTcpSocket["port"].(int)
+					tcpSocket := &apiclient.TCPSocket{
+						Port: &port,
+					}
+					livenessProbe.TcpSocket = tcpSocket
+				}
+			}
+
+			if livenessProbe.Protocol == "HTTP_GET" {
+				for _, entry := range convertedEntryLivenessProbe["http_get"].([]interface{}) {
+
+					convertedEntryHttpGet := entry.(map[string]interface{})
+
+					port := convertedEntryHttpGet["port"].(int)
+					httpGet := &apiclient.HTTPGet{
+						Scheme: convertedEntryHttpGet["scheme"].(string),
+						Path:   convertedEntryHttpGet["path"].(string),
+						Port:   &port,
+					}
+
+					for _, entry := range convertedEntryHttpGet["http_headers"].([]interface{}) {
+						convertedEntry := entry.(map[string]interface{})
+						httpHeaders := apiclient.HTTPHeaders{
+							HeaderName:  convertedEntry["header_name"].(string),
+							HeaderValue: convertedEntry["header_value"].(string),
+						}
+						httpGet.HttpHeaders = append(httpGet.HttpHeaders, httpHeaders)
+					}
+					livenessProbe.HttpGet = httpGet
+				}
+			}
+
+			updatedWorkload.LivenessProbe = livenessProbe
+		}
+	}
+
+	if updatedWorkload.ProbeConfiguration == "LIVENESS_AND_READINESS" {
+
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			delaySeconds := convertedEntryLivenessProbe["initial_delay_seconds"].(int)
+			timeoutSeconds := convertedEntryLivenessProbe["timeout_seconds"].(int)
+			periodSeconds := convertedEntryLivenessProbe["period_seconds"].(int)
+			successThreshold := convertedEntryLivenessProbe["success_threshold"].(int)
+			failureThreshold := convertedEntryLivenessProbe["failure_threshold"].(int)
+			livenessProbe := &apiclient.LivenessProbe{
+				InitialDelaySeconds: &delaySeconds,
+				TimeoutSeconds:      &timeoutSeconds,
+				PeriodSeconds:       &periodSeconds,
+				SuccessThreshold:    &successThreshold,
+				FailureThreshold:    &failureThreshold,
+				Protocol:            convertedEntryLivenessProbe["protocol"].(string),
+			}
+
+			if livenessProbe.Protocol == "TCP_SOCKET" {
+				for _, entry := range convertedEntryLivenessProbe["tcp_socket"].([]interface{}) {
+					convertedEntryTcpSocket := entry.(map[string]interface{})
+					port := convertedEntryTcpSocket["port"].(int)
+					tcpSocket := &apiclient.TCPSocket{
+						Port: &port,
+					}
+					livenessProbe.TcpSocket = tcpSocket
+				}
+			}
+
+			if livenessProbe.Protocol == "HTTP_GET" {
+				for _, entry := range convertedEntryLivenessProbe["http_get"].([]interface{}) {
+
+					convertedEntryHttpGet := entry.(map[string]interface{})
+
+					port := convertedEntryHttpGet["port"].(int)
+					httpGet := &apiclient.HTTPGet{
+						Scheme: convertedEntryHttpGet["scheme"].(string),
+						Path:   convertedEntryHttpGet["path"].(string),
+						Port:   &port,
+					}
+
+					for _, entry := range convertedEntryHttpGet["http_headers"].([]interface{}) {
+						convertedEntry := entry.(map[string]interface{})
+						httpHeaders := apiclient.HTTPHeaders{
+							HeaderName:  convertedEntry["header_name"].(string),
+							HeaderValue: convertedEntry["header_value"].(string),
+						}
+						httpGet.HttpHeaders = append(httpGet.HttpHeaders, httpHeaders)
+					}
+					livenessProbe.HttpGet = httpGet
+				}
+			}
+
+			updatedWorkload.LivenessProbe = livenessProbe
+		}
+
+		for _, entry := range d.Get("readiness_probe").([]interface{}) {
+
+			convertedEntryReadinessProbe := entry.(map[string]interface{})
+
+			delaySeconds := convertedEntryReadinessProbe["initial_delay_seconds"].(int)
+			timeoutSeconds := convertedEntryReadinessProbe["timeout_seconds"].(int)
+			periodSeconds := convertedEntryReadinessProbe["period_seconds"].(int)
+			successThreshold := convertedEntryReadinessProbe["success_threshold"].(int)
+			failureThreshold := convertedEntryReadinessProbe["failure_threshold"].(int)
+			readinessProbe := &apiclient.ReadinessProbe{
+				InitialDelaySeconds: &delaySeconds,
+				TimeoutSeconds:      &timeoutSeconds,
+				PeriodSeconds:       &periodSeconds,
+				SuccessThreshold:    &successThreshold,
+				FailureThreshold:    &failureThreshold,
+				Protocol:            convertedEntryReadinessProbe["protocol"].(string),
+			}
+
+			if readinessProbe.Protocol == "TCP_SOCKET" {
+				for _, entry := range convertedEntryReadinessProbe["tcp_socket"].([]interface{}) {
+					convertedEntryTcpSocket := entry.(map[string]interface{})
+					port := convertedEntryTcpSocket["port"].(int)
+					tcpSocket := &apiclient.TCPSocket{
+						Port: &port,
+					}
+					readinessProbe.TcpSocket = tcpSocket
+				}
+			}
+
+			if readinessProbe.Protocol == "HTTP_GET" {
+				for _, entry := range convertedEntryReadinessProbe["http_get"].([]interface{}) {
+
+					convertedEntryHttpGet := entry.(map[string]interface{})
+
+					port := convertedEntryHttpGet["port"].(int)
+					httpGet := &apiclient.HTTPGet{
+						Scheme: convertedEntryHttpGet["scheme"].(string),
+						Path:   convertedEntryHttpGet["path"].(string),
+						Port:   &port,
+					}
+
+					for _, entry := range convertedEntryHttpGet["http_headers"].([]interface{}) {
+						convertedEntry := entry.(map[string]interface{})
+						httpHeaders := apiclient.HTTPHeaders{
+							HeaderName:  convertedEntry["header_name"].(string),
+							HeaderValue: convertedEntry["header_value"].(string),
+						}
+						httpGet.HttpHeaders = append(httpGet.HttpHeaders, httpHeaders)
+					}
+					readinessProbe.HttpGet = httpGet
+				}
+			}
+
+			updatedWorkload.ReadinessProbe = readinessProbe
+		}
 	}
 
 	return updatedWorkload
