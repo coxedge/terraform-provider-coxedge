@@ -12,7 +12,7 @@ provider "coxedge" {
 }
 
 resource "coxedge_workload" "test" {
-  name               = "terr-test1"
+  name               = "terr-test4"
   organization_id    = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
   environment_name   = "test-backend"
   type               = "VM"
@@ -31,17 +31,6 @@ resource "coxedge_workload" "test" {
     is_public_ip = false
   }
   probe_configuration = "LIVENESS_AND_READINESS"
-  #    liveness_probe {
-  #      initial_delay_seconds = 0
-  #      timeout_seconds       = 1
-  #      period_seconds        = 10
-  #      success_threshold     = 1
-  #      failure_threshold     = 3
-  #      protocol              = "TCP_SOCKET"
-  #      tcp_socket {
-  #        port = 22
-  #      }
-  #    }
   liveness_probe {
     initial_delay_seconds = 0
     timeout_seconds       = 1

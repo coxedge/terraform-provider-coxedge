@@ -22,7 +22,7 @@ output "envs" {
 # VM Workloads
 resource "coxedge_workload" "test" {
   name               = "test2"
-  organization_id  = "<organization_id>"
+  organization_id    = "<organization_id>"
   environment_name   = data.coxedge_environments.test.environments[0].name
   type               = "VM"
   image              = "stackpath-edge/ubuntu-1804-bionic:v202104291427"
@@ -33,5 +33,45 @@ resource "coxedge_workload" "test" {
     enable_autoscaling = false
     pops               = ["PVD"]
     instances_per_pop  = 1
+  }
+  network_interfaces {
+    vpc_slug     = "default"
+    ip_families  = "IPv4"
+    is_public_ip = true
+  }
+  probe_configuration = "LIVENESS_AND_READINESS"
+  liveness_probe {
+    initial_delay_seconds = 0
+    timeout_seconds       = 1
+    period_seconds        = 10
+    success_threshold     = 1
+    failure_threshold     = 3
+    protocol              = "HTTP_GET"
+    http_get {
+      path   = "/health"
+      port   = 80
+      scheme = "HTTPS"
+      http_headers {
+        header_name  = "authorization"
+        header_value = "123456"
+      }
+    }
+  }
+  readiness_probe {
+    initial_delay_seconds = 0
+    timeout_seconds       = 1
+    period_seconds        = 10
+    success_threshold     = 1
+    failure_threshold     = 3
+    protocol              = "HTTP_GET"
+    http_get {
+      path   = "/ping"
+      port   = 80
+      scheme = "HTTP"
+      http_headers {
+        header_name  = "authorization"
+        header_value = "123456"
+      }
+    }
   }
 }
