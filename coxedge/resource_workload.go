@@ -41,6 +41,54 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
+	prob := d.Get("probe_configuration").(string)
+	liveness := d.Get("liveness_probe").([]interface{})
+	readiness := d.Get("readiness_probe").([]interface{})
+	if prob == "LIVENESS" && len(liveness) == 0 {
+		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS'"})
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(liveness) == 0 {
+		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(readiness) == 0 {
+		diags = append(diags, diag.Diagnostic{Summary: "readiness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		return diags
+	}
+
+	if prob == "LIVENESS" || prob == "LIVENESS_AND_READINESS" {
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryLivenessProbe["protocol"].(string)
+			tcp := convertedEntryLivenessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryLivenessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in liveness_probe when protocol is set to 'TCP_SOCKET'"})
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in liveness_probe when protocol is set to 'HTTP_GET'"})
+				return diags
+			}
+		}
+
+		for _, entry := range d.Get("readiness_probe").([]interface{}) {
+			convertedEntryReadinessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryReadinessProbe["protocol"].(string)
+			tcp := convertedEntryReadinessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryReadinessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in readiness_probe when protocol is set to 'TCP_SOCKET'"})
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in readiness_probe when protocol is set to 'HTTP_GET'"})
+				return diags
+			}
+		}
+	}
+
 	//Convert resource data to API Object
 	newWorkload := convertResourceDataToWorkloadCreateAPIObject(d)
 
@@ -111,6 +159,56 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 
 	//Get the resource Id
 	resourceId := d.Id()
+
+	var diags diag.Diagnostics
+
+	prob := d.Get("probe_configuration").(string)
+	liveness := d.Get("liveness_probe").([]interface{})
+	readiness := d.Get("readiness_probe").([]interface{})
+	if prob == "LIVENESS" && len(liveness) == 0 {
+		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS'"})
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(liveness) == 0 {
+		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(readiness) == 0 {
+		diags = append(diags, diag.Diagnostic{Summary: "readiness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		return diags
+	}
+
+	if prob == "LIVENESS" || prob == "LIVENESS_AND_READINESS" {
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryLivenessProbe["protocol"].(string)
+			tcp := convertedEntryLivenessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryLivenessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in liveness_probe when protocol is set to 'TCP_SOCKET'"})
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in liveness_probe when protocol is set to 'HTTP_GET'"})
+				return diags
+			}
+		}
+
+		for _, entry := range d.Get("readiness_probe").([]interface{}) {
+			convertedEntryReadinessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryReadinessProbe["protocol"].(string)
+			tcp := convertedEntryReadinessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryReadinessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in readiness_probe when protocol is set to 'TCP_SOCKET'"})
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in readiness_probe when protocol is set to 'HTTP_GET'"})
+				return diags
+			}
+		}
+	}
 
 	//Convert resource data to API object
 	updatedWorkload := convertResourceDataToWorkloadCreateAPIObject(d)
