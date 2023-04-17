@@ -816,7 +816,8 @@ func getWorkloadSchema() map[string]*schema.Schema {
 					},
 					"is_public_ip": {
 						Type:     schema.TypeBool,
-						Required: true,
+						Optional: true,
+						Default:  true,
 					},
 				},
 			},
