@@ -168,6 +168,10 @@ type Workload struct {
 	Status                      string                        `json:"status,omitempty"`
 	Type                        string                        `json:"type,omitempty"`
 	Version                     string                        `json:"version,omitempty"`
+	NetworkInterfaces           []NetworkInterface            `json:"networkInterfaces,omitempty"`
+	ProbeConfiguration          string                        `json:"probeConfiguration,omitempty"`
+	LivenessProbe               LivenessProbe                 `json:"livenessProbe,omitempty"`
+	ReadinessProbe              ReadinessProbe                `json:"readinessProbe,omitempty"`
 }
 
 type NetworkInterface struct {

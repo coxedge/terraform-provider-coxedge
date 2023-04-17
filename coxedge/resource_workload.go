@@ -550,6 +550,7 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 	d.Set("container_server", workload.ContainerServer)
 	d.Set("first_boot_ssh_key", workload.FirstBootSshKey)
 	d.Set("user_data", workload.UserData)
+	d.Set("probe_configuration", workload.ProbeConfiguration)
 	//Now the list structures
 	deployments := make([]map[string]interface{}, len(workload.Deployments), len(workload.Deployments))
 	for i, deployment := range workload.Deployments {
@@ -564,6 +565,17 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		deployments[i] = item
 	}
 	d.Set("deployment", deployments)
+
+	networkInterfaces := make([]map[string]interface{}, len(workload.NetworkInterfaces), len(workload.NetworkInterfaces))
+	for i, networkInterface := range workload.NetworkInterfaces {
+		item := make(map[string]interface{})
+		item["vpc_slug"] = networkInterface.VpcSlug
+		item["ip_families"] = networkInterface.IpFamilies
+		item["subnet"] = networkInterface.Subnet
+		item["is_public_ip"] = networkInterface.IsPublicIP
+		networkInterfaces[i] = item
+	}
+	d.Set("network_interfaces", networkInterfaces)
 
 	ports := make([]map[string]string, len(workload.Ports), len(workload.Ports))
 	for i, portObj := range workload.Ports {
@@ -596,4 +608,89 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		secretEnvVars[envVarObj.Key] = envVarObj.Value
 	}
 	d.Set("secret_environment_variables", secretEnvVars)
+
+	if workload.ProbeConfiguration != "" {
+		d.Set("probe_configuration", workload.ProbeConfiguration)
+
+	}
+	livenessProbes := make([]map[string]interface{}, 0, 0)
+	vlivenessProbe := map[string]interface{}{}
+	vlivenessProbe["initial_delay_seconds"] = workload.LivenessProbe.InitialDelaySeconds
+	vlivenessProbe["timeout_seconds"] = workload.LivenessProbe.TimeoutSeconds
+	vlivenessProbe["period_seconds"] = workload.LivenessProbe.PeriodSeconds
+	vlivenessProbe["success_threshold"] = workload.LivenessProbe.SuccessThreshold
+	vlivenessProbe["failure_threshold"] = workload.LivenessProbe.FailureThreshold
+	vlivenessProbe["protocol"] = workload.LivenessProbe.Protocol
+
+	if workload.LivenessProbe.TcpSocket != nil {
+		tcpSockets := make([]map[string]interface{}, 0, 0)
+		vtcpSocket := map[string]interface{}{}
+		vtcpSocket["port"] = *workload.LivenessProbe.TcpSocket.Port
+		tcpSockets = append(tcpSockets, vtcpSocket)
+		vlivenessProbe["tcp_socket"] = tcpSockets
+	}
+
+	if workload.LivenessProbe.HttpGet != nil {
+		httpGets := make([]map[string]interface{}, 0, 0)
+		vhttpGet := map[string]interface{}{}
+		if len(workload.LivenessProbe.HttpGet.HttpHeaders) > 0 {
+			httpHeaders := make([]map[string]interface{}, len(workload.LivenessProbe.HttpGet.HttpHeaders)-1, len(workload.LivenessProbe.HttpGet.HttpHeaders)-1)
+			for _, h := range workload.LivenessProbe.HttpGet.HttpHeaders {
+				vhttpHeader := map[string]interface{}{
+					"header_name":  h.HeaderName,
+					"header_value": h.HeaderValue,
+				}
+				httpHeaders = append(httpHeaders, vhttpHeader)
+			}
+			vhttpGet["http_headers"] = httpHeaders
+		}
+		vhttpGet["scheme"] = workload.LivenessProbe.HttpGet.Scheme
+		vhttpGet["path"] = workload.LivenessProbe.HttpGet.Path
+		vhttpGet["port"] = *workload.LivenessProbe.HttpGet.Port
+		httpGets = append(httpGets, vhttpGet)
+		vlivenessProbe["http_get"] = httpGets
+	}
+	livenessProbes = append(livenessProbes, vlivenessProbe)
+	d.Set("liveness_probe", livenessProbes)
+
+	readinessProbes := make([]map[string]interface{}, 0, 0)
+	vreadinessProbe := map[string]interface{}{}
+	vreadinessProbe["initial_delay_seconds"] = workload.ReadinessProbe.InitialDelaySeconds
+	vreadinessProbe["timeout_seconds"] = workload.ReadinessProbe.TimeoutSeconds
+	vreadinessProbe["period_seconds"] = workload.ReadinessProbe.PeriodSeconds
+	vreadinessProbe["success_threshold"] = workload.ReadinessProbe.SuccessThreshold
+	vreadinessProbe["failure_threshold"] = workload.ReadinessProbe.FailureThreshold
+	vreadinessProbe["protocol"] = workload.ReadinessProbe.Protocol
+
+	if workload.ReadinessProbe.TcpSocket != nil {
+		tcpSockets := make([]map[string]interface{}, 0, 0)
+		vtcpSocket := map[string]interface{}{}
+		vtcpSocket["port"] = *workload.ReadinessProbe.TcpSocket.Port
+		tcpSockets = append(tcpSockets, vtcpSocket)
+		vreadinessProbe["tcp_socket"] = tcpSockets
+	}
+
+	if workload.ReadinessProbe.HttpGet != nil {
+		httpGets := make([]map[string]interface{}, 0, 0)
+		vhttpGet := map[string]interface{}{}
+		if len(workload.ReadinessProbe.HttpGet.HttpHeaders) > 0 {
+			httpHeaders := make([]map[string]interface{}, len(workload.ReadinessProbe.HttpGet.HttpHeaders)-1, len(workload.ReadinessProbe.HttpGet.HttpHeaders)-1)
+			for _, h := range workload.ReadinessProbe.HttpGet.HttpHeaders {
+				vhttpHeader := map[string]interface{}{
+					"header_name":  h.HeaderName,
+					"header_value": h.HeaderValue,
+				}
+				httpHeaders = append(httpHeaders, vhttpHeader)
+			}
+			vhttpGet["http_headers"] = httpHeaders
+		}
+		vhttpGet["scheme"] = workload.ReadinessProbe.HttpGet.Scheme
+		vhttpGet["path"] = workload.ReadinessProbe.HttpGet.Path
+		vhttpGet["port"] = *workload.ReadinessProbe.HttpGet.Port
+		httpGets = append(httpGets, vhttpGet)
+		vreadinessProbe["http_get"] = httpGets
+	}
+	readinessProbes = append(readinessProbes, vreadinessProbe)
+	d.Set("readiness_probe", readinessProbes)
+
 }
