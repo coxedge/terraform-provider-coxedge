@@ -12,12 +12,14 @@ import (
 )
 
 type WorkloadCreateRequest struct {
-	EnvironmentName string                        `json:"-"`
-	Name            string                        `json:"name"`
-	Deployments     []WorkloadAutoscaleDeployment `json:"deployments"`
-	Image           string                        `json:"image"`
-	Specs           string                        `json:"specs"`
-	Type            string                        `json:"type"`
+	EnvironmentName   string                        `json:"-"`
+	Name              string                        `json:"name"`
+	Deployments       []WorkloadAutoscaleDeployment `json:"deployments"`
+	Image             string                        `json:"image"`
+	Specs             string                        `json:"specs"`
+	Type              string                        `json:"type"`
+	NetworkInterfaces []NetworkInterface            `json:"networkInterfaces"`
+
 	//Optional fields
 	AddAnyCastIpAddress           bool                          `json:"addAnyCastIpAddress,omitempty"`
 	AddImagePullCredentialsOption bool                          `json:"addImagePullCredentialsOption,omitempty"`
@@ -88,7 +90,7 @@ func (c *Client) GetWorkload(environmentName string, id string, organizationId s
 }
 
 //CreateWorkload Create the workload
-func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest, organizationId string,) (*TaskStatusResponse, error) {
+func (c *Client) CreateWorkload(newWorkload WorkloadCreateRequest, organizationId string, ) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newWorkload)
 	if err != nil {

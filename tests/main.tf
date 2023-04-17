@@ -25,6 +25,11 @@ resource "coxedge_workload" "test" {
     pops               = ["LAS"]
     instances_per_pop  = 1
   }
+  network_interfaces {
+    vpc_slug     = "default"
+    ip_families  = "IPv4"
+    is_public_ip = false
+  }
   probe_configuration = "LIVENESS_AND_READINESS"
   #    liveness_probe {
   #      initial_delay_seconds = 0

@@ -170,6 +170,13 @@ type Workload struct {
 	Version                     string                        `json:"version,omitempty"`
 }
 
+type NetworkInterface struct {
+	VpcSlug    string `json:"vpcSlug"`
+	IpFamilies string `json:"ipFamilies"`
+	Subnet     string `json:"subnet,omitempty"`
+	IsPublicIP *bool  `json:"isPublicIP"`
+}
+
 type WorkloadAutoscaleDeployment struct {
 	Name               string   `json:"name,omitempty"`
 	Pops               []string `json:"pops,omitempty"`

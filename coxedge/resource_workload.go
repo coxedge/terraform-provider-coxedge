@@ -284,6 +284,18 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		ProbeConfiguration:  d.Get("probe_configuration").(string),
 	}
 
+	for _, entry := range d.Get("network_interfaces").([]interface{}) {
+		convertedEntry := entry.(map[string]interface{})
+		isPublicIp := convertedEntry["is_public_ip"].(bool)
+		networkInterface := apiclient.NetworkInterface{
+			VpcSlug:    convertedEntry["vpc_slug"].(string),
+			IpFamilies: convertedEntry["ip_families"].(string),
+			Subnet:     convertedEntry["subnet"].(string),
+			IsPublicIP: &isPublicIp,
+		}
+		updatedWorkload.NetworkInterfaces = append(updatedWorkload.NetworkInterfaces, networkInterface)
+	}
+
 	//Set commands
 	updatedWorkload.Commands = make([]string, len(d.Get("commands").([]interface{})))
 	for i, command := range d.Get("commands").([]interface{}) {
