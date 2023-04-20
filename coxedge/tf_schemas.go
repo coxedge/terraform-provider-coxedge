@@ -4656,3 +4656,94 @@ func getScriptSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getBareMetalDeviceSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_devices": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"service_plan": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"device_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"primary_ip": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"monitors_total": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"monitors_up": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"ipmi_address": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"power_status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"tags": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem:     schema.TypeString,
+		},
+		"location": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"facility": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"facility_title": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+				},
+			},
+		},
+	}
+}

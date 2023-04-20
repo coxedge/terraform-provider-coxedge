@@ -665,3 +665,26 @@ type EdgeLogic struct {
 type WrappedEdgeLogic struct {
 	Data EdgeLogic `json:"data,omitempty"`
 }
+
+type BareMetalDevice struct {
+	Id            string   `json:"id,omitempty"`
+	ServicePlan   string   `json:"servicePlan,omitempty"`
+	Name          string   `json:"name,omitempty"`
+	DeviceType    string   `json:"deviceType,omitempty"`
+	PrimaryIp     string   `json:"primaryIp,omitempty"`
+	Status        string   `json:"status,omitempty"`
+	MonitorsTotal int      `json:"monitorsTotal,omitempty"`
+	MonitorsUp    int      `json:"monitorsUp,omitempty"`
+	IpmiAddress   string   `json:"ipmiAddress,omitempty"`
+	PowerStatus   string   `json:"powerStatus,omitempty"`
+	Tags          []string `json:"tags,omitempty"`
+	Location      Location `json:"location,omitempty"`
+}
+type Location struct {
+	Facility      string `json:"facility,omitempty"`
+	FacilityTitle string `json:"facility_title,omitempty"`
+}
+
+type WrappedBareMetalDevices struct {
+	Data []BareMetalDevice `json:"data"`
+}
