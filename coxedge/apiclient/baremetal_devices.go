@@ -10,7 +10,9 @@ import (
 	"net/http"
 )
 
-//GetBareMetalDevices Get BareMetal devices
+/*
+GetBareMetalDevices get all BareMetal devices
+*/
 func (c *Client) GetBareMetalDevices(environmentName string, organizationId string) ([]BareMetalDevice, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices?org_id="+organizationId, nil)
@@ -29,4 +31,27 @@ func (c *Client) GetBareMetalDevices(environmentName string, organizationId stri
 		return nil, err
 	}
 	return wrappedAPIStruct.Data, nil
+}
+
+/*
+GetBareMetalDeviceById get BareMetal device by Id
+*/
+func (c *Client) GetBareMetalDeviceById(environmentName string, organizationId string, requestedId string) (*BareMetalDevice, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices/"+requestedId+"?org_id="+organizationId, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedBareMetalDevice
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
 }

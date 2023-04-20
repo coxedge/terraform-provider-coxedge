@@ -30,13 +30,24 @@ func dataSourceBareMetalRead(ctx context.Context, d *schema.ResourceData, m inte
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
 
-	bareMetalDevices, err := coxEdgeClient.GetBareMetalDevices(environmentName, organizationId)
-	if err != nil {
-		return diag.FromErr(err)
-	}
+	requestedId := d.Get("id").(string)
+	if requestedId != "" {
+		bareMetalDevice, err := coxEdgeClient.GetBareMetalDeviceById(environmentName, organizationId, requestedId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		if err := d.Set("baremetal_devices", flattenBareMetalDevicesData(&[]apiclient.BareMetalDevice{*bareMetalDevice})); err != nil {
+			return diag.FromErr(err)
+		}
+	} else {
+		bareMetalDevices, err := coxEdgeClient.GetBareMetalDevices(environmentName, organizationId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 
-	if err := d.Set("baremetal_devices", flattenBareMetalDevicesData(bareMetalDevices)); err != nil {
-		return diag.FromErr(err)
+		if err := d.Set("baremetal_devices", flattenBareMetalDevicesData(&bareMetalDevices)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	// always run
@@ -45,11 +56,11 @@ func dataSourceBareMetalRead(ctx context.Context, d *schema.ResourceData, m inte
 
 }
 
-func flattenBareMetalDevicesData(bareMetalDevices []apiclient.BareMetalDevice) []interface{} {
+func flattenBareMetalDevicesData(bareMetalDevices *[]apiclient.BareMetalDevice) []interface{} {
 	if bareMetalDevices != nil {
-		devices := make([]interface{}, len(bareMetalDevices), len(bareMetalDevices))
+		devices := make([]interface{}, len(*bareMetalDevices), len(*bareMetalDevices))
 
-		for i, device := range bareMetalDevices {
+		for i, device := range *bareMetalDevices {
 			item := make(map[string]interface{})
 
 			item["id"] = device.Id
@@ -62,11 +73,7 @@ func flattenBareMetalDevicesData(bareMetalDevices []apiclient.BareMetalDevice) [
 			item["monitors_up"] = device.MonitorsUp
 			item["ipmi_address"] = device.IpmiAddress
 			item["power_status"] = device.PowerStatus
-			var tag []string
-			for _, t := range device.Tags {
-				tag = append(tag, t)
-			}
-			item["tags"] = tag
+			item["tags"] = device.Tags
 
 			loc := make([]interface{}, 1, 1)
 			locItem := make(map[string]interface{})

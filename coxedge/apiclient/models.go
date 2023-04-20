@@ -688,3 +688,7 @@ type Location struct {
 type WrappedBareMetalDevices struct {
 	Data []BareMetalDevice `json:"data"`
 }
+
+type WrappedBareMetalDevice struct {
+	Data BareMetalDevice `json:"data"`
+}
