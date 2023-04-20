@@ -62,7 +62,11 @@ func flattenBareMetalDevicesData(bareMetalDevices []apiclient.BareMetalDevice) [
 			item["monitors_up"] = device.MonitorsUp
 			item["ipmi_address"] = device.IpmiAddress
 			item["power_status"] = device.PowerStatus
-			item["tags"] = device.Tags
+			var tag []string
+			for _, t := range device.Tags {
+				tag = append(tag, t)
+			}
+			item["tags"] = tag
 
 			loc := make([]interface{}, 1, 1)
 			locItem := make(map[string]interface{})
