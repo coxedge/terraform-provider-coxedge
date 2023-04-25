@@ -109,14 +109,21 @@ func convertResourceDataToBareMetalDeviceCreateAPIObject(d *schema.ResourceData)
 
 	//Convert server
 	serverList := d.Get("server").([]interface{})
-	for _, entry := range serverList {
+	var name string
+	for i, entry := range serverList {
 		convertedEntry := entry.(map[string]interface{})
 		server := apiclient.Server{
 			Hostname: convertedEntry["hostname"].(string),
 		}
+		if i == 0 {
+			name = convertedEntry["hostname"].(string)
+		} else {
+			name += ", " + convertedEntry["hostname"].(string)
+		}
 		bareMetalDevice.Server = append(bareMetalDevice.Server, server)
 	}
 	bareMetalDevice.Quantity = len(serverList)
+	bareMetalDevice.Name = name
 
 	if bareMetalDevice.HasUserData != nil && *bareMetalDevice.HasUserData {
 		bareMetalDevice.UserData = d.Get("user_data").(string)
