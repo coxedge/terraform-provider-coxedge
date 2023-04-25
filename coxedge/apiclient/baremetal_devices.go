@@ -107,3 +107,22 @@ func (c *Client) CreateBareMetalDevice(createRequest CreateBareMetalDeviceReques
 	}
 	return &wrappedAPIStruct, nil
 }
+
+func (c *Client) DeleteBareMetalDeviceById(deviceId string, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices/"+deviceId+"?operation=delete&org_id="+organizationId,
+		nil)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}

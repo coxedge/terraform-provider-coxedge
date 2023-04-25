@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strings"
 	"time"
 )
 
@@ -24,121 +25,98 @@ func resourceBareMetalDevice() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Schema: getBareMetalDeviceResourceSchema(),
+		Schema: getBareMetalDeviceSchema(),
 		Timeouts: &schema.ResourceTimeout{
-			Create: schema.DefaultTimeout(10 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
 		},
 	}
 }
 
-func resourceBareMetalDeviceCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func resourceBareMetalDeviceCreate(ctx context.Context, d *schema.ResourceData, i interface{}) diag.Diagnostics {
+	return nil
+}
 
+func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, i interface{}) diag.Diagnostics {
+	return nil
+}
+
+func resourceBareMetalDeviceRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
+
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	sshKeyId := d.Get("ssh_key_id").(string)
-	hasSshKey := d.Get("has_ssh_data").(bool)
-	if sshKeyId != "" {
-		if hasSshKey {
-			return diag.Errorf("has_ssh_data field should be set false if ssh_key_id field is added")
-		}
-	}
-	hasUserData := d.Get("has_user_data").(bool)
-	userData := d.Get("user_data").(string)
+	//check the id comes with id,environment_name & organization_id, then split the value -> in case of importing the resource
+	//format is <device_id>:<environment_name>:<organization_id>
+	if strings.Contains(d.Id(), ":") {
+		keys := strings.Split(d.Id(), ":")
+		d.SetId(keys[0])
+		d.Set("environment_name", keys[1])
+		d.Set("organization_id", keys[2])
 
-	if hasUserData {
-		if userData == "" {
-			return diag.Errorf("user_data field is required if has_user_data field is set to true")
-		}
 	}
-
-	createRequest := convertResourceDataToBareMetalDeviceCreateAPIObject(d)
+	//Get the resource Id
+	resourceId := d.Id()
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
+	bareMetalDevice, err := coxEdgeClient.GetBareMetalDeviceById(environmentName, organizationId, resourceId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	convertDeviceAPIObjectToResourceData(d, bareMetalDevice)
+	return diags
+}
 
-	//Call the API
-	createdDevice, err := coxEdgeClient.CreateBareMetalDevice(createRequest, environmentName, organizationId)
+func resourceBareMetalDeviceDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	//Get the API Client
+	coxEdgeClient := m.(apiclient.Client)
+
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+
+	resourceId := d.Id()
+	environmentName := d.Get("environment_name").(string)
+	organizationId := d.Get("organization_id").(string)
+	//Delete the Workload
+	deletedDevice, err := coxEdgeClient.DeleteBareMetalDeviceById(resourceId, environmentName, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	tflog.Info(ctx, "Initiated Create. Awaiting task result.")
+	tflog.Info(ctx, "Initiated Delete. Awaiting task result.")
 
-	timeout := d.Timeout(schema.TimeoutCreate)
+	timeout := d.Timeout(schema.TimeoutDelete)
 	//Await
-	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdDevice.TaskId, timeout)
+	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, deletedDevice.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	//Save the Id
-	d.SetId(taskResult.Data.Result.Id)
+	// From Docs: d.SetId("") is automatically called assuming delete returns no errors, but
+	// it is added here for explicitness.
+	d.SetId("")
 
 	return diags
 }
 
-func resourceBareMetalDeviceUpdate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
-	return diag.Errorf("no option to update BareMetal devices - remove terraform state files to create new one")
-}
+func convertDeviceAPIObjectToResourceData(d *schema.ResourceData, bareMetalDevice *apiclient.BareMetalDevice) {
+	d.Set("id", bareMetalDevice.Id)
+	d.Set("service_plan", bareMetalDevice.ServicePlan)
+	d.Set("name", bareMetalDevice.Name)
+	d.Set("device_type", bareMetalDevice.DeviceType)
+	d.Set("primary_ip", bareMetalDevice.PrimaryIp)
+	d.Set("status", bareMetalDevice.Status)
+	d.Set("monitors_total", bareMetalDevice.MonitorsTotal)
+	d.Set("monitors_up", bareMetalDevice.MonitorsUp)
+	d.Set("ipmi_address", bareMetalDevice.IpmiAddress)
+	d.Set("power_status", bareMetalDevice.PowerStatus)
+	d.Set("tags", bareMetalDevice.Tags)
 
-func resourceBareMetalDeviceRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
-	return nil
-}
+	loc := make([]interface{}, 1, 1)
+	locItem := make(map[string]interface{})
+	locItem["facility"] = bareMetalDevice.Location.Facility
+	locItem["facility_title"] = bareMetalDevice.Location.FacilityTitle
+	loc[0] = locItem
 
-func resourceBareMetalDeviceDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	return nil
-}
-
-func convertResourceDataToBareMetalDeviceCreateAPIObject(d *schema.ResourceData) apiclient.CreateBareMetalDeviceRequest {
-	//Create/update BareMetal device struct
-
-	hasUserData := d.Get("has_user_data").(bool)
-	hasSshData := d.Get("has_ssh_data").(bool)
-	bareMetalDevice := apiclient.CreateBareMetalDeviceRequest{
-		LocationName:    d.Get("location_name").(string),
-		HasUserData:     &hasUserData,
-		HasSshData:      &hasSshData,
-		ProductOptionId: d.Get("product_option_id").(int),
-		ProductId:       d.Get("product_id").(string),
-		OsName:          d.Get("os_name").(string),
-		SshKey:          d.Get("ssh_key").(string),
-		SshKeyName:      d.Get("ssh_key_name").(string),
-		SshKeyId:        d.Get("ssh_key_id").(string),
-	}
-
-	//Convert server
-	serverList := d.Get("server").([]interface{})
-	var name string
-	for i, entry := range serverList {
-		convertedEntry := entry.(map[string]interface{})
-		server := apiclient.Server{
-			Hostname: convertedEntry["hostname"].(string),
-		}
-		if i == 0 {
-			name = convertedEntry["hostname"].(string)
-		} else {
-			name += ", " + convertedEntry["hostname"].(string)
-		}
-		bareMetalDevice.Server = append(bareMetalDevice.Server, server)
-	}
-	bareMetalDevice.Quantity = len(serverList)
-	bareMetalDevice.Name = name
-
-	if bareMetalDevice.HasUserData != nil && *bareMetalDevice.HasUserData {
-		bareMetalDevice.UserData = d.Get("user_data").(string)
-	}
-
-	if bareMetalDevice.HasSshData != nil && *bareMetalDevice.HasSshData {
-		bareMetalDevice.SshKey = d.Get("ssh_key").(string)
-		bareMetalDevice.SshKeyName = d.Get("ssh_key_name").(string)
-	}
-
-	sshKeyId := d.Get("ssh_key_id").(string)
-	if sshKeyId != "" {
-		if bareMetalDevice.HasSshData != nil && !*bareMetalDevice.HasSshData {
-			bareMetalDevice.SshKeyId = sshKeyId
-		}
-	}
-	return bareMetalDevice
+	d.Set("location", loc)
 }

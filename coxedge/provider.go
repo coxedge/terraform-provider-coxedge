@@ -44,7 +44,8 @@ func Provider() *schema.Provider {
 			"coxedge_user":                resourceUser(),
 			"coxedge_waf_settings":        resourceWAFSettings(),
 			"coxedge_workload":            resourceWorkload(),
-			"coxedge_baremetal_devices":   resourceBareMetalDevice(),
+			"coxedge_baremetal_devices":   resourceBareMetalDevices(),
+			"coxedge_baremetal_device":    resourceBareMetalDevice(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

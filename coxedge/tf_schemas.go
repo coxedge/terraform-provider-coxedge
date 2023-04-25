@@ -4687,6 +4687,17 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 		"id": {
 			Type:     schema.TypeString,
 			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
 		},
 		"service_plan": {
 			Type:     schema.TypeString,
