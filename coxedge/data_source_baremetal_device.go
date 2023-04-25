@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func dataSourceBareMetal() *schema.Resource {
+func dataSourceBareMetalDevice() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceBareMetalRead,
 		Schema:      getBareMetalDeviceSetSchema(),

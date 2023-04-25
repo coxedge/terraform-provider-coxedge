@@ -4727,7 +4727,9 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 		"tags": {
 			Type:     schema.TypeList,
 			Computed: true,
-			Elem:     schema.TypeString,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 		"location": {
 			Type:     schema.TypeList,
@@ -4744,6 +4746,80 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 					},
 				},
 			},
+		},
+	}
+}
+
+func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"location_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"has_user_data": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"has_ssh_data": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"product_option_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
+		"product_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"os_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"server": {
+			Type:     schema.TypeList,
+			Required: true,
+			MinItems: 1,
+			MaxItems: 5,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"hostname": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+				},
+			},
+		},
+		"ssh_key": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"ssh_key_name"},
+		},
+		"ssh_key_name": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"ssh_key"},
+		},
+		"ssh_key_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"user_data": {
+			Type:     schema.TypeString,
+			Optional: true,
 		},
 	}
 }

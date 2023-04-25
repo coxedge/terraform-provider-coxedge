@@ -29,7 +29,7 @@ func Provider() *schema.Provider {
 			"coxedge_origin_settings":            dataSourceOriginSetting(),
 			"coxedge_roles":                      dataSourceRoles(),
 			"coxedge_workload_instances":         dataWorkloadInstances(),
-			"coxedge_baremetals":                 dataSourceBareMetal(),
+			"coxedge_baremetals":                 dataSourceBareMetalDevice(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"coxedge_cdn_purge":           resourceCDNPurgeResource(),
@@ -44,6 +44,7 @@ func Provider() *schema.Provider {
 			"coxedge_user":                resourceUser(),
 			"coxedge_waf_settings":        resourceWAFSettings(),
 			"coxedge_workload":            resourceWorkload(),
+			"coxedge_baremetal_device":    resourceBareMetalDevice(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

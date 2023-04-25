@@ -3,12 +3,33 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package apiclient
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 )
+
+type CreateBareMetalDeviceRequest struct {
+	Quantity        int      `json:"quantity"`
+	LocationName    string   `json:"locationName"`
+	HasUserData     *bool    `json:"hasUserData"`
+	HasSshData      *bool    `json:"hasSshData"`
+	ProductOptionId int      `json:"productOptionId"`
+	ProductId       string   `json:"productId"`
+	OsName          string   `json:"osName"`
+	Server          []Server `json:"server"`
+	SshKey          string   `json:"sshKey,omitempty"`
+	SshKeyName      string   `json:"sshKeyName,omitempty"`
+	SshKeyId        string   `json:"sshKeyId,omitempty"`
+	UserData        string   `json:"user_data,omitempty"`
+}
+
+type Server struct {
+	Hostname string `json:"hostname"`
+}
 
 /*
 GetBareMetalDevices get all BareMetal devices
@@ -54,4 +75,34 @@ func (c *Client) GetBareMetalDeviceById(environmentName string, organizationId s
 		return nil, err
 	}
 	return &wrappedAPIStruct.Data, nil
+}
+
+/*
+CreateBareMetalDevice create BareMetal device(s)
+*/
+func (c *Client) CreateBareMetalDevice(createRequest CreateBareMetalDeviceRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(createRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-create-request?org_id="+organizationId,
+		bReader)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
 }

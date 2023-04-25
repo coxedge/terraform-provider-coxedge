@@ -34,4 +34,6 @@ resource "coxedge_workload" "test" {
     pops               = ["PVD"]
     instances_per_pop  = 1
   }
+
+
 }
