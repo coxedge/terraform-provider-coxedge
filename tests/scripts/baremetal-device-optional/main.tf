@@ -11,7 +11,7 @@ provider "coxedge" {
   key = ""
 }
 
-resource "coxedge_baremetal_device" "device" {
+resource "coxedge_baremetal_devices" "device" {
   environment_name  = "<environment_name>"
   organization_id   = "<organization_id>"
   location_name     = "ATL2"

@@ -12,18 +12,18 @@ provider "coxedge" {
 }
 
 //Get all BareMetal devices
-data "coxedge_baremetals" "baremetals" {
+data "coxedge_baremetal_devices" "baremetals" {
   environment_name = "<environment_name>"
   organization_id  = "<organization_id>"
 }
 
 //Get BareMetal device by Id
-data "coxedge_baremetals" "baremetals" {
+data "coxedge_baremetal_devices" "baremetals" {
   environment_name = "<environment_name>"
   organization_id  = "<organization_id>"
   id               = "<device_id>"
 }
 
 output "output" {
-  value = data.coxedge_baremetals.baremetals
+  value = data.coxedge_baremetal_devices.baremetals
 }
