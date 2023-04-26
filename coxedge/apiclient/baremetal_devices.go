@@ -33,9 +33,10 @@ type Server struct {
 }
 
 type EditBareMetalDeviceRequest struct {
-	Name     string   `json:"name,omitempty"`
-	Hostname string   `json:"hostname,omitempty"`
-	Tags     []string `json:"tags,omitempty"`
+	Name        string   `json:"name,omitempty"`
+	Hostname    string   `json:"hostname,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
+	PowerStatus string   `json:"power_status,omitempty"`
 }
 
 /*
@@ -151,6 +152,30 @@ func (c *Client) EditBareMetalDeviceById(editRequest EditBareMetalDeviceRequest,
 	request, err := http.NewRequest("PATCH",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-setting/"+deviceId+"?org_id="+organizationId,
 		bReader)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+/*
+EditBareMetalDevicePowerById edit BareMetal device power by Id
+*/
+func (c *Client) EditBareMetalDevicePowerById(deviceId string, operation string, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices/"+deviceId+"?operation="+operation+"&org_id="+organizationId,
+		nil)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)

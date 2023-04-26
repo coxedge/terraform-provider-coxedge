@@ -4740,6 +4740,20 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 		"power_status": {
 			Type:     schema.TypeString,
 			Computed: true,
+			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				if value != "ON" && value != "OFF" {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%s is not a expected value. Value should be either ON or OFF", value),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
 		},
 		"tags": {
 			Type:     schema.TypeList,

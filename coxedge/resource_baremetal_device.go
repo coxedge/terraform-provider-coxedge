@@ -77,21 +77,37 @@ func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, 
 	organizationId := d.Get("organization_id").(string)
 
 	editDevice := convertResourceDataToBareMetalDeviceEditAPIObject(d)
-	//Delete the BareMetal device
+	//Edit the BareMetal device
 	editedDevice, err := coxEdgeClient.EditBareMetalDeviceById(editDevice, resourceId, environmentName, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
+	timeout := d.Timeout(schema.TimeoutUpdate)
 	tflog.Info(ctx, "Initiated Update. Awaiting task result.")
 
-	timeout := d.Timeout(schema.TimeoutUpdate)
 	//Await
 	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, editedDevice.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
+	powerStatus := d.Get("power_status").(string)
+	if powerStatus != "" {
+		var operation string
+		if powerStatus == "ON" {
+			operation = "device-on"
+		} else {
+			operation = "device-off"
+		}
+		powerStatusDevice, err := coxEdgeClient.EditBareMetalDevicePowerById(resourceId, operation, environmentName, organizationId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		//Await
+		_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, powerStatusDevice.TaskId, timeout)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
 	return diags
 }
 
