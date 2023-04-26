@@ -4706,6 +4706,12 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 		"name": {
 			Type:     schema.TypeString,
 			Computed: true,
+			Optional: true,
+		},
+		"hostname": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
 		},
 		"device_type": {
 			Type:     schema.TypeString,
@@ -4738,6 +4744,7 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 		"tags": {
 			Type:     schema.TypeList,
 			Computed: true,
+			Optional: true,
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},

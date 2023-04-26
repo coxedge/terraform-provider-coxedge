@@ -27,16 +27,13 @@ func resourceBareMetalDevice() *schema.Resource {
 		},
 		Schema: getBareMetalDeviceSchema(),
 		Timeouts: &schema.ResourceTimeout{
+			Update: schema.DefaultTimeout(10 * time.Minute),
 			Delete: schema.DefaultTimeout(10 * time.Minute),
 		},
 	}
 }
 
 func resourceBareMetalDeviceCreate(ctx context.Context, d *schema.ResourceData, i interface{}) diag.Diagnostics {
-	return nil
-}
-
-func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, i interface{}) diag.Diagnostics {
 	return nil
 }
 
@@ -67,6 +64,37 @@ func resourceBareMetalDeviceRead(ctx context.Context, d *schema.ResourceData, m 
 	return diags
 }
 
+func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	//Get the API Client
+	coxEdgeClient := m.(apiclient.Client)
+
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+
+	//Get the resource Id
+	resourceId := d.Id()
+	environmentName := d.Get("environment_name").(string)
+	organizationId := d.Get("organization_id").(string)
+
+	editDevice := convertResourceDataToBareMetalDeviceEditAPIObject(d)
+	//Delete the BareMetal device
+	editedDevice, err := coxEdgeClient.EditBareMetalDeviceById(editDevice, resourceId, environmentName, organizationId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	tflog.Info(ctx, "Initiated Update. Awaiting task result.")
+
+	timeout := d.Timeout(schema.TimeoutUpdate)
+	//Await
+	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, editedDevice.TaskId, timeout)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	return diags
+}
+
 func resourceBareMetalDeviceDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	//Get the API Client
 	coxEdgeClient := m.(apiclient.Client)
@@ -77,7 +105,8 @@ func resourceBareMetalDeviceDelete(ctx context.Context, d *schema.ResourceData, 
 	resourceId := d.Id()
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
-	//Delete the Workload
+
+	//Delete the BareMetal device
 	deletedDevice, err := coxEdgeClient.DeleteBareMetalDeviceById(resourceId, environmentName, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
@@ -103,6 +132,7 @@ func convertDeviceAPIObjectToResourceData(d *schema.ResourceData, bareMetalDevic
 	d.Set("id", bareMetalDevice.Id)
 	d.Set("service_plan", bareMetalDevice.ServicePlan)
 	d.Set("name", bareMetalDevice.Name)
+	d.Set("hostname", bareMetalDevice.Hostname)
 	d.Set("device_type", bareMetalDevice.DeviceType)
 	d.Set("primary_ip", bareMetalDevice.PrimaryIp)
 	d.Set("status", bareMetalDevice.Status)
@@ -119,4 +149,20 @@ func convertDeviceAPIObjectToResourceData(d *schema.ResourceData, bareMetalDevic
 	loc[0] = locItem
 
 	d.Set("location", loc)
+}
+
+func convertResourceDataToBareMetalDeviceEditAPIObject(d *schema.ResourceData) apiclient.EditBareMetalDeviceRequest {
+
+	editDevice := apiclient.EditBareMetalDeviceRequest{
+		Name:     d.Get("name").(string),
+		Hostname: d.Get("hostname").(string),
+	}
+
+	tgs := d.Get("tags").([]interface{})
+	tags := make([]string, len(tgs))
+	for i, data := range tgs {
+		tags[i] = data.(string)
+	}
+	editDevice.Tags = tags
+	return editDevice
 }

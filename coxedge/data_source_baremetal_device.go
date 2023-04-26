@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package coxedge
 
 import (
@@ -66,6 +67,7 @@ func flattenBareMetalDevicesData(bareMetalDevices *[]apiclient.BareMetalDevice) 
 			item["id"] = device.Id
 			item["service_plan"] = device.ServicePlan
 			item["name"] = device.Name
+			item["hostname"] = device.Hostname
 			item["device_type"] = device.DeviceType
 			item["primary_ip"] = device.PrimaryIp
 			item["status"] = device.Status

@@ -670,6 +670,7 @@ type BareMetalDevice struct {
 	Id            string   `json:"id,omitempty"`
 	ServicePlan   string   `json:"servicePlan,omitempty"`
 	Name          string   `json:"name,omitempty"`
+	Hostname      string   `json:"hostname,omitempty"`
 	DeviceType    string   `json:"deviceType,omitempty"`
 	PrimaryIp     string   `json:"primaryIp,omitempty"`
 	Status        string   `json:"status,omitempty"`

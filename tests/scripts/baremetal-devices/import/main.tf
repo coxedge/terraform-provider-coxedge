@@ -12,7 +12,7 @@ provider "coxedge" {
 }
 
 #do import existing resource, do run below script
-#terraform import coxedge_baremetal_device.device <site_id>:<environment_name>:<organization_id>
+#terraform import coxedge_baremetal_device.device <device_id>:<environment_name>:<organization_id>
 resource "coxedge_baremetal_device" "device" {
 }
 

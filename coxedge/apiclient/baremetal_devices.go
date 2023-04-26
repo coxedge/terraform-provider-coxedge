@@ -32,6 +32,12 @@ type Server struct {
 	Hostname string `json:"hostname"`
 }
 
+type EditBareMetalDeviceRequest struct {
+	Name     string   `json:"name,omitempty"`
+	Hostname string   `json:"hostname,omitempty"`
+	Tags     []string `json:"tags,omitempty"`
+}
+
 /*
 GetBareMetalDevices get all BareMetal devices
 */
@@ -108,10 +114,43 @@ func (c *Client) CreateBareMetalDevice(createRequest CreateBareMetalDeviceReques
 	return &wrappedAPIStruct, nil
 }
 
+/*
+DeleteBareMetalDeviceById delete BareMetal device by Id
+*/
 func (c *Client) DeleteBareMetalDeviceById(deviceId string, environmentName string, organizationId string) (*TaskStatusResponse, error) {
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices/"+deviceId+"?operation=delete&org_id="+organizationId,
 		nil)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+/*
+EditBareMetalDeviceById edit BareMetal device by Id
+*/
+func (c *Client) EditBareMetalDeviceById(editRequest EditBareMetalDeviceRequest, deviceId string, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(editRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("PATCH",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-setting/"+deviceId+"?org_id="+organizationId,
+		bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)
