@@ -90,16 +90,16 @@ func resourceBareMetalDevicesCreate(ctx context.Context, d *schema.ResourceData,
 	return diags
 }
 
-func resourceBareMetalDevicesUpdate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
-	return diag.Errorf("no option to update BareMetal devices - remove terraform state files to create new one")
+func resourceBareMetalDevicesUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	return diag.Errorf("Unfortunately, it is not possible to update BareMetal devices from this resource. For guidance on updating devices, please refer to the documentation.")
 }
 
-func resourceBareMetalDevicesRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceBareMetalDevicesRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	return nil
 }
 
 func resourceBareMetalDevicesDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	return nil
+	return diag.Errorf("Unfortunately, it is not possible to delete BareMetal devices from this resource. For guidance on deleting devices, please refer to the documentation.")
 }
 
 func convertResourceDataToBareMetalDeviceCreateAPIObject(d *schema.ResourceData) apiclient.CreateBareMetalDeviceRequest {

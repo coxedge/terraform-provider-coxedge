@@ -4920,3 +4920,44 @@ func getBareMetalDeviceChartsSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getBareMetalDeviceSensorsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_device_sensors": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceSensorsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceSensorsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ipmi_field": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ipmi_value": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}

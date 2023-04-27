@@ -33,8 +33,8 @@ func resourceBareMetalDevice() *schema.Resource {
 	}
 }
 
-func resourceBareMetalDeviceCreate(ctx context.Context, d *schema.ResourceData, i interface{}) diag.Diagnostics {
-	return nil
+func resourceBareMetalDeviceCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	return diag.Errorf("Creating devices from this resource is not possible. However, you can import devices using the following command: \"terraform import coxedge_baremetal_device.device <device_id>:<environment_name>:<organization_id>\". Please refer to the documentation for instructions on device creation.")
 }
 
 func resourceBareMetalDeviceRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

@@ -252,3 +252,27 @@ func (c *Client) PostBareMetalDeviceCustomChartsById(customRequest CustomChartRe
 	}
 	return &wrappedAPIStruct, nil
 }
+
+/*
+GetBareMetalDeviceSensorsById get BareMetal device sensors by Id
+*/
+func (c *Client) GetBareMetalDeviceSensorsById(environmentName string, organizationId string, requestedId string) ([]BareMetalDeviceSensor, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-sensors-list?id="+requestedId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedBareMetalDeviceSensors
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
