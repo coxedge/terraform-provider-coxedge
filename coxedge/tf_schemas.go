@@ -4871,6 +4871,21 @@ func getBareMetalDeviceChartsSetSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"custom": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  false,
+		},
+		"start_date": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"end_date"},
+		},
+		"end_date": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"start_date"},
+		},
 		"baremetal_device_charts": {
 			Type:     schema.TypeList,
 			Computed: true,

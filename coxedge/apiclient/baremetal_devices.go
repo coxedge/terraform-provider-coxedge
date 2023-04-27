@@ -39,6 +39,11 @@ type EditBareMetalDeviceRequest struct {
 	PowerStatus string   `json:"power_status,omitempty"`
 }
 
+type CustomChartRequest struct {
+	StartDate string `json:"startDate,omitempty"`
+	EndDate   string `json:"endDate,omitempty"`
+}
+
 /*
 GetBareMetalDevices get all BareMetal devices
 */
@@ -213,4 +218,37 @@ func (c *Client) GetBareMetalDeviceChartsById(environmentName string, organizati
 		return nil, err
 	}
 	return wrappedAPIStruct.Data, nil
+}
+
+/*
+PostBareMetalDeviceCustomChartsById request BareMetal device custom charts by Id
+*/
+func (c *Client) PostBareMetalDeviceCustomChartsById(customRequest CustomChartRequest, environmentName string, organizationId string, requestedId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(customRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-charts/"+requestedId+"?operation=custom&org_id="+organizationId,
+		bReader)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
 }

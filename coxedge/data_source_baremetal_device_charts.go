@@ -9,6 +9,7 @@ package coxedge
 import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -31,6 +32,31 @@ func dataSourceBareMetalDeviceChartsRead(ctx context.Context, d *schema.Resource
 
 	requestedId := d.Get("id").(string)
 
+	customChart := d.Get("custom").(bool)
+
+	if customChart {
+		if d.Get("start_date").(string) == "" || d.Get("end_date").(string) == "" {
+			diag := diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Missing required argument",
+				Detail:   "start_date field and end_date field are required for custom charts",
+			}
+			diags = append(diags, diag)
+			return diags
+		}
+		customRequest := convertResourceDataToBareMetalDeviceCustomChartAPIObject(d)
+		customChart, err := coxEdgeClient.PostBareMetalDeviceCustomChartsById(customRequest, environmentName, organizationId, requestedId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		tflog.Info(ctx, "Initiated Update. Awaiting task result.")
+		//Await
+		_, err = coxEdgeClient.AwaitTaskResolveWithDefaults(ctx, customChart.TaskId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
 	bareMetalDeviceCharts, err := coxEdgeClient.GetBareMetalDeviceChartsById(environmentName, organizationId, requestedId)
 	if err != nil {
 		return diag.FromErr(err)
@@ -41,6 +67,14 @@ func dataSourceBareMetalDeviceChartsRead(ctx context.Context, d *schema.Resource
 
 	d.SetId(requestedId)
 	return diags
+}
+
+func convertResourceDataToBareMetalDeviceCustomChartAPIObject(d *schema.ResourceData) apiclient.CustomChartRequest {
+	customRequest := apiclient.CustomChartRequest{
+		StartDate: d.Get("start_date").(string),
+		EndDate:   d.Get("end_date").(string),
+	}
+	return customRequest
 }
 
 func flattenBareMetalDeviceChartsData(bareMetalDevicesCharts *[]apiclient.BareMetalDeviceChart) []interface{} {
