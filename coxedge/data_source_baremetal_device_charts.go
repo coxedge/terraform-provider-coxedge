@@ -38,8 +38,8 @@ func dataSourceBareMetalDeviceChartsRead(ctx context.Context, d *schema.Resource
 		if d.Get("start_date").(string) == "" || d.Get("end_date").(string) == "" {
 			diag := diag.Diagnostic{
 				Severity: diag.Error,
-				Summary:  "Missing required argument",
-				Detail:   "start_date field and end_date field are required for custom charts",
+				Summary:  "Configure 'start_date' and 'end_date' fields for custom charts to work.",
+				Detail:   "The start_date and end_date fields are required for custom charts. Please ensure that both fields are configured correctly to enable custom chart functionality.",
 			}
 			diags = append(diags, diag)
 			return diags
