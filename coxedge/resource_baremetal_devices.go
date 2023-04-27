@@ -41,7 +41,13 @@ func resourceBareMetalDevicesCreate(ctx context.Context, d *schema.ResourceData,
 	hasSshKey := d.Get("has_ssh_data").(bool)
 	if sshKeyId != "" {
 		if hasSshKey {
-			return diag.Errorf("has_ssh_data field should be set false if ssh_key_id field is added")
+			diag := diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Set 'has_ssh_data' to false when adding 'ssh_key_id' field to avoid issues.",
+				Detail:   "When the ssh_key_id field is added, the has_ssh_data field should be set to false. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+			}
+			diags = append(diags, diag)
+			return diags
 		}
 	}
 	hasUserData := d.Get("has_user_data").(bool)
@@ -49,7 +55,13 @@ func resourceBareMetalDevicesCreate(ctx context.Context, d *schema.ResourceData,
 
 	if hasUserData {
 		if userData == "" {
-			return diag.Errorf("user_data field is required if has_user_data field is set to true")
+			diag := diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Ensure 'user_data' field is configured when 'has_user_data' is true to avoid issues.",
+				Detail:   "The 'user_data' field is required when 'has_user_data' is set to true. Please ensure that the 'user_data' field is configured correctly to avoid unexpected behavior.",
+			}
+			diags = append(diags, diag)
+			return diags
 		}
 	}
 
