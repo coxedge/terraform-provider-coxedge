@@ -190,3 +190,27 @@ func (c *Client) EditBareMetalDevicePowerById(deviceId string, operation string,
 	}
 	return &wrappedAPIStruct, nil
 }
+
+/*
+GetBareMetalDeviceChartsById get BareMetal device charts by Id
+*/
+func (c *Client) GetBareMetalDeviceChartsById(environmentName string, organizationId string, requestedId string) ([]BareMetalDeviceChart, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-charts?id="+requestedId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedBareMetalDeviceCharts
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}

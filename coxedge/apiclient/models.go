@@ -681,6 +681,7 @@ type BareMetalDevice struct {
 	Tags          []string `json:"tags,omitempty"`
 	Location      Location `json:"location,omitempty"`
 }
+
 type Location struct {
 	Facility      string `json:"facility,omitempty"`
 	FacilityTitle string `json:"facility_title,omitempty"`
@@ -692,4 +693,16 @@ type WrappedBareMetalDevices struct {
 
 type WrappedBareMetalDevice struct {
 	Data BareMetalDevice `json:"data"`
+}
+
+type BareMetalDeviceChart struct {
+	Id         string `json:"id,omitempty"`
+	Filter     string `json:"filter,omitempty"`
+	GraphImage string `json:"graphImage,omitempty"`
+	Interfaces string `json:"interfaces,omitempty"`
+	SwitchId   string `json:"switchId,omitempty"`
+}
+
+type WrappedBareMetalDeviceCharts struct {
+	Data []BareMetalDeviceChart `json:"data,omitempty"`
 }

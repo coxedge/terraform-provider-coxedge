@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package coxedge
 
 import (
@@ -4852,6 +4853,55 @@ func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
 		"user_data": {
 			Type:     schema.TypeString,
 			Optional: true,
+		},
+	}
+}
+
+func getBareMetalDeviceChartsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_device_charts": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceChartsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceChartsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"filter": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"graph_image": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"interfaces": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"switch_id": {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 	}
 }

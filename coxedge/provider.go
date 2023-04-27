@@ -30,6 +30,7 @@ func Provider() *schema.Provider {
 			"coxedge_roles":                      dataSourceRoles(),
 			"coxedge_workload_instances":         dataWorkloadInstances(),
 			"coxedge_baremetal_devices":          dataSourceBareMetalDevice(),
+			"coxedge_baremetal_device_charts":    dataSourceBareMetalDeviceCharts(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"coxedge_cdn_purge":           resourceCDNPurgeResource(),
