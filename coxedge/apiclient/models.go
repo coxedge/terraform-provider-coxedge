@@ -716,3 +716,12 @@ type BareMetalDeviceSensor struct {
 type WrappedBareMetalDeviceSensors struct {
 	Data []BareMetalDeviceSensor `json:"data,omitempty"`
 }
+
+type BareMetalDeviceIP struct {
+	IPName string `json:"ipName,omitempty"`
+	Value  string `json:"value,omitempty"`
+}
+
+type WrappedBareMetalDeviceIPs struct {
+	Data []BareMetalDeviceIP `json:"data,omitempty"`
+}

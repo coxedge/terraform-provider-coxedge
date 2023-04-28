@@ -4986,3 +4986,40 @@ func getBareMetalDeviceConnectIPMISchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getBareMetalDeviceIPsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_device_ips": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceIPsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceIPsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"ip_name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"value": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}

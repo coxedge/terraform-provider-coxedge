@@ -11,47 +11,67 @@ provider "coxedge" {
   key = ""
 }
 
-resource "coxedge_network_policy_rule" "testing" {
-  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  environment_name = "test-codecraft"
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "inbound-1"
-    protocol    = "TCP"
-    type        = "INBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/32"
-    port_range  = "30000-33001"
-  }
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "inbound-2"
-    protocol    = "TCP"
-    type        = "INBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/2"
-    port_range  = "30000-33001"
-  }
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "outbound-1"
-    protocol    = "TCP"
-    type        = "OUTBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/0"
-    port_range  = "80"
-  }
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "outbound-2"
-    protocol    = "TCP"
-    type        = "OUTBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/32"
-    port_range  = "80"
-  }
+data "coxedge_baremetal_device_ips" "ips" {
+  id               = "14092"
+  environment_name = "bm-env"
+  organization_id  = "e5290682-44f4-481b-9327-34f677a1c46c"
 }
 
-output "policy_id" {
-  value = coxedge_network_policy_rule.testing.id
+output "ips_output" {
+  value = data.coxedge_baremetal_device_ips.ips
 }
+
+#resource "coxedge_baremetal_device_ipmi" "ipmi" {
+#  device_id        = "14092"
+#  environment_name = "bm-env"
+#  organization_id  = "e5290682-44f4-481b-9327-34f677a1c46c"
+#  custom_ip        = "103.153.104.63"
+#
+#}
+#
+#data "coxedge_baremetal_device_sensors" "sensors" {
+#  id               = "14092"
+#  environment_name = "bm-env"
+#  organization_id  = "e5290682-44f4-481b-9327-34f677a1c46c"
+#}
+#
+#output "sensors_output" {
+#  value = data.coxedge_baremetal_device_sensors.sensors
+#}
+
+#resource "coxedge_baremetal_device" "device" {
+#  id               = 14882
+#  environment_name = "bm-env"
+#  organization_id  = "e5290682-44f4-481b-9327-34f677a1c46c"
+##  hostname         = "test022.coxedge.com"
+##  name             = "test022.coxedge.com"
+##  tags             = tolist(["tag1"])
+#  power_status     = "ON"
+#}
+
+#resource "coxedge_baremetal_devices" "device" {
+#  environment_name  = "bm-env"
+#  organization_id   = "e5290682-44f4-481b-9327-34f677a1c46c"
+#  location_name     = "ATL2"
+#  has_user_data     = true
+#  has_ssh_data      = false
+#  product_option_id = 144463
+#  product_id        = "580"
+#  os_name           = "Ubuntu 20.x"
+#  server {
+#    hostname = "testterr006.coxedge.com"
+#  }
+#  user_data  = "test user data field from terraform"
+#  ssh_key_id = "923"
+#}
+
+#//Get all BareMetal devices
+#data "coxedge_baremetal_devices" "baremetals" {
+#  environment_name  = "bm-env"
+#  organization_id   = "e5290682-44f4-481b-9327-34f677a1c46c"
+#  id = 14882
+#}
+#
+#output "output" {
+#  value = data.coxedge_baremetal_devices.baremetals
+#}

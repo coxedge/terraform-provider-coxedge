@@ -339,3 +339,27 @@ func (c *Client) PostBareMetalDeviceClearIPMIById(environmentName string, organi
 	}
 	return &wrappedAPIStruct, nil
 }
+
+/*
+GetBareMetalDeviceIPsById get BareMetal device IPs by Id
+*/
+func (c *Client) GetBareMetalDeviceIPsById(environmentName string, organizationId string, requestedId string) ([]BareMetalDeviceIP, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-ips-list?id="+requestedId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedBareMetalDeviceIPs
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
