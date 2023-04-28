@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package coxedge
 
 import (
@@ -45,15 +46,30 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 	liveness := d.Get("liveness_probe").([]interface{})
 	readiness := d.Get("readiness_probe").([]interface{})
 	if prob == "LIVENESS" && len(liveness) == 0 {
-		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS'"})
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
 		return diags
 	}
 	if prob == "LIVENESS_AND_READINESS" && len(liveness) == 0 {
-		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
 		return diags
 	}
 	if prob == "LIVENESS_AND_READINESS" && len(readiness) == 0 {
-		diags = append(diags, diag.Diagnostic{Summary: "readiness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', readiness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
 		return diags
 	}
 
@@ -64,11 +80,21 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 			tcp := convertedEntryLivenessProbe["tcp_socket"].([]interface{})
 			http := convertedEntryLivenessProbe["http_get"].([]interface{})
 			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in liveness_probe when protocol is set to 'TCP_SOCKET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 			if protocol == "HTTP_GET" && len(http) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in liveness_probe when protocol is set to 'HTTP_GET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 		}
@@ -79,11 +105,21 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 			tcp := convertedEntryReadinessProbe["tcp_socket"].([]interface{})
 			http := convertedEntryReadinessProbe["http_get"].([]interface{})
 			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in readiness_probe when protocol is set to 'TCP_SOCKET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 			if protocol == "HTTP_GET" && len(http) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in readiness_probe when protocol is set to 'HTTP_GET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 		}
@@ -166,15 +202,30 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 	liveness := d.Get("liveness_probe").([]interface{})
 	readiness := d.Get("readiness_probe").([]interface{})
 	if prob == "LIVENESS" && len(liveness) == 0 {
-		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS'"})
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
 		return diags
 	}
 	if prob == "LIVENESS_AND_READINESS" && len(liveness) == 0 {
-		diags = append(diags, diag.Diagnostic{Summary: "liveness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
 		return diags
 	}
 	if prob == "LIVENESS_AND_READINESS" && len(readiness) == 0 {
-		diags = append(diags, diag.Diagnostic{Summary: "readiness_probe is required when probe_configuration is set to 'LIVENESS_AND_READINESS'"})
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', readiness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
 		return diags
 	}
 
@@ -185,11 +236,21 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 			tcp := convertedEntryLivenessProbe["tcp_socket"].([]interface{})
 			http := convertedEntryLivenessProbe["http_get"].([]interface{})
 			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in liveness_probe when protocol is set to 'TCP_SOCKET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 			if protocol == "HTTP_GET" && len(http) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in liveness_probe when protocol is set to 'HTTP_GET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 		}
@@ -200,11 +261,21 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 			tcp := convertedEntryReadinessProbe["tcp_socket"].([]interface{})
 			http := convertedEntryReadinessProbe["http_get"].([]interface{})
 			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "tcp_socket is required in readiness_probe when protocol is set to 'TCP_SOCKET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 			if protocol == "HTTP_GET" && len(http) == 0 {
-				diags = append(diags, diag.Diagnostic{Summary: "http_get is required in readiness_probe when protocol is set to 'HTTP_GET'"})
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
 				return diags
 			}
 		}
@@ -233,8 +304,7 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 			time.Sleep(20 * time.Second)
 		}
 	}
-	//Set last_updated
-	//d.Set("last_updated", time.Now().Format(time.RFC850))
+
 	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
@@ -284,17 +354,13 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		ProbeConfiguration:  d.Get("probe_configuration").(string),
 	}
 
-	for _, entry := range d.Get("network_interfaces").([]interface{}) {
-		convertedEntry := entry.(map[string]interface{})
-		isPublicIp := convertedEntry["is_public_ip"].(bool)
-		networkInterface := apiclient.NetworkInterface{
-			VpcSlug:    convertedEntry["vpc_slug"].(string),
-			IpFamilies: convertedEntry["ip_families"].(string),
-			Subnet:     convertedEntry["subnet"].(string),
-			IsPublicIP: &isPublicIp,
-		}
-		updatedWorkload.NetworkInterfaces = append(updatedWorkload.NetworkInterfaces, networkInterface)
+	networkInterface := apiclient.NetworkInterface{
+		VpcSlug:    "default",
+		IpFamilies: "IPv4",
+		Subnet:     "",
+		IsPublicIP: true,
 	}
+	updatedWorkload.NetworkInterfaces = append(updatedWorkload.NetworkInterfaces, networkInterface)
 
 	//Set commands
 	updatedWorkload.Commands = make([]string, len(d.Get("commands").([]interface{})))

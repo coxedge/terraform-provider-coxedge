@@ -795,33 +795,6 @@ func getWorkloadSchema() map[string]*schema.Schema {
 				},
 			},
 		},
-		"network_interfaces": {
-			Type:     schema.TypeList,
-			Required: true,
-			MaxItems: 5,
-			MinItems: 1,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"vpc_slug": {
-						Type:     schema.TypeString,
-						Required: true,
-					},
-					"ip_families": {
-						Type:     schema.TypeString,
-						Required: true,
-					},
-					"subnet": {
-						Type:     schema.TypeString,
-						Optional: true,
-					},
-					"is_public_ip": {
-						Type:     schema.TypeBool,
-						Optional: true,
-						Default:  true,
-					},
-				},
-			},
-		},
 	}
 }
 

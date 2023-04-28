@@ -58,11 +58,6 @@ resource "coxedge_workload" "test" {
     pops               = ["BTR"]
     instances_per_pop  = 1
   }
-  network_interfaces {
-    vpc_slug     = "default"
-    ip_families  = "IPv4"
-    is_public_ip = true
-  }
   probe_configuration = "LIVENESS_AND_READINESS"
   liveness_probe {
     initial_delay_seconds = 0
@@ -115,8 +110,6 @@ The following arguments are supported:
 - `name` (String) - The display name of the workload.
 - `specs` (String) - Specification type for resources which are allocated to each instance in a workload.
 - `type` (String) - Specify whether a workload is a VM-based workload or container-based.
-- `network_interfaces` (Block List, Min: 1) (see [below for nested schema](#nestedblock--network_interfaces)) - The list
-  of network Interfaces.
 
 ### Optional
 
@@ -198,19 +191,7 @@ Required:
   provided.
 - `public_port_src` (String) - A subnet that will define all the IPs allowed by the network policy rule. Defaults to
   0.0.0.0/0 if not specified.
-
-### Nested Schema for `network_interfaces`
-
-Required:
-
-- `vpc_slug` (String)
-- `ip_families` (String)
-
-Optional:
-
-- `is_public_ip` (bool) - Default it will be true
-- `subnest` (string)
-
+  
 ### Nested Schema for `liveness_probe`
 
 Required:

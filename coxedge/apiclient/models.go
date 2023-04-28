@@ -178,7 +178,7 @@ type NetworkInterface struct {
 	VpcSlug    string `json:"vpcSlug"`
 	IpFamilies string `json:"ipFamilies"`
 	Subnet     string `json:"subnet,omitempty"`
-	IsPublicIP *bool  `json:"isPublicIP"`
+	IsPublicIP bool  `json:"isPublicIP"`
 }
 
 type WorkloadAutoscaleDeployment struct {

@@ -34,11 +34,6 @@ resource "coxedge_workload" "test" {
     pops               = ["PVD"]
     instances_per_pop  = 1
   }
-  network_interfaces {
-    vpc_slug     = "default"
-    ip_families  = "IPv4"
-    is_public_ip = true
-  }
   probe_configuration = "LIVENESS_AND_READINESS"
   liveness_probe {
     initial_delay_seconds = 0
