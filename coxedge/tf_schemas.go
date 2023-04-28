@@ -4961,3 +4961,28 @@ func getBareMetalDeviceSensorsSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getBareMetalDeviceConnectIPMISchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"device_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"custom_ip": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}

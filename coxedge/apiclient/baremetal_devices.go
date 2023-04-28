@@ -44,6 +44,10 @@ type CustomChartRequest struct {
 	EndDate   string `json:"endDate,omitempty"`
 }
 
+type ConnectIPMIRequest struct {
+	CustomIP string `json:"customIP,omitempty"`
+}
+
 /*
 GetBareMetalDevices get all BareMetal devices
 */
@@ -275,4 +279,63 @@ func (c *Client) GetBareMetalDeviceSensorsById(environmentName string, organizat
 		return nil, err
 	}
 	return wrappedAPIStruct.Data, nil
+}
+
+/*
+PostBareMetalDeviceConnectToIPMIById request BareMetal device connect to ipmi
+*/
+func (c *Client) PostBareMetalDeviceConnectToIPMIById(ipmiRequest ConnectIPMIRequest, environmentName string, organizationId string, requestedId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(ipmiRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-sensors-list/"+requestedId+"?operation=connect&org_id="+organizationId,
+		bReader)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+/*
+PostBareMetalDeviceClearIPMIById request BareMetal device clear ipmi address
+*/
+func (c *Client) PostBareMetalDeviceClearIPMIById(environmentName string, organizationId string, requestedId string) (*TaskStatusResponse, error) {
+
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/device-sensors-list/"+requestedId+"?operation=clear&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
 }
