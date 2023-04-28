@@ -706,3 +706,13 @@ type BareMetalDeviceChart struct {
 type WrappedBareMetalDeviceCharts struct {
 	Data []BareMetalDeviceChart `json:"data,omitempty"`
 }
+
+type BareMetalDeviceSensor struct {
+	Id        string `json:"id,omitempty"`
+	IpmiField string `json:"ipmiField,omitempty"`
+	IpmiValue string `json:"ipmiValue,omitempty"`
+}
+
+type WrappedBareMetalDeviceSensors struct {
+	Data []BareMetalDeviceSensor `json:"data,omitempty"`
+}
