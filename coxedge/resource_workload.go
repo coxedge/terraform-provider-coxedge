@@ -357,8 +357,8 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 	networkInterface := apiclient.NetworkInterface{
 		VpcSlug:    "default",
 		IpFamilies: "IPv4",
-		Subnet:     "",
-		IsPublicIP: true,
+		SubnetSlug: "",
+		IsPublicIP: false,
 	}
 	updatedWorkload.NetworkInterfaces = append(updatedWorkload.NetworkInterfaces, networkInterface)
 
@@ -637,7 +637,7 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		item := make(map[string]interface{})
 		item["vpc_slug"] = networkInterface.VpcSlug
 		item["ip_families"] = networkInterface.IpFamilies
-		item["subnet"] = networkInterface.Subnet
+		item["subnet_slug"] = networkInterface.SubnetSlug
 		item["is_public_ip"] = networkInterface.IsPublicIP
 		networkInterfaces[i] = item
 	}

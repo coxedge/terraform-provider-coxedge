@@ -139,7 +139,6 @@ type WrappedUser struct {
 	Data User `json:"data"`
 }
 
-// Workloads
 type Workload struct {
 	AddImagePullCreationsOption bool                          `json:"addImagePullCredentialsOption,omitempty"`
 	AnycastIpAddress            string                        `json:"anycastIpAddress,omitempty"`
@@ -177,8 +176,8 @@ type Workload struct {
 type NetworkInterface struct {
 	VpcSlug    string `json:"vpcSlug"`
 	IpFamilies string `json:"ipFamilies"`
-	Subnet     string `json:"subnet,omitempty"`
-	IsPublicIP bool  `json:"isPublicIP"`
+	SubnetSlug string `json:"subnetSlug"`
+	IsPublicIP bool   `json:"isPublicIP"`
 }
 
 type WorkloadAutoscaleDeployment struct {
