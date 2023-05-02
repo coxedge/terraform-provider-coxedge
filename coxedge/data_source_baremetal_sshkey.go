@@ -30,10 +30,10 @@ func dataSourceBareMetalSSHKeysRead(ctx context.Context, d *schema.ResourceData,
 
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
-	requestedId := d.Get("id").(string)
+	resourceId := d.Get("id").(string)
 
-	if requestedId != "" {
-		bareMetalSSHKeys, err := coxEdgeClient.GetBareMetalSSHKeyById(environmentName, organizationId, requestedId)
+	if resourceId != "" {
+		bareMetalSSHKeys, err := coxEdgeClient.GetBareMetalSSHKeyById(environmentName, organizationId, resourceId)
 		if err != nil {
 			return diag.FromErr(err)
 		}

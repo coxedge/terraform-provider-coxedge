@@ -5064,3 +5064,31 @@ func getBareMetalSSHKeysSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getBareMetalSSHKeyResourceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"public_key": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+	}
+}

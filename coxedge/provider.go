@@ -52,6 +52,7 @@ func Provider() *schema.Provider {
 			"coxedge_baremetal_devices":     resourceBareMetalDevices(),
 			"coxedge_baremetal_device":      resourceBareMetalDevice(),
 			"coxedge_baremetal_device_ipmi": resourceBareMetalDeviceIPMI(),
+			"coxedge_baremetal_ssh_key":     resourceBareMetaSSHKey(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
