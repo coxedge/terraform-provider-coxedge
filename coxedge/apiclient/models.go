@@ -725,3 +725,16 @@ type BareMetalDeviceIP struct {
 type WrappedBareMetalDeviceIPs struct {
 	Data []BareMetalDeviceIP `json:"data,omitempty"`
 }
+
+type BareMetalSSHKey struct {
+	Id        string `json:"id,omitempty"`
+	PublicKey string `json:"publicKey,omitempty"`
+	Name      string `json:"name,omitempty"`
+}
+
+type WrappedBareMetalSSHKeys struct {
+	Data []BareMetalSSHKey `json:"data,omitempty"`
+}
+type WrappedBareMetalSSHKey struct {
+	Data BareMetalSSHKey `json:"data,omitempty"`
+}

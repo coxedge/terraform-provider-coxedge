@@ -5023,3 +5023,44 @@ func getBareMetalDeviceIPsSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getBareMetalSSHKeysSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_ssh_keys": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalSSHKeysSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalSSHKeysSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"public_key": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
