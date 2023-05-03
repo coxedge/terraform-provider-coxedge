@@ -23,4 +23,7 @@ resource "coxedge_baremetal_devices" "device" {
   server {
     hostname = "test001.coxedge.com"
   }
+  timeouts {
+    create = "20m"
+  }
 }

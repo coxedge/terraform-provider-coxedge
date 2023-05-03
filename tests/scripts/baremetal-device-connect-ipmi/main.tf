@@ -16,5 +16,4 @@ resource "coxedge_baremetal_device_ipmi" "ipmi" {
   environment_name = "<environment_name>"
   organization_id  = "<organization_id>"
   custom_ip        = "<custom_ip>"
-
 }
