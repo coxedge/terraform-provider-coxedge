@@ -31,7 +31,6 @@ output "testing" {
 
 ## Schema
 
-
 ### Required
 
 - `environment_name` (String) - Name of the environment belonging to the organization.
@@ -67,11 +66,11 @@ output "testing" {
 - `ipmi_address` (String) - IP address for IPMI connection. Requires you to whitelist your current IP or be on IPMI VPN.
 - `power_status` (String) - ON/OFF
 - `tags` (List of String) - List of all user set device tags.
-- `location` (Object) (see [below for nested schema](#nestedobjatt--baremetal_devices--location)) - Object of Location
+- `location` (Object) (see [below for nested schema](#nestedobjatt--location)) - Object of Location
 
 <a id="nestedobjatt--baremetal_devices--location"></a>
 
-### Nested Schema for `baremetal_devices.location`
+### Nested Schema for `location`
 
 Read-Only:
 
