@@ -4,13 +4,13 @@
 
 page_title: "coxedge_baremetal_devices Resource - terraform-provider-coxedge"
 subcategory: ""
-description: Allows you to purchase, deploy, and manage your Bare Metal machines and network resources.
+description: Allows you to deploy, and manage your Bare Metal machines and network resources.
   
 ---
 
 # coxedge_baremetal_devices (Resource)
 
-Allows you to purchase and deploy your Bare Metal machines and network resources.
+Allows you to deploy your Bare Metal machines and network resources.
 
 Example Usage
 ---
@@ -20,8 +20,8 @@ resource "coxedge_baremetal_devices" "device" {
   environment_name  = "<environment_name>"
   organization_id   = "<organization_id>"
   location_name     = "ATL2"
-  has_user_data     = true
-  has_ssh_data      = true
+  has_user_data     = false
+  has_ssh_data      = false
   product_option_id = 144463
   product_id        = "580"
   os_name           = "Ubuntu 20.x"

@@ -35,4 +35,4 @@ The following arguments are supported:
 - `environment_name` (String) - The name of the environment.
 - `organization_id` (String) - The id of the organization.
 - `device_id` (String) - The id of the device.
-- `custom_ip` (String) - IP address of the machine
+- `custom_ip` (String) - IP address that needs to be whitelisted.
