@@ -651,14 +651,14 @@ type WrappedScripts struct {
 
 //Edge Logic
 type EdgeLogic struct {
+	Id                        string   `json:"id,omitempty"`
 	AllowEmptyReferrer        bool     `json:"allowEmptyReferrer,omitempty"`
 	ForceWwwEnabled           bool     `json:"forceWwwEnabled,omitempty"`
-	Id                        string   `json:"id,omitempty"`
 	PseudoStreamingEnabled    bool     `json:"pseudoStreamingEnabled,omitempty"`
 	ReferrerList              []string `json:"referrerList,omitempty"`
 	ReferrerProtectionEnabled bool     `json:"referrerProtectionEnabled,omitempty"`
 	RobotTxtEnabled           bool     `json:"robotTxtEnabled,omitempty"`
-	RobotTxtFile              string   `json:"robotTxtFile,omitempty"`
+	RobotTxtFile              string   `json:"robotsTxtFile,omitempty"`
 	ScopeId                   string   `json:"scopeId,omitempty"`
 	StackId                   string   `json:"stackId,omitempty"`
 }

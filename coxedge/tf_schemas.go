@@ -605,59 +605,6 @@ func getImageSetSchema() map[string]*schema.Schema {
 	}
 }
 
-func getNetworkPolicyRuleSchemas() map[string]*schema.Schema {
-	return map[string]*schema.Schema{
-		"id": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"stack_id": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"organization_id": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"environment_name": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"workload_id": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"network_policy_id": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"description": {
-			Type:     schema.TypeString,
-			Optional: true,
-		},
-		"type": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"source": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"action": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"protocol": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		"port_range": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-	}
-}
-
 func getNetworkPolicyRuleSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"id": {
@@ -4653,6 +4600,78 @@ func getScriptSchema() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 			Required: true,
+		},
+	}
+}
+
+func getSitesEdgeLogicSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"predefined_edge_logic": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getPredefinedEdgeLogicSchema(),
+			},
+		},
+	}
+}
+
+func getPredefinedEdgeLogicSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"scope_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"force_www_enabled": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"robots_txt_enabled": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"robots_txt_file": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"pseudo_streaming_enabled": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"referrer_protection_enabled": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"allow_empty_referrer": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"referrer_list": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 	}
 }
