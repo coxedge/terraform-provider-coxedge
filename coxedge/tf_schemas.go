@@ -4675,3 +4675,64 @@ func getPredefinedEdgeLogicSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getPredefinedEdgeLogicResourceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"site_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"scope_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"force_www_enabled": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"robots_txt_enabled": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"robots_txt_file": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"pseudo_streaming_enabled": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"referrer_protection_enabled": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"allow_empty_referrer": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"referrer_list": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+	}
+}

@@ -58,7 +58,7 @@ func flattenPredefinedEdgeLogicData(apiEdgeLogic *[]apiclient.EdgeLogic) []inter
 			item["stack_id"] = edgeLogic.StackId
 			item["scope_id"] = edgeLogic.ScopeId
 			item["force_www_enabled"] = edgeLogic.ForceWwwEnabled
-			item["robots_txt_enabled"] = edgeLogic.RobotTxtEnabled
+			item["robots_txt_enabled"] = edgeLogic.RobotsTxtEnabled
 			item["robots_txt_file"] = edgeLogic.RobotTxtFile
 			item["pseudo_streaming_enabled"] = edgeLogic.PseudoStreamingEnabled
 			item["referrer_protection_enabled"] = edgeLogic.ReferrerProtectionEnabled

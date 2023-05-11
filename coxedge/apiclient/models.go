@@ -657,7 +657,7 @@ type EdgeLogic struct {
 	PseudoStreamingEnabled    bool     `json:"pseudoStreamingEnabled,omitempty"`
 	ReferrerList              []string `json:"referrerList,omitempty"`
 	ReferrerProtectionEnabled bool     `json:"referrerProtectionEnabled,omitempty"`
-	RobotTxtEnabled           bool     `json:"robotTxtEnabled,omitempty"`
+	RobotsTxtEnabled           bool     `json:"robotsTxtEnabled,omitempty"`
 	RobotTxtFile              string   `json:"robotsTxtFile,omitempty"`
 	ScopeId                   string   `json:"scopeId,omitempty"`
 	StackId                   string   `json:"stackId,omitempty"`
