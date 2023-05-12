@@ -52,7 +52,9 @@ type WrappedEnvironments struct {
 	Data []Environment `json:"data"`
 }
 type WrappedEnvironment struct {
-	Data Environment `json:"data"`
+	Data       Environment `json:"data"`
+	TaskId     string      `json:"taskId"`
+	TaskStatus string      `json:"taskStatus"`
 }
 
 type ParentOrganization struct {

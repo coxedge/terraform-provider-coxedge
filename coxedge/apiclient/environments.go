@@ -78,7 +78,7 @@ func (c *Client) GetEnvironment(id string) (*Environment, error) {
 }
 
 //CreateEnvironment Create the Environment
-func (c *Client) CreateEnvironment(newEnvironment EnvironmentCreateRequest) (*Environment, error) {
+func (c *Client) CreateEnvironment(newEnvironment EnvironmentCreateRequest) (*WrappedEnvironment, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(newEnvironment)
 	if err != nil {
@@ -100,7 +100,7 @@ func (c *Client) CreateEnvironment(newEnvironment EnvironmentCreateRequest) (*En
 	if err != nil {
 		return nil, err
 	}
-	return &wrappedAPIStruct.Data, nil
+	return &wrappedAPIStruct, nil
 }
 
 //UpdateEnvironment Update a Environment

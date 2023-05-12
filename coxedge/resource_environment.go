@@ -3,11 +3,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package coxedge
 
 import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"time"
@@ -23,6 +25,10 @@ func resourceEnvironment() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: getEnvironmentSchema(),
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(10 * time.Minute),
+			Update: schema.DefaultTimeout(10 * time.Minute),
+		},
 	}
 }
 
@@ -39,17 +45,26 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, m in
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	time.Sleep(time.Second * 10)
-	if _, hasMembershipValue := d.GetOk("membership"); hasMembershipValue {
-		membership := convertResourceDataToEnvironmentMembership(d)
-		_, err = coxEdgeClient.UpdateEnvironmentMembership(createdEnvironment.Id, membership)
-		if err != nil {
-			return diag.FromErr(err)
+	tflog.Info(ctx, "Initiated Create. Awaiting task result.")
+
+	timeout := d.Timeout(schema.TimeoutCreate)
+	//Await
+	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdEnvironment.TaskId, timeout)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	if taskResult.Data.TaskStatus == "SUCCESS" {
+		if _, hasMembershipValue := d.GetOk("membership"); hasMembershipValue {
+			membership := convertResourceDataToEnvironmentMembership(d)
+			_, err = coxEdgeClient.UpdateEnvironmentMembership(createdEnvironment.Data.Id, membership)
+			if err != nil {
+				return diag.FromErr(err)
+			}
 		}
 	}
 
 	//Save the Id
-	d.SetId(createdEnvironment.Id)
+	d.SetId(createdEnvironment.Data.Id)
 
 	return diags
 }
