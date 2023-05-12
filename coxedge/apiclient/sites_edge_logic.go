@@ -22,6 +22,41 @@ type PredefinedEdgeLogicRequest struct {
 	ReferrerList              []string `json:"referrerList,omitempty"`
 }
 
+type DeliveryRuleRequest struct {
+	Id        string             `json:"id,omitempty"`
+	Name      string             `json:"name,omitempty"`
+	Condition []ConditionRequest `json:"conditions,omitempty"`
+	Action    []ActionRequest    `json:"actions,omitempty"`
+}
+
+type ConditionRequest struct {
+	Trigger     string   `json:"trigger,omitempty"`
+	Operator    string   `json:"operator,omitempty"`
+	HTTPMethods []string `json:"httpMethods,omitempty"`
+	Target      string   `json:"target,omitempty"`
+}
+
+type ActionRequest struct {
+	ActionType             string          `json:"actionType,omitempty"`
+	ResponseHeaders        []HeaderRequest `json:"responseHeaders,omitempty"`
+	OriginHeaders          []HeaderRequest `json:"originHeaders,omitempty"`
+	CDNHeaders             []HeaderRequest `json:"cdnHeaders,omitempty"`
+	CacheTtl               int             `json:"cacheTtl,omitempty"`
+	RedirectUrl            string          `json:"redirectUrl,omitempty"`
+	HeaderPattern          string          `json:"headerPattern,omitempty"`
+	Passphrase             string          `json:"passphrase,omitempty"`
+	PassphraseField        string          `json:"passphraseField,omitempty"`
+	MD5TokenField          string          `json:"md5TokenField,omitempty"`
+	TTLField               string          `json:"ttlField,omitempty"`
+	IPAddressFilter        string          `json:"ipAddressFilter,omitempty"`
+	URLSignaturePathLength string          `json:"urlSignaturePathLength,omitempty"`
+}
+
+type HeaderRequest struct {
+	Key   string `json:"key,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
 //GetPredefinedEdgeLogics Get predefined edge logic of sites by site Id
 func (c *Client) GetPredefinedEdgeLogics(environmentName string, organizationId string, siteId string) (*EdgeLogic, error) {
 	request, err := http.NewRequest("GET",
@@ -58,6 +93,111 @@ func (c *Client) UpdatePredefinedEdgeLogic(predefinedEdgeLogicRequest Predefined
 	request, err := http.NewRequest("PATCH",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/predefinededgerules/"+siteId+"?org_id="+organizationId,
 		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+//GetDeliveryRules Get delivery rule by Id from edge logic of sites by site Id
+func (c *Client) GetDeliveryRules(environmentName string, organizationId string, deliveryRuleId string, siteId string) (*DeliveryRule, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules/"+deliveryRuleId+"?siteId="+siteId+"&org_id="+organizationId,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedDeliveryRules
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+//AddDeliveryRule add delivery rule to edge logic of sites by site Id
+func (c *Client) AddDeliveryRule(deliveryRuleRequest DeliveryRuleRequest, environmentName string, organizationId string, siteId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(deliveryRuleRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules?siteId="+siteId+"&org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+//UpdateDeliveryRule edit delivery rule by rule Id in edge logic of sites by site Id
+func (c *Client) UpdateDeliveryRule(deliveryRuleRequest DeliveryRuleRequest, environmentName string, organizationId string, deliveryRuleId string, siteId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(deliveryRuleRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules/"+deliveryRuleId+"?siteId="+siteId+"&org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+//DeleteDeliveryRule delete delivery rule by rule Id in edge logic of sites by site Id
+func (c *Client) DeleteDeliveryRule(environmentName string, organizationId string, deliveryRuleId string, siteId string) (*TaskStatusResponse, error) {
+
+	//Create the request
+	request, err := http.NewRequest("DELETE",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules/"+deliveryRuleId+"?siteId="+siteId+"&org_id="+organizationId,
+		nil,
 	)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request

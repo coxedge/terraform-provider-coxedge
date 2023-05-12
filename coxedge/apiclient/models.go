@@ -657,11 +657,55 @@ type EdgeLogic struct {
 	PseudoStreamingEnabled    bool     `json:"pseudoStreamingEnabled,omitempty"`
 	ReferrerList              []string `json:"referrerList,omitempty"`
 	ReferrerProtectionEnabled bool     `json:"referrerProtectionEnabled,omitempty"`
-	RobotsTxtEnabled           bool     `json:"robotsTxtEnabled,omitempty"`
+	RobotsTxtEnabled          bool     `json:"robotsTxtEnabled,omitempty"`
 	RobotTxtFile              string   `json:"robotsTxtFile,omitempty"`
 	ScopeId                   string   `json:"scopeId,omitempty"`
 	StackId                   string   `json:"stackId,omitempty"`
 }
+
 type WrappedEdgeLogic struct {
 	Data EdgeLogic `json:"data,omitempty"`
+}
+
+type DeliveryRule struct {
+	Id         string      `json:"id,omitempty"`
+	Name       string      `json:"name,omitempty"`
+	Slug       string      `json:"slug,omitempty"`
+	StackId    string      `json:"stackId,omitempty"`
+	SiteId     string      `json:"siteId,omitempty"`
+	ScopeId    string      `json:"scopeId,omitempty"`
+	Conditions []Condition `json:"conditions,omitempty"`
+	Actions    []Action    `json:"actions,omitempty"`
+}
+
+type Condition struct {
+	Trigger     string   `json:"trigger,omitempty"`
+	Operator    string   `json:"operator,omitempty"`
+	HTTPMethods []string `json:"httpMethods,omitempty"`
+	Target      string   `json:"target,omitempty"`
+}
+
+type Action struct {
+	ActionType             string   `json:"actionType,omitempty"`
+	ResponseHeaders        []Header `json:"responseHeaders,omitempty"`
+	OriginHeaders          []Header `json:"originHeaders,omitempty"`
+	CDNHeaders             []Header `json:"cdnHeaders,omitempty"`
+	CacheTtl               int      `json:"cacheTtl,omitempty"`
+	RedirectUrl            string   `json:"redirectUrl,omitempty"`
+	HeaderPattern          string   `json:"headerPattern,omitempty"`
+	Passphrase             string   `json:"passphrase,omitempty"`
+	PassphraseField        string   `json:"passphraseField,omitempty"`
+	MD5TokenField          string   `json:"md5TokenField,omitempty"`
+	TTLField               string   `json:"ttlField,omitempty"`
+	IPAddressFilter        string   `json:"ipAddressFilter,omitempty"`
+	URLSignaturePathLength string   `json:"urlSignaturePathLength,omitempty"`
+}
+
+type Header struct {
+	Key   string `json:"key,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
+type WrappedDeliveryRules struct {
+	Data DeliveryRule `json:"data,omitempty"`
 }

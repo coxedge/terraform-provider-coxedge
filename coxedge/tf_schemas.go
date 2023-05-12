@@ -4736,3 +4736,163 @@ func getPredefinedEdgeLogicResourceSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getEdgeLogicDeliveryRuleResourceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"scope_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"site_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"conditions": {
+			Type:     schema.TypeList,
+			MinItems: 1,
+			Required: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleConditionsSchema(),
+			},
+		},
+		"actions": {
+			Type:     schema.TypeList,
+			MinItems: 1,
+			Required: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleActionsSchema(),
+			},
+		},
+	}
+}
+
+func getEdgeLogicDeliveryRuleConditionsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"trigger": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"operator": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"http_methods": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		"target": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}
+
+func getEdgeLogicDeliveryRuleActionsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"action_type": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"response_headers": {
+			Type:     schema.TypeList,
+			MinItems: 1,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+			},
+		},
+		"origin_headers": {
+			Type:     schema.TypeList,
+			MinItems: 1,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+			},
+		},
+		"cdn_headers": {
+			Type:     schema.TypeList,
+			MinItems: 1,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+			},
+		},
+		"cache_ttl": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"redirect_url": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"header_pattern": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"passphrase": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"passphrase_field": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"md5_token_field": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"ttl_field": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"ip_address_filter": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"url_signature_path_length": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}
+
+func getEdgeLogicDeliveryRuleHeaderSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"key": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"value": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}
