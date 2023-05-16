@@ -8,6 +8,7 @@ package apiclient
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 )
@@ -27,6 +28,10 @@ type DeliveryRuleRequest struct {
 	Name      string             `json:"name,omitempty"`
 	Condition []ConditionRequest `json:"conditions,omitempty"`
 	Action    []ActionRequest    `json:"actions,omitempty"`
+	ScopeId   string             `json:"scopeId"`
+	SiteId    string             `json:"siteId"`
+	Slug      string             `json:"slug"`
+	StackId   string             `json:"stackId"`
 }
 
 type ConditionRequest struct {
@@ -38,9 +43,9 @@ type ConditionRequest struct {
 
 type ActionRequest struct {
 	ActionType             string          `json:"actionType,omitempty"`
-	ResponseHeaders        []HeaderRequest `json:"responseHeaders,omitempty"`
-	OriginHeaders          []HeaderRequest `json:"originHeaders,omitempty"`
-	CDNHeaders             []HeaderRequest `json:"cdnHeaders,omitempty"`
+	ResponseHeaders        []HeaderRequest `json:"responseHeaders"`
+	OriginHeaders          []HeaderRequest `json:"originHeaders"`
+	CDNHeaders             []HeaderRequest `json:"cdnHeaders"`
 	CacheTtl               int             `json:"cacheTtl,omitempty"`
 	RedirectUrl            string          `json:"redirectUrl,omitempty"`
 	HeaderPattern          string          `json:"headerPattern,omitempty"`
@@ -163,7 +168,7 @@ func (c *Client) AddDeliveryRule(deliveryRuleRequest DeliveryRuleRequest, enviro
 }
 
 //UpdateDeliveryRule edit delivery rule by rule Id in edge logic of sites by site Id
-func (c *Client) UpdateDeliveryRule(deliveryRuleRequest DeliveryRuleRequest, environmentName string, organizationId string, deliveryRuleId string, siteId string) (*TaskStatusResponse, error) {
+func (c *Client) UpdateDeliveryRule(ctx context.Context, deliveryRuleRequest DeliveryRuleRequest, environmentName string, organizationId string, deliveryRuleId string, siteId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(deliveryRuleRequest)
 	if err != nil {
@@ -173,7 +178,7 @@ func (c *Client) UpdateDeliveryRule(deliveryRuleRequest DeliveryRuleRequest, env
 	bReader := bytes.NewReader(jsonBytes)
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules/"+deliveryRuleId+"?siteId="+siteId+"&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules/"+deliveryRuleId+"?siteId="+siteId+"&org_id="+organizationId+"&operation=edit",
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")

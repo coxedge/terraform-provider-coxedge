@@ -8,50 +8,52 @@ terraform {
 }
 
 provider "coxedge" {
-  key = ""
+  key = "GM3COPLOU6nOI12/NZ7HNg=="
 }
 
-resource "coxedge_network_policy_rule" "testing" {
+#data "coxedge_sites_edge_logic" "edge_logic" {
+#  id = "afd792e6-2764-4802-85ce-9b0a0361a3e1"
+#  environment_name = "test-backend"
+#  organization_id = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#}
+#
+#output "output_edge_logic" {
+#  value = data.coxedge_sites_edge_logic.edge_logic
+#}
+
+#resource "coxedge_sites_predefined_edge_logic" "edge_logic" {
+#  environment_name            = "test-backend"
+#  organization_id             = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#  site_id                     = "afd792e6-2764-4802-85ce-9b0a0361a3e1"
+#  force_www_enabled           = false
+#  pseudo_streaming_enabled    = false
+#  robots_txt_enabled          = false
+#  robots_txt_file             = ""
+#  referrer_protection_enabled = true
+#  referrer_list               = tolist(["listadd"])
+#  allow_empty_referrer        = false
+#
+#}
+
+resource "coxedge_sites_edge_logic_delivery_rule" "delivery_rule" {
+  environment_name = "test-backend"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  environment_name = "test-codecraft"
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "inbound-1"
-    protocol    = "TCP"
-    type        = "INBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/32"
-    port_range  = "30000-33001"
+  site_id          = "afd792e6-2764-4802-85ce-9b0a0361a3e1"
+  name             = "terr-rule7"
+  conditions {
+    trigger  = "URL"
+    operator = "MATCHES"
+    target   = "codecraft"
   }
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "inbound-2"
-    protocol    = "TCP"
-    type        = "INBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/2"
-    port_range  = "30000-33001"
-  }
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "outbound-1"
-    protocol    = "TCP"
-    type        = "OUTBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/0"
-    port_range  = "80"
-  }
-  network_policy {
-    workload_id = "3fd19d97-22bf-40a4-a615-6436f4714633"
-    description = "outbound-2"
-    protocol    = "TCP"
-    type        = "OUTBOUND"
-    action      = "ALLOW"
-    source      = "0.0.0.0/32"
-    port_range  = "80"
-  }
-}
 
-output "policy_id" {
-  value = coxedge_network_policy_rule.testing.id
+  actions {
+    action_type               = "SIGN_URL"
+    passphrase                = "code"
+    passphrase_field          = "code"
+    md5_token_field           = "code"
+    ttl_field                 = "code"
+    ip_address_filter         = "100.0.0.7"
+    url_signature_path_length = "10"
+  }
+
 }

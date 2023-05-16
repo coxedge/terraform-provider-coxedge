@@ -63,6 +63,7 @@ func resourceEdgeLogicDeliveryRuleCreate(ctx context.Context, d *schema.Resource
 	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
+	resourceEdgeLogicDeliveryRuleRead(ctx, d, m)
 	return diags
 }
 
@@ -110,7 +111,7 @@ func resourceEdgeLogicDeliveryRuleUpdate(ctx context.Context, d *schema.Resource
 	organizationId := d.Get("organization_id").(string)
 	request := convertResourceDataToEdgeLogicDeliveryRuleAPIObject(d)
 
-	updateDeliveryRule, err := coxEdgeClient.UpdateDeliveryRule(request, environmentName, organizationId, resourceId, siteId)
+	updateDeliveryRule, err := coxEdgeClient.UpdateDeliveryRule(ctx, request, environmentName, organizationId, resourceId, siteId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -224,8 +225,12 @@ func convertEdgeLogicDeliveryRuleAPIObjectToResourceData(d *schema.ResourceData,
 func convertResourceDataToEdgeLogicDeliveryRuleAPIObject(d *schema.ResourceData) apiclient.DeliveryRuleRequest {
 
 	request := apiclient.DeliveryRuleRequest{
-		Id:   d.Get("id").(string),
-		Name: d.Get("name").(string),
+		Id:      d.Get("id").(string),
+		Name:    d.Get("name").(string),
+		ScopeId: d.Get("scope_id").(string),
+		SiteId:  d.Get("site_id").(string),
+		Slug:    d.Get("slug").(string),
+		StackId: d.Get("stack_id").(string),
 	}
 
 	for _, entry := range d.Get("conditions").([]interface{}) {
