@@ -74,6 +74,9 @@ func flattenEdgeLogicCustomRulesData(apiCustomRule []apiclient.CustomRule) []int
 				conditionItem["type"] = condition.Type
 				conditionItem["operation"] = condition.Operation
 				conditionItem["value_list"] = condition.ValueList
+				conditionItem["value"] = condition.Value
+				conditionItem["end_value"] = condition.EndValue
+				conditionItem["header"] = condition.Header
 				conditions[j] = conditionItem
 			}
 			item["conditions"] = conditions

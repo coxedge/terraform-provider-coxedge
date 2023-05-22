@@ -737,6 +737,9 @@ type CustomRuleCondition struct {
 	Type      string   `json:"type,omitempty"`
 	Operation string   `json:"operation,omitempty"`
 	ValueList []string `json:"valueList,omitempty"`
+	Value     string   `json:"value,omitempty"`
+	EndValue  string   `json:"endValue,omitempty"`
+	Header    string   `json:"header,omitempty"`
 }
 
 type WrappedCustomRule struct {

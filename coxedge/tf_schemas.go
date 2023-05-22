@@ -5186,5 +5186,17 @@ func getEdgeLogicCustomRuleConditionsSchema() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
+		"value": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"end_value": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"header": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
 	}
 }
