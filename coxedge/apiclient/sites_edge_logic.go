@@ -241,3 +241,26 @@ func (c *Client) DeleteDeliveryRule(environmentName string, organizationId strin
 	}
 	return &wrappedAPIStruct, nil
 }
+
+//GetCustomRules Get custom rules from edge logic of sites by site Id
+func (c *Client) GetCustomRules(environmentName string, organizationId string, siteId string) ([]CustomRule, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/customrules?siteId="+siteId+"&org_id="+organizationId,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedCustomRules
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}

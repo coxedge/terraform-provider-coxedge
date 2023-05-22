@@ -713,3 +713,36 @@ type WrappedDeliveryRule struct {
 type WrappedDeliveryRules struct {
 	Data []DeliveryRule `json:"data,omitempty"`
 }
+
+type CustomRule struct {
+	Id             string                `json:"id,omitempty"`
+	Name           string                `json:"name,omitempty"`
+	StackId        string                `json:"stackId,omitempty"`
+	SiteId         string                `json:"siteId,omitempty"`
+	Notes          string                `json:"notes,omitempty"`
+	Type           string                `json:"type,omitempty"`
+	Enabled        bool                  `json:"enabled,omitempty"`
+	Action         string                `json:"action,omitempty"`
+	ActionDuration string                `json:"actionDuration,omitempty"`
+	StatusCode     string                `json:"statusCode,omitempty"`
+	NBRequest      int                   `json:"nbRequest,omitempty"`
+	Duration       int                   `json:"duration,omitempty"`
+	PathRegExp     string                `json:"pathRegExp,omitempty"`
+	HttpMethods    []string              `json:"httpMethods,omitempty"`
+	IPAddresses    []string              `json:"ipAddresses,omitempty"`
+	Conditions     []CustomRuleCondition `json:"conditions,omitempty"`
+}
+
+type CustomRuleCondition struct {
+	Type      string   `json:"type,omitempty"`
+	Operation string   `json:"operation,omitempty"`
+	ValueList []string `json:"valueList,omitempty"`
+}
+
+type WrappedCustomRule struct {
+	Data CustomRule `json:"data,omitempty"`
+}
+
+type WrappedCustomRules struct {
+	Data []CustomRule `json:"data,omitempty"`
+}

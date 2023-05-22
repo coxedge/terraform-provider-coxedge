@@ -4907,7 +4907,6 @@ func getEdgeLogicDeliveryRuleHeaderSchema() map[string]*schema.Schema {
 	}
 }
 
-
 func getEdgeLogicDeliveryRuleResourceSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"id": {
@@ -5064,6 +5063,128 @@ func getEdgeLogicDeliveryRuleHeaderResourceSchema() map[string]*schema.Schema {
 		"value": {
 			Type:     schema.TypeString,
 			Required: true,
+		},
+	}
+}
+
+func getEdgeLogicCustomRulesSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"edge_logic_custom_rules": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicCustomRuleSchema(),
+			},
+		},
+	}
+}
+
+func getEdgeLogicCustomRuleSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"site_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"notes": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"enabled": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"action": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"action_duration": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status_code": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"nb_request": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"duration": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"path_reg_exp": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"http_methods": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		"ip_addresses": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		"conditions": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicCustomRuleConditionsSchema(),
+			},
+		},
+	}
+}
+
+func getEdgeLogicCustomRuleConditionsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"operation": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"value_list": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 	}
 }

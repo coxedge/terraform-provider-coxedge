@@ -15,7 +15,7 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"key": &schema.Schema{
+			"key": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("COXEDGE_KEY", nil),
@@ -31,6 +31,7 @@ func Provider() *schema.Provider {
 			"coxedge_workload_instances":              dataWorkloadInstances(),
 			"coxedge_sites_predefined_edge_logic":     dataSourceSitesEdgeLogic(),
 			"coxedge_sites_edge_logic_delivery_rules": dataSourceSitesEdgeLogicDeliveryRules(),
+			"coxedge_sites_edge_logic_custom_rules":   dataSourceSitesEdgeLogicCustomRules(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"coxedge_cdn_purge":                      resourceCDNPurgeResource(),
