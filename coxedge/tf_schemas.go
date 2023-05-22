@@ -4737,6 +4737,177 @@ func getPredefinedEdgeLogicResourceSchema() map[string]*schema.Schema {
 	}
 }
 
+func getEdgeLogicDeliveryRulesSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"edge_logic_delivery_rules": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleSchema(),
+			},
+		},
+	}
+}
+
+func getEdgeLogicDeliveryRuleSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"scope_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"site_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"conditions": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleConditionsSchema(),
+			},
+		},
+		"actions": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleActionsSchema(),
+			},
+		},
+	}
+}
+
+func getEdgeLogicDeliveryRuleConditionsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"trigger": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"operator": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"http_methods": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		"target": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getEdgeLogicDeliveryRuleActionsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"action_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"response_headers": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+			},
+		},
+		"origin_headers": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+			},
+		},
+		"cdn_headers": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+			},
+		},
+		"cache_ttl": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"redirect_url": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"header_pattern": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"passphrase": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"passphrase_field": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"md5_token_field": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ttl_field": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ip_address_filter": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"url_signature_path_length": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getEdgeLogicDeliveryRuleHeaderSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"key": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"value": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+
 func getEdgeLogicDeliveryRuleResourceSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"id": {
@@ -4777,7 +4948,7 @@ func getEdgeLogicDeliveryRuleResourceSchema() map[string]*schema.Schema {
 			MinItems: 1,
 			Required: true,
 			Elem: &schema.Resource{
-				Schema: getEdgeLogicDeliveryRuleConditionsSchema(),
+				Schema: getEdgeLogicDeliveryRuleConditionsResourceSchema(),
 			},
 		},
 		"actions": {
@@ -4785,13 +4956,13 @@ func getEdgeLogicDeliveryRuleResourceSchema() map[string]*schema.Schema {
 			MinItems: 1,
 			Required: true,
 			Elem: &schema.Resource{
-				Schema: getEdgeLogicDeliveryRuleActionsSchema(),
+				Schema: getEdgeLogicDeliveryRuleActionsResourceSchema(),
 			},
 		},
 	}
 }
 
-func getEdgeLogicDeliveryRuleConditionsSchema() map[string]*schema.Schema {
+func getEdgeLogicDeliveryRuleConditionsResourceSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"trigger": {
 			Type:     schema.TypeString,
@@ -4815,7 +4986,7 @@ func getEdgeLogicDeliveryRuleConditionsSchema() map[string]*schema.Schema {
 	}
 }
 
-func getEdgeLogicDeliveryRuleActionsSchema() map[string]*schema.Schema {
+func getEdgeLogicDeliveryRuleActionsResourceSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"action_type": {
 			Type:     schema.TypeString,
@@ -4826,7 +4997,7 @@ func getEdgeLogicDeliveryRuleActionsSchema() map[string]*schema.Schema {
 			MinItems: 1,
 			Optional: true,
 			Elem: &schema.Resource{
-				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+				Schema: getEdgeLogicDeliveryRuleHeaderResourceSchema(),
 			},
 		},
 		"origin_headers": {
@@ -4834,7 +5005,7 @@ func getEdgeLogicDeliveryRuleActionsSchema() map[string]*schema.Schema {
 			MinItems: 1,
 			Optional: true,
 			Elem: &schema.Resource{
-				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+				Schema: getEdgeLogicDeliveryRuleHeaderResourceSchema(),
 			},
 		},
 		"cdn_headers": {
@@ -4842,7 +5013,7 @@ func getEdgeLogicDeliveryRuleActionsSchema() map[string]*schema.Schema {
 			MinItems: 1,
 			Optional: true,
 			Elem: &schema.Resource{
-				Schema: getEdgeLogicDeliveryRuleHeaderSchema(),
+				Schema: getEdgeLogicDeliveryRuleHeaderResourceSchema(),
 			},
 		},
 		"cache_ttl": {
@@ -4884,7 +5055,7 @@ func getEdgeLogicDeliveryRuleActionsSchema() map[string]*schema.Schema {
 	}
 }
 
-func getEdgeLogicDeliveryRuleHeaderSchema() map[string]*schema.Schema {
+func getEdgeLogicDeliveryRuleHeaderResourceSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"key": {
 			Type:     schema.TypeString,

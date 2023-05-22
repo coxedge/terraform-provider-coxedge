@@ -114,8 +114,31 @@ func (c *Client) UpdatePredefinedEdgeLogic(predefinedEdgeLogicRequest Predefined
 	return &wrappedAPIStruct, nil
 }
 
-//GetDeliveryRules Get delivery rule by Id from edge logic of sites by site Id
-func (c *Client) GetDeliveryRules(environmentName string, organizationId string, deliveryRuleId string, siteId string) (*DeliveryRule, error) {
+//GetDeliveryRules Get delivery rules from edge logic of sites by site Id
+func (c *Client) GetDeliveryRules(environmentName string, organizationId string, siteId string) ([]DeliveryRule, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules?siteId="+siteId+"&org_id="+organizationId,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedDeliveryRules
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+//GetDeliveryRule Get delivery rule by Id from edge logic of sites by site Id
+func (c *Client) GetDeliveryRule(environmentName string, organizationId string, deliveryRuleId string, siteId string) (*DeliveryRule, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/deliveryrules/"+deliveryRuleId+"?siteId="+siteId+"&org_id="+organizationId,
 		nil,
@@ -129,7 +152,7 @@ func (c *Client) GetDeliveryRules(environmentName string, organizationId string,
 		return nil, err
 	}
 
-	var wrappedAPIStruct WrappedDeliveryRules
+	var wrappedAPIStruct WrappedDeliveryRule
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err

@@ -706,6 +706,10 @@ type Header struct {
 	Value string `json:"value,omitempty"`
 }
 
-type WrappedDeliveryRules struct {
+type WrappedDeliveryRule struct {
 	Data DeliveryRule `json:"data,omitempty"`
+}
+
+type WrappedDeliveryRules struct {
+	Data []DeliveryRule `json:"data,omitempty"`
 }

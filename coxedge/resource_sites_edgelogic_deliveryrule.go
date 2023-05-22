@@ -89,7 +89,7 @@ func resourceEdgeLogicDeliveryRuleRead(ctx context.Context, d *schema.ResourceDa
 	organizationId := d.Get("organization_id").(string)
 	environmentName := d.Get("environment_name").(string)
 
-	deliveryRules, err := coxEdgeClient.GetDeliveryRules(environmentName, organizationId, resourceId, siteId)
+	deliveryRules, err := coxEdgeClient.GetDeliveryRule(environmentName, organizationId, resourceId, siteId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
