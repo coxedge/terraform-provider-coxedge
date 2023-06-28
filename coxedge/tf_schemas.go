@@ -4911,3 +4911,150 @@ func getScriptSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getVPCsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"environment": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpcs": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsSchema(),
+			},
+		},
+	}
+}
+
+func getVPCsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"default_vpc": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subnets": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsSubnetsSchema(),
+			},
+		},
+		"routes": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsRoutesSchema(),
+			},
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getVPCsSubnetsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getVPCsRoutesSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"destination_cidrs": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Computed: true,
+		},
+		"next_hops": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}

@@ -29,6 +29,7 @@ func Provider() *schema.Provider {
 			"coxedge_origin_settings":            dataSourceOriginSetting(),
 			"coxedge_roles":                      dataSourceRoles(),
 			"coxedge_workload_instances":         dataWorkloadInstances(),
+			"coxedge_vpcs":                       dataSourceVPCs(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"coxedge_cdn_purge":           resourceCDNPurgeResource(),

@@ -713,3 +713,41 @@ type EdgeLogic struct {
 type WrappedEdgeLogic struct {
 	Data EdgeLogic `json:"data,omitempty"`
 }
+
+type Subnets struct {
+	Id      string `json:"id,omitempty"`
+	StackId string `json:"stackId,omitempty"`
+	VpcId   string `json:"vpcId,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Slug    string `json:"slug,omitempty"`
+	Cidr    string `json:"cidr,omitempty"`
+	Status  string `json:"status,omitempty"`
+}
+
+type Routes struct {
+	Id               string   `json:"id,omitempty"`
+	StackId          string   `json:"stackId,omitempty"`
+	VpcId            string   `json:"vpcId,omitempty"`
+	Name             string   `json:"name,omitempty"`
+	Slug             string   `json:"slug,omitempty"`
+	DestinationCidrs []string `json:"destinationCidrs,omitempty"`
+	NextHops         []string `json:"nextHops,omitempty"`
+	Status           string   `json:"status,omitempty"`
+}
+
+type VPCs struct {
+	Id         string    `json:"id,omitempty"`
+	Name       string    `json:"name,omitempty"`
+	StackId    string    `json:"stackId,omitempty"`
+	Slug       string    `json:"slug,omitempty"`
+	Cidr       string    `json:"cidr,omitempty"`
+	DefaultVpc bool      `json:"defaultVpc,omitempty"`
+	Created    string    `json:"created,omitempty"`
+	Subnets    []Subnets `json:"subnets,omitempty"`
+	Routes     []Routes  `json:"routes,omitempty"`
+	Status     string    `json:"status,omitempty"`
+}
+
+type WrappedVPCsData struct {
+	Data []VPCs `json:"data,omitempty"`
+}
