@@ -21,9 +21,10 @@ func dataSourceVPCsRead(ctx context.Context, d *schema.ResourceData, m interface
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	environmentName := d.Get("environment").(string)
+	environmentName := d.Get("environment_name").(string)
+	organizationId := d.Get("organization_id").(string)
 
-	org, err := coxEdgeClient.GetAllVPCs(environmentName)
+	org, err := coxEdgeClient.GetAllVPCs(environmentName, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}

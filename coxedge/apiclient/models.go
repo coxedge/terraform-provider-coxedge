@@ -748,6 +748,10 @@ type VPCs struct {
 	Status     string    `json:"status,omitempty"`
 }
 
+type WrappedVPCs struct {
+	Data VPCs `json:"data,omitempty"`
+}
+
 type WrappedVPCsData struct {
 	Data []VPCs `json:"data,omitempty"`
 }

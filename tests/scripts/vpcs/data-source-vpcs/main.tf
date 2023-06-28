@@ -12,7 +12,8 @@ provider "coxedge" {
 }
 
 data "coxedge_vpcs" "vpcs" {
-  environment = "<environment>"
+  environment_name     = "<environment_name>"
+  organization_id = "<organization_id>"
 }
 
 output "output_vpc" {

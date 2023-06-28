@@ -4918,7 +4918,11 @@ func getVPCsSetSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		"environment": {
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
@@ -5055,6 +5059,58 @@ func getVPCsRoutesSchema() map[string]*schema.Schema {
 		"status": {
 			Type:     schema.TypeString,
 			Computed: true,
+		},
+	}
+}
+
+func getVPCSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"default_vpc": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"subnets": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsSubnetsSchema(),
+			},
+		},
+		"routes": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsRoutesSchema(),
+			},
 		},
 	}
 }
