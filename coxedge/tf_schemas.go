@@ -5086,6 +5086,10 @@ func getVPCSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
 		"cidr": {
 			Type:     schema.TypeString,
 			Required: true,
@@ -5111,6 +5115,10 @@ func getVPCSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: getVPCsRoutesSchema(),
 			},
+		},
+		"created": {
+			Type:     schema.TypeString,
+			Required: true,
 		},
 	}
 }

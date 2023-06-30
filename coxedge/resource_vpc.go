@@ -115,17 +115,14 @@ func resourceVPCDelete(ctx context.Context, d *schema.ResourceData, m interface{
 	vpcRequest := convertResourceDataToVPCCreateAPIObject(d)
 
 	//Delete the Site
-	deleteVPC, err := coxEdgeClient.DeleteVPCNetwork(ctx,vpcRequest, environmentName, organizationId)
+	deleteVPC, err := coxEdgeClient.DeleteVPCNetwork(ctx, vpcRequest, environmentName, organizationId)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("-------------- %v", err))
 		return diag.FromErr(err)
 	}
-	tflog.Error(ctx, fmt.Sprintf("--------------deleteVPC %v", deleteVPC))
 	timeout := d.Timeout(schema.TimeoutDelete)
 	//Await
 	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, deleteVPC.TaskId, timeout)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("------------------ task %v", err))
 		return diag.FromErr(err)
 	}
 	// From Docs: d.SetId("") is automatically called assuming delete returns no errors, but
@@ -140,9 +137,11 @@ func convertResourceDataToVPCCreateAPIObject(d *schema.ResourceData) apiclient.V
 		Id:         d.Get("id").(string),
 		Name:       d.Get("name").(string),
 		Slug:       d.Get("slug").(string),
+		StackId:    d.Get("stack_id").(string),
 		Cidr:       d.Get("cidr").(string),
 		DefaultVpc: d.Get("default_vpc").(bool),
 		Status:     d.Get("status").(string),
+		Created:    d.Get("created").(string),
 	}
 	return vpcObject
 }

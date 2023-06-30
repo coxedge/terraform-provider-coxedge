@@ -2,20 +2,21 @@ package apiclient
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
-	"fmt"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"net/http"
 )
 
 type VPCRequest struct {
-	Id         string `json:"id,omitempty"`
-	Name       string `json:"name"`
-	Slug       string `json:"slug"`
-	Cidr       string `json:"cidr"`
-	DefaultVpc bool   `json:"defaultVpc"`
-	Status     string `json:"status"`
+	Id         string   `json:"id,omitempty"`
+	Name       string   `json:"name"`
+	Slug       string   `json:"slug"`
+	StackId    string   `json:"stackId"`
+	Cidr       string   `json:"cidr"`
+	DefaultVpc bool     `json:"defaultVpc"`
+	Status     string   `json:"status"`
+	Created    string   `json:"created"`
+	Subnets    []string `json:"subnets,omitempty"`
+	Routes     []string `json:"routes,omitempty"`
 }
 
 func (c *Client) GetAllVPCs(environmentName string, organizationId string) ([]VPCs, error) {
@@ -86,7 +87,7 @@ func (c *Client) GetVPCNetwork(vpcRequestId string, environmentName string, orga
 	return &wrappedAPIStruct.Data, nil
 }
 
-func (c *Client) DeleteVPCNetwork(ctx context.Context,vpcRequest VPCRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+func (c *Client) DeleteVPCNetwork(vpcRequest VPCRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(vpcRequest)
 	if err != nil {
@@ -94,7 +95,6 @@ func (c *Client) DeleteVPCNetwork(ctx context.Context,vpcRequest VPCRequest, env
 	}
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
-	tflog.Error(ctx, fmt.Sprintf("--------------body %v", string(jsonBytes)))
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/vpcs/"+vpcRequest.Id+"?operation=delete&org_id="+organizationId,
 		bReader)
