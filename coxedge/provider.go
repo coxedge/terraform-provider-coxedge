@@ -46,6 +46,7 @@ func Provider() *schema.Provider {
 			"coxedge_waf_settings":        resourceWAFSettings(),
 			"coxedge_workload":            resourceWorkload(),
 			"coxedge_vpc":                 resourceVPC(),
+			"coxedge_subnet":              resourceSubnet(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

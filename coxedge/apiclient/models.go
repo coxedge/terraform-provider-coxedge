@@ -768,6 +768,10 @@ type Subnets struct {
 	Status  string `json:"status,omitempty"`
 }
 
+type WrappedSubnet struct {
+	Data Subnets `json:"data,omitempty"`
+}
+
 type WrappedSubnetsData struct {
 	Data []Subnets `json:"data,omitempty"`
 }
