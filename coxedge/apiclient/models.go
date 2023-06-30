@@ -714,7 +714,7 @@ type WrappedEdgeLogic struct {
 	Data EdgeLogic `json:"data,omitempty"`
 }
 
-type Subnets struct {
+type VPCSubnets struct {
 	Id      string `json:"id,omitempty"`
 	StackId string `json:"stackId,omitempty"`
 	VpcId   string `json:"vpcId,omitempty"`
@@ -724,7 +724,7 @@ type Subnets struct {
 	Status  string `json:"status,omitempty"`
 }
 
-type Routes struct {
+type VPCRoutes struct {
 	Id               string   `json:"id,omitempty"`
 	StackId          string   `json:"stackId,omitempty"`
 	VpcId            string   `json:"vpcId,omitempty"`
@@ -736,16 +736,16 @@ type Routes struct {
 }
 
 type VPCs struct {
-	Id         string    `json:"id,omitempty"`
-	Name       string    `json:"name,omitempty"`
-	StackId    string    `json:"stackId,omitempty"`
-	Slug       string    `json:"slug,omitempty"`
-	Cidr       string    `json:"cidr,omitempty"`
-	DefaultVpc bool      `json:"defaultVpc,omitempty"`
-	Created    string    `json:"created,omitempty"`
-	Subnets    []Subnets `json:"subnets,omitempty"`
-	Routes     []Routes  `json:"routes,omitempty"`
-	Status     string    `json:"status,omitempty"`
+	Id         string       `json:"id,omitempty"`
+	Name       string       `json:"name,omitempty"`
+	StackId    string       `json:"stackId,omitempty"`
+	Slug       string       `json:"slug,omitempty"`
+	Cidr       string       `json:"cidr,omitempty"`
+	DefaultVpc bool         `json:"defaultVpc,omitempty"`
+	Created    string       `json:"created,omitempty"`
+	Subnets    []VPCSubnets `json:"subnets,omitempty"`
+	Routes     []VPCRoutes  `json:"routes,omitempty"`
+	Status     string       `json:"status,omitempty"`
 }
 
 type WrappedVPCs struct {
@@ -754,4 +754,20 @@ type WrappedVPCs struct {
 
 type WrappedVPCsData struct {
 	Data []VPCs `json:"data,omitempty"`
+}
+
+type Subnets struct {
+	Id      string `json:"id,omitempty"`
+	StackId string `json:"stackId,omitempty"`
+	VpcId   string `json:"vpcId,omitempty"`
+	VpcName string `json:"vpcName,omitempty"`
+	VpcSlug string `json:"vpcSlug,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Slug    string `json:"slug,omitempty"`
+	Cidr    string `json:"cidr,omitempty"`
+	Status  string `json:"status,omitempty"`
+}
+
+type WrappedSubnetsData struct {
+	Data []Subnets `json:"data,omitempty"`
 }
