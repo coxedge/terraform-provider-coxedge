@@ -5193,3 +5193,53 @@ func getSubnetsSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getSubnets() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpc_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"vpc_slug": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}
+
