@@ -358,7 +358,7 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		VpcSlug:    "default",
 		IpFamilies: "IPv4",
 		SubnetSlug: "",
-		IsPublicIP: false,
+		IsPublicIP: true,
 	}
 	updatedWorkload.NetworkInterfaces = append(updatedWorkload.NetworkInterfaces, networkInterface)
 
