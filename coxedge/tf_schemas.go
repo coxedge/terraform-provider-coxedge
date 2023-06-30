@@ -5088,7 +5088,8 @@ func getVPCSchema() map[string]*schema.Schema {
 		},
 		"stack_id": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
+			Computed: true,
 		},
 		"cidr": {
 			Type:     schema.TypeString,
@@ -5118,7 +5119,8 @@ func getVPCSchema() map[string]*schema.Schema {
 		},
 		"created": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
+			Computed: true,
 		},
 	}
 }

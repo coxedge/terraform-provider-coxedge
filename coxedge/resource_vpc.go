@@ -3,8 +3,6 @@ package coxedge
 import (
 	"context"
 	"coxedge/terraform-provider/coxedge/apiclient"
-	"fmt"
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strings"
@@ -43,23 +41,41 @@ func resourceVPCCreate(ctx context.Context, d *schema.ResourceData, m interface{
 	//Call the API
 	createdVPC, err := coxEdgeClient.CreateVPCNetwork(vpcRequest, environmentName, organizationId)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("------------------err %v", err))
 		return diag.FromErr(err)
 	}
-	tflog.Info(ctx, fmt.Sprintf("------------------createdVPC %v", createdVPC))
 
 	timeout := d.Timeout(schema.TimeoutCreate)
 	//Await
 	taskResult, err := coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, createdVPC.TaskId, timeout)
 	if err != nil {
-		tflog.Error(ctx, fmt.Sprintf("------------------ task %v", err))
 		return diag.FromErr(err)
 	}
-	tflog.Error(ctx, fmt.Sprintf("------------------taskResult %v", taskResult))
+	//vpc Id is not present in task result
+	//calling getAllVPCs api and filtering it out using name  to get vpcId
+	//if vpc is not present in getAllVPCs api, throwing error
+	var resourceId = ""
+	if taskResult.Data.TaskStatus == "SUCCESS" {
+		vpcsList, err := coxEdgeClient.GetAllVPCs(environmentName, organizationId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		for _, vpc := range vpcsList {
+			if vpc.Name == d.Get("name").(string) {
+				resourceId = vpc.Id
+			}
+		}
 
-	//Save the Id
-	d.SetId(taskResult.Data.Result.Id)
-
+	}
+	if resourceId != "" {
+		d.SetId(resourceId)
+	} else {
+		diagn := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Something went wrong. VPC name not found",
+			Detail:   "Something went wrong. VPC name not found",
+		}
+		diags = append(diags, diagn)
+	}
 	return diags
 }
 
