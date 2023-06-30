@@ -10,11 +10,11 @@ type VPCRequest struct {
 	Id         string   `json:"id,omitempty"`
 	Name       string   `json:"name"`
 	Slug       string   `json:"slug"`
-	StackId    string   `json:"stackId"`
+	StackId    string   `json:"stackId,omitempty"`
 	Cidr       string   `json:"cidr"`
 	DefaultVpc bool     `json:"defaultVpc"`
 	Status     string   `json:"status"`
-	Created    string   `json:"created"`
+	Created    string   `json:"created,omitempty"`
 	Subnets    []string `json:"subnets,omitempty"`
 	Routes     []string `json:"routes,omitempty"`
 }

@@ -115,7 +115,7 @@ func resourceVPCDelete(ctx context.Context, d *schema.ResourceData, m interface{
 	vpcRequest := convertResourceDataToVPCCreateAPIObject(d)
 
 	//Delete the Site
-	deleteVPC, err := coxEdgeClient.DeleteVPCNetwork(ctx, vpcRequest, environmentName, organizationId)
+	deleteVPC, err := coxEdgeClient.DeleteVPCNetwork(vpcRequest, environmentName, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
