@@ -204,8 +204,11 @@ func getWorkloadInstanceSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"ip_address": {
-			Type:     schema.TypeString,
-			Computed: true,
+			Type:     schema.TypeList,
+			Required: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 		"public_ip_address": {
 			Type:     schema.TypeString,

@@ -21,7 +21,7 @@ Example Usage
 terraform {
   required_providers {
     coxedge = {
-      version = "0.4.7"
+      version = "0.4.8"
       source  = "coxedge/coxedge"
     
   }
@@ -191,7 +191,7 @@ Required:
   provided.
 - `public_port_src` (String) - A subnet that will define all the IPs allowed by the network policy rule. Defaults to
   0.0.0.0/0 if not specified.
-  
+
 ### Nested Schema for `liveness_probe`
 
 Required:
