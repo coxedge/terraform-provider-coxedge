@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package coxedge
 
 import (
@@ -15,7 +16,7 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"key": &schema.Schema{
+			"key": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("COXEDGE_KEY", nil),
@@ -31,6 +32,7 @@ func Provider() *schema.Provider {
 			"coxedge_workload_instances":         dataWorkloadInstances(),
 			"coxedge_vpcs":                       dataSourceVPCs(),
 			"coxedge_subnets":                    dataSourceSubnets(),
+			"coxedge_routes":                     dataSourceRoutes(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"coxedge_cdn_purge":           resourceCDNPurgeResource(),

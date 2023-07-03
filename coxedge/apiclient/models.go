@@ -775,3 +775,23 @@ type WrappedSubnet struct {
 type WrappedSubnetsData struct {
 	Data []Subnets `json:"data,omitempty"`
 }
+
+type Route struct {
+	Id               string   `json:"id,omitempty"`
+	StackId          string   `json:"stackId,omitempty"`
+	VpcId            string   `json:"vpcId,omitempty"`
+	VpcName          string   `json:"vpcName,omitempty"`
+	Name             string   `json:"name,omitempty"`
+	Slug             string   `json:"slug,omitempty"`
+	DestinationCidrs []string `json:"destinationCidrs,omitempty"`
+	NextHops         []string `json:"nextHops,omitempty"`
+	Status           string   `json:"status,omitempty"`
+}
+
+type WrappedRoute struct {
+	Data Route `json:"data,omitempty"`
+}
+
+type WrappedRoutesData struct {
+	Data []Route `json:"data,omitempty"`
+}
