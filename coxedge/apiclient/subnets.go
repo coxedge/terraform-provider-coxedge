@@ -7,11 +7,12 @@ import (
 )
 
 type SubnetRequest struct {
-	Id    string `json:"id,omitempty"`
-	VpcId string `json:"vpcId"`
-	Name  string `json:"name"`
-	Slug  string `json:"slug"`
-	Cidr  string `json:"cidr"`
+	Id      string `json:"id,omitempty"`
+	StackId string `json:"stackId,omitempty"`
+	VpcId   string `json:"vpcId"`
+	Name    string `json:"name"`
+	Slug    string `json:"slug"`
+	Cidr    string `json:"cidr"`
 }
 
 func (c *Client) GetAllSubnets(vpcId string, environmentName string, organizationId string) ([]Subnets, error) {
@@ -63,8 +64,8 @@ func (c *Client) CreateSubnet(subnetRequest SubnetRequest, environmentName strin
 	return &wrappedAPIStruct, nil
 }
 
-func (c *Client) GetSubnet(subnetRequestId string, environmentName string, organizationId string) (*Subnets, error) {
-	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/subnets/"+subnetRequestId+"?org_id="+organizationId, nil)
+func (c *Client) GetSubnet(subnetRequestId string, vpcId string, environmentName string, organizationId string) (*Subnets, error) {
+	request, err := http.NewRequest("GET", CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/subnets/"+subnetRequestId+"?vpc_id="+vpcId+"&org_id="+organizationId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +92,7 @@ func (c *Client) DeleteSubnet(subnetRequest SubnetRequest, environmentName strin
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/subnets/"+subnetRequest.Id+"?operation=delete&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/subnets/"+subnetRequest.Id+"?vpc_id="+subnetRequest.VpcId+"&operation=delete&org_id="+organizationId,
 		bReader)
 	if err != nil {
 		return nil, err

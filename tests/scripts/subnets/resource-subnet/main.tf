@@ -11,6 +11,8 @@ provider "coxedge" {
   key = ""
 }
 
+//for importing
+//terraform import coxedge_subnet.subnet <subnet_id>:<vpc_id>:<environment_name>:<organization_id>
 resource "coxedge_subnet" "subnet" {
   environment_name = "<environment_name>"
   organization_id  = "<organization_id>"
