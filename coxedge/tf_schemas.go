@@ -5317,3 +5317,63 @@ func getRoutesSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getRoutes() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpc_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"destination_cidrs": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Required: true,
+		},
+		"next_hops": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Required: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+	}
+}

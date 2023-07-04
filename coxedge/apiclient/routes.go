@@ -12,6 +12,8 @@ type RouteRequest struct {
 	Name             string   `json:"name"`
 	DestinationCidrs []string `json:"destinationCidrs"`
 	NextHops         []string `json:"nextHops"`
+	StackId          string   `json:"stackId,omitempty"`
+	Status           string   `json:"status"`
 }
 
 func (c *Client) GetAllRoutes(vpcId string, environmentName string, organizationId string) ([]Route, error) {
@@ -91,7 +93,7 @@ func (c *Client) DeleteRoute(routeRequest RouteRequest, environmentName string, 
 	//Wrap bytes in reader
 	bReader := bytes.NewReader(jsonBytes)
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/subnets/"+routeRequest.Id+"?vpc_id="+routeRequest.VpcId+"&operation=delete&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/routes/"+routeRequest.Id+"?vpc_id="+routeRequest.VpcId+"&operation=delete&org_id="+organizationId,
 		bReader)
 	if err != nil {
 		return nil, err

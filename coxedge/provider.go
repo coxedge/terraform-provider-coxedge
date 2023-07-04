@@ -49,6 +49,7 @@ func Provider() *schema.Provider {
 			"coxedge_workload":            resourceWorkload(),
 			"coxedge_vpc":                 resourceVPC(),
 			"coxedge_subnet":              resourceSubnet(),
+			"coxedge_route":               resourceRoute(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
