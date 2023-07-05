@@ -253,16 +253,16 @@ type WrappedWorkload struct {
 }
 
 type WorkloadInstance struct {
-	StackId         string `json:"stackId"`
-	WorkloadId      string `json:"workloadId"`
-	Name            string `json:"name"`
-	IPAddress       string `json:"ipAddress"`
-	PublicIPAddress string `json:"publicIpAddress"`
-	Location        string `json:"location"`
-	CreatedDate     string `json:"createdDate"`
-	StartedDate     string `json:"startedDate"`
-	Id              string `json:"id"`
-	Status          string `json:"status"`
+	StackId         string   `json:"stackId"`
+	WorkloadId      string   `json:"workloadId"`
+	Name            string   `json:"name"`
+	IPAddress       []string `json:"ipAddress"`
+	PublicIPAddress string   `json:"publicIpAddress"`
+	Location        string   `json:"location"`
+	CreatedDate     string   `json:"createdDate"`
+	StartedDate     string   `json:"startedDate"`
+	Id              string   `json:"id"`
+	Status          string   `json:"status"`
 }
 
 //Network Policy Rules
