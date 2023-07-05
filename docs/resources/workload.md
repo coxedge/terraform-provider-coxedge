@@ -87,7 +87,12 @@ resource "coxedge_workload" "test" {
       port = 22
     }
   }
-  
+  network_interfaces {
+    vpc_slug     = "default"
+    ip_families  = "IPv4"
+    subnet_slug  = ""
+    is_public_ip = true
+  }
   timeouts { 
     create = "20m"
     update = "20m"
@@ -110,6 +115,8 @@ The following arguments are supported:
 - `name` (String) - The display name of the workload.
 - `specs` (String) - Specification type for resources which are allocated to each instance in a workload.
 - `type` (String) - Specify whether a workload is a VM-based workload or container-based.
+- `network_interfaces` (Block List, Min: 1) (see [below for nested schema](#nestedblock--network_interfaces)) - The list
+  of network_interfaces.
 
 ### Optional
 
@@ -191,7 +198,7 @@ Required:
   provided.
 - `public_port_src` (String) - A subnet that will define all the IPs allowed by the network policy rule. Defaults to
   0.0.0.0/0 if not specified.
-  
+
 ### Nested Schema for `liveness_probe`
 
 Required:
@@ -239,4 +246,16 @@ Required:
 
 - `header_name` (String)
 - `header_value` (String)
+
+<a id="nestedblock--network_interfaces"></a>
+
+### Nested Schema for `network_interfaces`
+
+Required:
+
+- `vpc_slug` (String) - The vpc_slug of the VPC.
+- `ip_families` (String) - ip_families type.
+- `subnet_slug` (String) - The name of the subnet_slug.
+- `is_public_ip` (Boolean) - Enable/Disable public Ip.
+
 
