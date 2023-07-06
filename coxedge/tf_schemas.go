@@ -462,6 +462,13 @@ func getWorkloadSchema() map[string]*schema.Schema {
 			},
 			Optional: true,
 		},
+		"network_names": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Optional: true,
+		},
 		"container_email": {
 			Type:     schema.TypeString,
 			Optional: true,

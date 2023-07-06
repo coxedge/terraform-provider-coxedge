@@ -620,6 +620,7 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 	d.Set("first_boot_ssh_key", workload.FirstBootSshKey)
 	d.Set("user_data", workload.UserData)
 	d.Set("probe_configuration", workload.ProbeConfiguration)
+	d.Set("network_names", workload.NetworkNames)
 	//Now the list structures
 	deployments := make([]map[string]interface{}, len(workload.Deployments), len(workload.Deployments))
 	for i, deployment := range workload.Deployments {
@@ -680,7 +681,6 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 
 	if workload.ProbeConfiguration != "" {
 		d.Set("probe_configuration", workload.ProbeConfiguration)
-
 	}
 	livenessProbes := make([]map[string]interface{}, 0, 0)
 	vlivenessProbe := map[string]interface{}{}
@@ -723,20 +723,20 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 	d.Set("liveness_probe", livenessProbes)
 
 	readinessProbes := make([]map[string]interface{}, 0, 0)
-	vreadinessProbe := map[string]interface{}{}
-	vreadinessProbe["initial_delay_seconds"] = workload.ReadinessProbe.InitialDelaySeconds
-	vreadinessProbe["timeout_seconds"] = workload.ReadinessProbe.TimeoutSeconds
-	vreadinessProbe["period_seconds"] = workload.ReadinessProbe.PeriodSeconds
-	vreadinessProbe["success_threshold"] = workload.ReadinessProbe.SuccessThreshold
-	vreadinessProbe["failure_threshold"] = workload.ReadinessProbe.FailureThreshold
-	vreadinessProbe["protocol"] = workload.ReadinessProbe.Protocol
+	readinessProbe := map[string]interface{}{}
+	readinessProbe["initial_delay_seconds"] = workload.ReadinessProbe.InitialDelaySeconds
+	readinessProbe["timeout_seconds"] = workload.ReadinessProbe.TimeoutSeconds
+	readinessProbe["period_seconds"] = workload.ReadinessProbe.PeriodSeconds
+	readinessProbe["success_threshold"] = workload.ReadinessProbe.SuccessThreshold
+	readinessProbe["failure_threshold"] = workload.ReadinessProbe.FailureThreshold
+	readinessProbe["protocol"] = workload.ReadinessProbe.Protocol
 
 	if workload.ReadinessProbe.TcpSocket != nil {
 		tcpSockets := make([]map[string]interface{}, 0, 0)
 		vtcpSocket := map[string]interface{}{}
 		vtcpSocket["port"] = *workload.ReadinessProbe.TcpSocket.Port
 		tcpSockets = append(tcpSockets, vtcpSocket)
-		vreadinessProbe["tcp_socket"] = tcpSockets
+		readinessProbe["tcp_socket"] = tcpSockets
 	}
 
 	if workload.ReadinessProbe.HttpGet != nil {
@@ -757,9 +757,9 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		vhttpGet["path"] = workload.ReadinessProbe.HttpGet.Path
 		vhttpGet["port"] = *workload.ReadinessProbe.HttpGet.Port
 		httpGets = append(httpGets, vhttpGet)
-		vreadinessProbe["http_get"] = httpGets
+		readinessProbe["http_get"] = httpGets
 	}
-	readinessProbes = append(readinessProbes, vreadinessProbe)
+	readinessProbes = append(readinessProbes, readinessProbe)
 	d.Set("readiness_probe", readinessProbes)
 
 }

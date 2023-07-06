@@ -157,7 +157,7 @@ type Workload struct {
 	IsRemoteManagementEnabled   bool                          `json:"isRemoteManagementEnabled,omitempty"`
 	Memory                      string                        `json:"memory,omitempty"`
 	Name                        string                        `json:"name,omitempty"`
-	Network                     string                        `json:"network,omitempty"`
+	NetworkNames                []string                      `json:"networkNames,omitempty"`
 	PersistentStorages          []WorkloadPersistentStorage   `json:"persistentStorages,omitempty"`
 	Ports                       []WorkloadPort                `json:"ports,omitempty"`
 	SecretEnvironmentVariables  []WorkloadEnvironmentVariable `json:"secretEnvironmentVariables,omitempty"`
