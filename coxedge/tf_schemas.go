@@ -5414,3 +5414,150 @@ func getRoutes() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeWorkloadSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workloads": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeWorkloadSchema(),
+			},
+		},
+	}
+}
+
+func getComputeWorkloadSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"hostname": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"os": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"ram": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"disk": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"main_ip": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"vcpu_count": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"plan": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"allowed_bandwidth": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"netmask_v4": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"gateway_v4": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"power_status": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"server_status": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"v6_network": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"v6_main_ip": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"v6_network_size": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"internal_ip": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"kvm": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"os_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"app_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"image_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"firewall_group_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"features": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Optional: true,
+		},
+		"tags": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Optional: true,
+		},
+	}
+}

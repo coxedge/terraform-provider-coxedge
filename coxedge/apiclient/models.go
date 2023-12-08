@@ -795,3 +795,38 @@ type WrappedRoute struct {
 type WrappedRoutesData struct {
 	Data []Route `json:"data,omitempty"`
 }
+
+type ComputeWorkload struct {
+	Id               string    `json:"id"`
+	Hostname         string    `json:"hostname"`
+	Label            string    `json:"label"`
+	Status           string    `json:"status"`
+	OS               string    `json:"os"`
+	RAM              string    `json:"ram"`
+	DateCreated      time.Time `json:"date_created"`
+	Region           string    `json:"region"`
+	Disk             string    `json:"disk"`
+	MainIP           string    `json:"main_ip"`
+	VCPUCount        int       `json:"vcpu_count"`
+	Plan             string    `json:"plan"`
+	AllowedBandwidth int       `json:"allowed_bandwidth"`
+	NetmaskV4        string    `json:"netmask_v4"`
+	GatewayV4        string    `json:"gateway_v4"`
+	PowerStatus      string    `json:"power_status"`
+	ServerStatus     string    `json:"server_status"`
+	V6Network        string    `json:"v6_network"`
+	V6MainIP         string    `json:"v6_main_ip"`
+	V6NetworkSize    int       `json:"v6_network_size"`
+	InternalIP       string    `json:"internal_ip"`
+	KVM              string    `json:"kvm"`
+	OSID             int       `json:"os_id"`
+	AppID            int       `json:"app_id"`
+	ImageID          string    `json:"image_id"`
+	FirewallGroupID  string    `json:"firewall_group_id"`
+	Features         []string  `json:"features"`
+	Tags             []string  `json:"tags"`
+}
+
+type WrapperComputeWorkloads struct {
+	Data []ComputeWorkload
+}
