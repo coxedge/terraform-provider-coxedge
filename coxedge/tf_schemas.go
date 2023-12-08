@@ -5557,3 +5557,88 @@ func getComputeWorkloadSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeWorkloadSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"is_ipv6": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"no_public_ipv4": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"is_virtual_private_clouds": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"is_vpc2": {
+			Type:     schema.TypeBool,
+			Optional: true,
+		},
+		"server_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"server_type_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"image_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"operating_system_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"plan_filter": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"continent": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"location_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"plan_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"hostname": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"label": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"first_boot_ssh_key": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"ssh_key_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"firewall_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"user_data": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}
