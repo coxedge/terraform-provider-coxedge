@@ -5417,10 +5417,6 @@ func getRoutes() map[string]*schema.Schema {
 
 func getComputeWorkloadSetSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"id": {
-			Type:     schema.TypeString,
-			Required: true,
-		},
 		"environment_name": {
 			Type:     schema.TypeString,
 			Required: true,

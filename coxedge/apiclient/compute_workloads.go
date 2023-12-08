@@ -7,7 +7,7 @@ import (
 
 func (c *Client) GetComputeWorkloads(environmentName string, organizationId string) ([]ComputeWorkload, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeServiceCode+"/"+environmentName+"/workloads?&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads?&org_id="+organizationId,
 		nil)
 	if err != nil {
 		return nil, err

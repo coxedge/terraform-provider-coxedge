@@ -73,9 +73,10 @@ func flattenComputeWorkloadsData(computeWorkloads []apiclient.ComputeWorkload) [
 			item["firewall_group_id"] = workload.FirewallGroupID
 			item["features"] = workload.Features
 			item["tags"] = workload.Tags
-			
+
 			workloads[i] = item
 		}
+
 		return workloads
 	}
 	return make([]interface{}, 0)
