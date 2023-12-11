@@ -835,7 +835,7 @@ type WrapperComputeWorkload struct {
 	Data ComputeWorkload
 }
 
-type NetworkConfiguration struct {
+type IPv4Configuration struct {
 	IP      string `json:"ip"`
 	Netmask string `json:"netmask"`
 	Gateway string `json:"gateway"`
@@ -843,6 +843,18 @@ type NetworkConfiguration struct {
 	Reverse string `json:"reverse"`
 }
 
-type WrapperNetworkConfiguration struct {
-	Data []NetworkConfiguration
+type WrapperIPv4Configuration struct {
+	Data []IPv4Configuration
+}
+
+type IPv6Configuration struct {
+	Id          string `json:"id"`
+	IP          string `json:"ip"`
+	Network     string `json:"network"`
+	NetworkSize int    `json:"network_size"`
+	Type        string `json:"type"`
+}
+
+type WrapperIPv6Configuration struct {
+	Data []IPv6Configuration
 }

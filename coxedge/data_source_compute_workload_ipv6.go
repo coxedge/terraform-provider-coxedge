@@ -9,14 +9,14 @@ import (
 	"time"
 )
 
-func dataSourceComputeWorkloadIPv4() *schema.Resource {
+func dataSourceComputeWorkloadIPv6() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceComputeWorkloadIPv4Read,
-		Schema:      getComputeWorkloadIPv4SetSchema(),
+		ReadContext: dataSourceComputeWorkloadIPv6Read,
+		Schema:      getComputeWorkloadIPv6SetSchema(),
 	}
 }
 
-func dataSourceComputeWorkloadIPv4Read(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func dataSourceComputeWorkloadIPv6Read(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	coxEdgeClient := i.(apiclient.Client)
 
 	// Warning or errors can be collected in a slice type
@@ -26,11 +26,11 @@ func dataSourceComputeWorkloadIPv4Read(ctx context.Context, data *schema.Resourc
 	organizationId := data.Get("organization_id").(string)
 	workloadId := data.Get("workload_id").(string)
 
-	ipv4s, err := coxEdgeClient.GetComputeWorkloadIPv4ById(environmentName, organizationId, workloadId)
+	ipv6s, err := coxEdgeClient.GetComputeWorkloadIPv6ById(environmentName, organizationId, workloadId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	if err := data.Set("ipv4s", flattenComputeWorkloadIPv4Data(&ipv4s)); err != nil {
+	if err := data.Set("ipv6s", flattenComputeWorkloadIPv6Data(&ipv6s)); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -39,23 +39,23 @@ func dataSourceComputeWorkloadIPv4Read(ctx context.Context, data *schema.Resourc
 	return diags
 }
 
-func flattenComputeWorkloadIPv4Data(ipv4s *[]apiclient.IPv4Configuration) []interface{} {
-	if ipv4s != nil {
-		ipv4List := make([]interface{}, len(*ipv4s), len(*ipv4s))
+func flattenComputeWorkloadIPv6Data(ipv6s *[]apiclient.IPv6Configuration) []interface{} {
+	if ipv6s != nil {
+		ipv6List := make([]interface{}, len(*ipv6s), len(*ipv6s))
 
-		for i, networkConfig := range *ipv4s {
+		for i, networkConfig := range *ipv6s {
 			item := make(map[string]interface{})
 
 			item["id"] = networkConfig.IP
-			item["netmask"] = networkConfig.Netmask
-			item["gateway"] = networkConfig.Gateway
+			item["ip"] = networkConfig.IP
+			item["network"] = networkConfig.Network
+			item["network_size"] = networkConfig.NetworkSize
 			item["type"] = networkConfig.Type
-			item["reverse"] = networkConfig.Reverse
 
-			ipv4List[i] = item
+			ipv6List[i] = item
 		}
 
-		return ipv4List
+		return ipv6List
 	}
 	return make([]interface{}, 0)
 }

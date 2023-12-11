@@ -5683,3 +5683,52 @@ func getComputeWorkloadIPv4Schema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeWorkloadIPv6SetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"ipv6s": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeWorkloadIPv6Schema(),
+			},
+		},
+	}
+}
+
+func getComputeWorkloadIPv6Schema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ip": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"network": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"network_size": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}

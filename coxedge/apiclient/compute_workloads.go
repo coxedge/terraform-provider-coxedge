@@ -107,7 +107,7 @@ func (c *Client) DeleteComputeWorkloadById(environmentName string, organizationI
 	return nil
 }
 
-func (c *Client) GetComputeWorkloadIPv4ById(environmentName string, organizationId string, workloadId string) ([]NetworkConfiguration, error) {
+func (c *Client) GetComputeWorkloadIPv4ById(environmentName string, organizationId string, workloadId string) ([]IPv4Configuration, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/ipv4?id="+workloadId+"&org_id="+organizationId,
 		nil)
@@ -119,7 +119,27 @@ func (c *Client) GetComputeWorkloadIPv4ById(environmentName string, organization
 		return nil, err
 	}
 
-	var wrappedAPIStruct WrapperNetworkConfiguration
+	var wrappedAPIStruct WrapperIPv4Configuration
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetComputeWorkloadIPv6ById(environmentName string, organizationId string, workloadId string) ([]IPv6Configuration, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/ipv6?id="+workloadId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperIPv6Configuration
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err
