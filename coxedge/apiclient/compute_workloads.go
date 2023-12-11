@@ -106,3 +106,23 @@ func (c *Client) DeleteComputeWorkloadById(environmentName string, organizationI
 	}
 	return nil
 }
+
+func (c *Client) GetComputeWorkloadIPv4ById(environmentName string, organizationId string, workloadId string) ([]NetworkConfiguration, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/ipv4?id="+workloadId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperNetworkConfiguration
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}

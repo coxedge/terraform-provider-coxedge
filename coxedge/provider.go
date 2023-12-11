@@ -34,6 +34,7 @@ func Provider() *schema.Provider {
 			"coxedge_subnets":            dataSourceSubnets(),
 			"coxedge_routes":             dataSourceRoutes(),
 			"coxedge_compute_workloads":  dataSourceComputeWorkloads(),
+			"coxedge_compute_workload_ipv4":  dataSourceComputeWorkloadIPv4(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			//"coxedge_cdn_purge":           resourceCDNPurgeResource(),

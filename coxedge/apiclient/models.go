@@ -834,3 +834,15 @@ type WrapperComputeWorkloads struct {
 type WrapperComputeWorkload struct {
 	Data ComputeWorkload
 }
+
+type NetworkConfiguration struct {
+	IP      string `json:"ip"`
+	Netmask string `json:"netmask"`
+	Gateway string `json:"gateway"`
+	Type    string `json:"type"`
+	Reverse string `json:"reverse"`
+}
+
+type WrapperNetworkConfiguration struct {
+	Data []NetworkConfiguration
+}

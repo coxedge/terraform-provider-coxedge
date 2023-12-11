@@ -5630,3 +5630,56 @@ func getResourceComputeWorkloadSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeWorkloadIPv4SetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"ipv4s": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeWorkloadIPv4Schema(),
+			},
+		},
+	}
+}
+
+func getComputeWorkloadIPv4Schema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ip": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"netmask": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"gateway": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"reverse": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
