@@ -11,6 +11,7 @@ provider "coxedge" {
   key = "[INSERT API KEY HERE]"
 }
 
+//terraform import coxedge_compute_workload.workload <workload_id>:<environment_name>:<organization_id>
 resource "coxedge_compute_workload" "workload" {
   organization_id           = "<organization_id>"
   environment_name          = "<environment name>"

@@ -45,7 +45,7 @@ func (c *Client) GetComputeWorkloads(environmentName string, organizationId stri
 
 func (c *Client) GetComputeWorkloadById(environmentName string, organizationId string, workloadId string) (*ComputeWorkload, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads/"+workloadId+"?&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads/"+workloadId+"?org_id="+organizationId,
 		nil)
 	if err != nil {
 		return nil, err
@@ -89,4 +89,20 @@ func (c *Client) CreateComputeWorkload(workloadRequest ComputeWorkloadRequest, e
 		return nil, err
 	}
 	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) DeleteComputeWorkloadById(environmentName string, organizationId string, workloadId string) error {
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads/"+workloadId+"?operation=delete-workload&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -5572,6 +5572,10 @@ func getResourceComputeWorkloadSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"is_ipv6": {
 			Type:     schema.TypeBool,
 			Required: true,
