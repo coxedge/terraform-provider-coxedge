@@ -11,12 +11,7 @@ type ComputeWorkloadRequest struct {
 	NoPublicIPv4           bool   `json:"noPublicIPv4"`
 	IsVirtualPrivateClouds bool   `json:"isVirtualPrivateClouds"`
 	IsVPC2                 bool   `json:"isVPC2"`
-	ServerId               string `json:"serverId"`
-	ServerTypeId           string `json:"serverTypeId"`
-	ImageId                string `json:"imageId"`
 	OperatingSystemId      string `json:"operatingSystemId"`
-	PlanFilter             string `json:"planFilter"`
-	Continent              string `json:"continent"`
 	LocationId             string `json:"locationId"`
 	PlanId                 string `json:"planId"`
 	Hostname               string `json:"hostname"`

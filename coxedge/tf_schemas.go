@@ -5584,27 +5584,7 @@ func getResourceComputeWorkloadSchema() map[string]*schema.Schema {
 			Type:     schema.TypeBool,
 			Optional: true,
 		},
-		"server_id": {
-			Type:     schema.TypeString,
-			Optional: true,
-		},
-		"server_type_id": {
-			Type:     schema.TypeString,
-			Optional: true,
-		},
-		"image_id": {
-			Type:     schema.TypeString,
-			Optional: true,
-		},
 		"operating_system_id": {
-			Type:     schema.TypeString,
-			Optional: true,
-		},
-		"plan_filter": {
-			Type:     schema.TypeString,
-			Optional: true,
-		},
-		"continent": {
 			Type:     schema.TypeString,
 			Optional: true,
 		},

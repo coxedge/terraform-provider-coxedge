@@ -62,7 +62,7 @@ func resourceComputeWorkloadCreate(ctx context.Context, data *schema.ResourceDat
 	}
 
 	//Save the Id
-	data.SetId(taskResult.Data.Result.Id)
+	data.SetId(taskResult.Data.TaskId)
 
 	return diags
 }
@@ -84,12 +84,7 @@ func convertResourceDataToComputeWorkloadCreateAPIObject(data *schema.ResourceDa
 		NoPublicIPv4:           data.Get("no_public_ipv4").(bool),
 		IsVirtualPrivateClouds: data.Get("is_virtual_private_clouds").(bool),
 		IsVPC2:                 data.Get("is_vpc2").(bool),
-		ServerId:               data.Get("server_id").(string),
-		ServerTypeId:           data.Get("server_type_id").(string),
-		ImageId:                data.Get("image_id").(string),
 		OperatingSystemId:      data.Get("operating_system_id").(string),
-		PlanFilter:             data.Get("plan_filter").(string),
-		Continent:              data.Get("continent").(string),
 		LocationId:             data.Get("location_id").(string),
 		PlanId:                 data.Get("plan_id").(string),
 		Hostname:               data.Get("hostname").(string),
