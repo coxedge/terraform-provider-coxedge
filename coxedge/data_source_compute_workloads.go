@@ -24,13 +24,24 @@ func dataSourceComputeWorkloadsRead(ctx context.Context, data *schema.ResourceDa
 
 	environmentName := data.Get("environment_name").(string)
 	organizationId := data.Get("organization_id").(string)
+	workloadId := data.Get("workload_id").(string)
 
-	computeWorkloads, err := coxEdgeClient.GetComputeWorkloads(environmentName, organizationId)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	if err := data.Set("workloads", flattenComputeWorkloadsData(computeWorkloads)); err != nil {
-		return diag.FromErr(err)
+	if workloadId != "" {
+		computeWorkload, err := coxEdgeClient.GetComputeWorkloadById(environmentName, organizationId, workloadId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		if err := data.Set("workloads", flattenComputeWorkloadsData(&[]apiclient.ComputeWorkload{*computeWorkload})); err != nil {
+			return diag.FromErr(err)
+		}
+	} else {
+		computeWorkloads, err := coxEdgeClient.GetComputeWorkloads(environmentName, organizationId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		if err := data.Set("workloads", flattenComputeWorkloadsData(&computeWorkloads)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	// always run
@@ -38,11 +49,11 @@ func dataSourceComputeWorkloadsRead(ctx context.Context, data *schema.ResourceDa
 	return diags
 }
 
-func flattenComputeWorkloadsData(computeWorkloads []apiclient.ComputeWorkload) []interface{} {
+func flattenComputeWorkloadsData(computeWorkloads *[]apiclient.ComputeWorkload) []interface{} {
 	if computeWorkloads != nil {
-		workloads := make([]interface{}, len(computeWorkloads), len(computeWorkloads))
+		workloads := make([]interface{}, len(*computeWorkloads), len(*computeWorkloads))
 
-		for i, workload := range computeWorkloads {
+		for i, workload := range *computeWorkloads {
 			item := make(map[string]interface{})
 
 			item["id"] = workload.Id

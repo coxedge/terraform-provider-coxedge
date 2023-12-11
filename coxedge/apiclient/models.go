@@ -830,3 +830,7 @@ type ComputeWorkload struct {
 type WrapperComputeWorkloads struct {
 	Data []ComputeWorkload
 }
+
+type WrapperComputeWorkload struct {
+	Data ComputeWorkload
+}

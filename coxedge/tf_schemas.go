@@ -5425,6 +5425,10 @@ func getComputeWorkloadSetSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
 		"workloads": {
 			Type:     schema.TypeList,
 			Computed: true,

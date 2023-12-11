@@ -43,6 +43,26 @@ func (c *Client) GetComputeWorkloads(environmentName string, organizationId stri
 	return wrappedAPIStruct.Data, nil
 }
 
+func (c *Client) GetComputeWorkloadById(environmentName string, organizationId string, workloadId string) (*ComputeWorkload, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads/"+workloadId+"?&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeWorkload
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
 func (c *Client) CreateComputeWorkload(workloadRequest ComputeWorkloadRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
 	jsonBytes, err := json.Marshal(workloadRequest)
