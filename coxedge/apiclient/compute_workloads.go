@@ -267,3 +267,23 @@ func (c *Client) UpdateComputeWorkloadFirewallGroupById(firewallGroupRequest Com
 	}
 	return &wrappedAPIStruct, nil
 }
+
+func (c *Client) GetComputeWorkloadHostnameById(environmentName string, organizationId string, workloadId string) (*Hostname, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-hostname/"+workloadId+"?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperHostname
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}

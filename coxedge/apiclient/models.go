@@ -878,3 +878,12 @@ type FirewallGroup struct {
 type WrapperFirewallGroup struct {
 	Data FirewallGroup
 }
+
+type Hostname struct {
+	Id       string `json:"id"`
+	Hostname string `json:"hostname"`
+}
+
+type WrapperHostname struct {
+	Data Hostname
+}
