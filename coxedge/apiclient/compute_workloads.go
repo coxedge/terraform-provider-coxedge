@@ -146,3 +146,23 @@ func (c *Client) GetComputeWorkloadIPv6ById(environmentName string, organization
 	}
 	return wrappedAPIStruct.Data, nil
 }
+
+func (c *Client) GetComputeWorkloadIPv6ReverseDNSById(environmentName string, organizationId string, workloadId string) ([]IPv6ReverseDNSConfiguration, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/reverse-dns?id="+workloadId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperIPv6ReverseDNSConfiguration
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}

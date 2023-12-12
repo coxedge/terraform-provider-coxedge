@@ -858,3 +858,13 @@ type IPv6Configuration struct {
 type WrapperIPv6Configuration struct {
 	Data []IPv6Configuration
 }
+
+type IPv6ReverseDNSConfiguration struct {
+	Id      string `json:"id"`
+	Ip      string `json:"ip"`
+	Reverse string `json:"reverse"`
+}
+
+type WrapperIPv6ReverseDNSConfiguration struct {
+	Data []IPv6ReverseDNSConfiguration
+}
