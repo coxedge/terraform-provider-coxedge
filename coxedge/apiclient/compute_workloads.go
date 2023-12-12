@@ -215,3 +215,23 @@ func (c *Client) DeleteComputeWorkloadIPv6ReverseDNSById(environmentName string,
 	}
 	return nil
 }
+
+func (c *Client) GetComputeWorkloadFirewallGroupById(environmentName string, organizationId string, workloadId string) (*FirewallGroup, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-firewall/"+workloadId+"?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperFirewallGroup
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}

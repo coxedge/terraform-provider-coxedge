@@ -868,3 +868,13 @@ type IPv6ReverseDNSConfiguration struct {
 type WrapperIPv6ReverseDNSConfiguration struct {
 	Data []IPv6ReverseDNSConfiguration
 }
+
+type FirewallGroup struct {
+	Id         string `json:"id"`
+	FirewallId string `json:"firewallId"`
+	Name       string `json:"name"`
+}
+
+type WrapperFirewallGroup struct {
+	Data FirewallGroup
+}
