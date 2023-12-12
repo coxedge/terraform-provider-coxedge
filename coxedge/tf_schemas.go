@@ -5773,3 +5773,28 @@ func getComputeWorkloadIPv6ReverseDNSSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeWorkloadIPv6ReverseDNSSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"ip": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"reverse": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}

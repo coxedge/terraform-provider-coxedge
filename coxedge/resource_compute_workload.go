@@ -175,5 +175,4 @@ func convertComputeWorkloadAPIObjectToResourceData(d *schema.ResourceData, workl
 	d.Set("firewall_group_id", workload.FirewallGroupID)
 	d.Set("features", workload.Features)
 	d.Set("tags", workload.Tags)
-
 }

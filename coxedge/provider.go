@@ -55,6 +55,7 @@ func Provider() *schema.Provider {
 			"coxedge_subnet":           resourceSubnet(),
 			"coxedge_route":            resourceRoute(),
 			"coxedge_compute_workload": resourceComputeWorkload(),
+			"coxedge_compute_workload_ipv6_reverse_dns": resourceComputeWorkloadIPv6ReverseDNS(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
