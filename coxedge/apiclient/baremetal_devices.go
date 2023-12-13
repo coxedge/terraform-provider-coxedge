@@ -26,6 +26,10 @@ type CreateBareMetalDeviceRequest struct {
 	SshKeyId        string   `json:"sshKeyId,omitempty"`
 	UserData        string   `json:"user_data,omitempty"`
 	Name            string   `json:"name,omitempty"`
+	Vendor          string   `json:"vendor,omitempty"`
+	OsId            string   `json:"osId,omitempty"`
+	ServerLabel     string   `json:"serverLabel,omitempty"`
+	Tags            []string `json:"tags,omitempty"`
 }
 
 type Server struct {

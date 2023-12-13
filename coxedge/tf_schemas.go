@@ -5717,15 +5717,15 @@ func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
 		},
 		"has_user_data": {
 			Type:     schema.TypeBool,
-			Required: true,
+			Optional: true,
 		},
 		"has_ssh_data": {
 			Type:     schema.TypeBool,
-			Required: true,
+			Optional: true,
 		},
 		"product_option_id": {
 			Type:     schema.TypeInt,
-			Required: true,
+			Optional: true,
 		},
 		"product_id": {
 			Type:     schema.TypeString,
@@ -5733,11 +5733,11 @@ func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
 		},
 		"os_name": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 		},
 		"server": {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			MinItems: 1,
 			MaxItems: 5,
 			Elem: &schema.Resource{
@@ -5766,6 +5766,38 @@ func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
 		"user_data": {
 			Type:     schema.TypeString,
 			Optional: true,
+		},
+		"vendor": {
+			Type:     schema.TypeString,
+			Required: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				if value != "HIVELOCITY" && value != "METALSOFT" {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%s is not a expected value. Value should be either HIVELOCITY or METALSOFT", value),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
+		},
+		"os_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"server_label": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"tags": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 	}
 }
