@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strings"
 	"time"
 )
 
@@ -43,23 +44,33 @@ func resourceBareMetalDeviceIPMICreate(ctx context.Context, d *schema.ResourceDa
 	organizationId := d.Get("organization_id").(string)
 	resourceId := d.Get("device_id").(string)
 
-	//Call the API
-	connectIPMI, err := coxEdgeClient.PostBareMetalDeviceConnectToIPMIById(ipmiObj, environmentName, organizationId, resourceId)
-	if err != nil {
-		return diag.FromErr(err)
+	if strings.HasPrefix(resourceId, "HV_") {
+		//Call the API
+		connectIPMI, err := coxEdgeClient.PostBareMetalDeviceConnectToIPMIById(ipmiObj, environmentName, organizationId, resourceId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		tflog.Info(ctx, "Initiated Create. Awaiting task result.")
+
+		timeout := d.Timeout(schema.TimeoutCreate)
+		//Await
+		_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, connectIPMI.TaskId, timeout)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		//Save the Id
+		d.SetId(resourceId)
+	} else {
+		diag := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "IPMI not available for METALSOFT",
+			Detail:   "IPMI not available for METALSOFT",
+		}
+		diags = append(diags, diag)
+		return diags
 	}
-
-	tflog.Info(ctx, "Initiated Create. Awaiting task result.")
-
-	timeout := d.Timeout(schema.TimeoutCreate)
-	//Await
-	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, connectIPMI.TaskId, timeout)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	//Save the Id
-	d.SetId(resourceId)
 
 	return diags
 }
@@ -82,23 +93,32 @@ func resourceBareMetalDeviceIPMIDelete(ctx context.Context, d *schema.ResourceDa
 	organizationId := d.Get("organization_id").(string)
 	resourceId := d.Get("device_id").(string)
 
-	//Call the API
-	connectIPMI, err := coxEdgeClient.PostBareMetalDeviceClearIPMIById(environmentName, organizationId, resourceId)
-	if err != nil {
-		return diag.FromErr(err)
+	if strings.HasPrefix(resourceId, "HV_") {
+		//Call the API
+		connectIPMI, err := coxEdgeClient.PostBareMetalDeviceClearIPMIById(environmentName, organizationId, resourceId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		tflog.Info(ctx, "Initiated Delete. Awaiting task result.")
+
+		timeout := d.Timeout(schema.TimeoutDelete)
+		//Await
+		_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, connectIPMI.TaskId, timeout)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		d.SetId("")
+	} else {
+		diag := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "IPMI not available for METALSOFT",
+			Detail:   "IPMI not available for METALSOFT",
+		}
+		diags = append(diags, diag)
+		return diags
 	}
-
-	tflog.Info(ctx, "Initiated Delete. Awaiting task result.")
-
-	timeout := d.Timeout(schema.TimeoutDelete)
-	//Await
-	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, connectIPMI.TaskId, timeout)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	d.SetId("")
-
 	return diags
 }
 

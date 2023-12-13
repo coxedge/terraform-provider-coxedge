@@ -44,9 +44,16 @@ provider "coxedge" {
 #  tags             = tolist(["tag added"])
 #}
 
-resource "coxedge_baremetal_device" "device" {
-  power_status = "SOFT-OFF"
-  tags         = tolist([])
-  name         = "terraformtest"
+#resource "coxedge_baremetal_device" "device" {
+#  power_status = "SOFT-OFF"
+#  tags         = tolist([])
+#  name         = "terraformtest"
+#}
+
+resource "coxedge_baremetal_device_ipmi" "ipmi" {
+  device_id        = "HV_14000"
+  environment_name = "sanityhiv"
+  organization_id  = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
+  custom_ip        = "103.147.209.3"
 }
 
