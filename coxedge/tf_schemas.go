@@ -5522,18 +5522,173 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
+		"vendor": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"is_network_policy_available": {
+			Type:     schema.TypeBool,
+			Computed: true,
+			Optional: true,
+		},
+		"change_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
 		"location": {
 			Type:     schema.TypeList,
 			Computed: true,
+			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
 					"facility": {
 						Type:     schema.TypeString,
+						Computed: true,
 						Optional: true,
 					},
 					"facility_title": {
 						Type:     schema.TypeString,
+						Computed: true,
 						Optional: true,
+					},
+				},
+			},
+		},
+		"device_detail": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"product_id": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"service_plan": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"processor": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"primary_hard_drive": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"memory": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"operating_system": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"bandwidth": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"internal_network": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"ddos": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"raid_set_up": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"next_renew": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"device_ip_detail": {
+						Type:     schema.TypeList,
+						Computed: true,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"primary_ip": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
+								"description": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
+								"gateway_ip": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
+								"subnet_mask": {
+									Type:     schema.TypeString,
+									Optional: true,
+								},
+								"usable_ips": {
+									Type:     schema.TypeList,
+									Computed: true,
+									Optional: true,
+									Elem: &schema.Schema{
+										Type: schema.TypeString,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"device_initial_password": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"password_returns_until": {
+						Type:     schema.TypeInt,
+						Computed: true,
+						Optional: true,
+					},
+					"password_expires": {
+						Type:     schema.TypeString,
+						Computed: true,
+						Optional: true,
+					},
+					"port": {
+						Type:     schema.TypeInt,
+						Computed: true,
+						Optional: true,
+					},
+					"user": {
+						Type:     schema.TypeString,
+						Computed: true,
+						Optional: true,
+					},
+				},
+			},
+		},
+		"device_ips": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"subnet": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"netmask": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"usable_ips": {
+						Type:     schema.TypeList,
+						Computed: true,
+						Optional: true,
+						Elem: &schema.Schema{
+							Type: schema.TypeString,
+						},
 					},
 				},
 			},

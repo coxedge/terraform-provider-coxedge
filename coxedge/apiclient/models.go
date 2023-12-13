@@ -797,19 +797,25 @@ type WrappedRoutesData struct {
 }
 
 type BareMetalDevice struct {
-	Id            string   `json:"id,omitempty"`
-	ServicePlan   string   `json:"servicePlan,omitempty"`
-	Name          string   `json:"name,omitempty"`
-	Hostname      string   `json:"hostname,omitempty"`
-	DeviceType    string   `json:"deviceType,omitempty"`
-	PrimaryIp     string   `json:"primaryIp,omitempty"`
-	Status        string   `json:"status,omitempty"`
-	MonitorsTotal int      `json:"monitorsTotal,omitempty"`
-	MonitorsUp    int      `json:"monitorsUp,omitempty"`
-	IpmiAddress   string   `json:"ipmiAddress,omitempty"`
-	PowerStatus   string   `json:"powerStatus,omitempty"`
-	Tags          []string `json:"tags,omitempty"`
-	Location      Location `json:"location,omitempty"`
+	Id                       string                `json:"id,omitempty"`
+	ServicePlan              string                `json:"servicePlan,omitempty"`
+	Name                     string                `json:"name,omitempty"`
+	Hostname                 string                `json:"hostname,omitempty"`
+	DeviceType               string                `json:"deviceType,omitempty"`
+	PrimaryIp                string                `json:"primaryIp,omitempty"`
+	Status                   string                `json:"status,omitempty"`
+	MonitorsTotal            int                   `json:"monitorsTotal,omitempty"`
+	MonitorsUp               int                   `json:"monitorsUp,omitempty"`
+	IpmiAddress              string                `json:"ipmiAddress,omitempty"`
+	PowerStatus              string                `json:"powerStatus,omitempty"`
+	Tags                     []string              `json:"tags,omitempty"`
+	Location                 Location              `json:"location,omitempty"`
+	DeviceDetail             DeviceDetail          `json:"deviceDetail,omitempty"`
+	DeviceInitialPassword    DeviceInitialPassword `json:"deviceInitialPassword,omitempty"`
+	DeviceIPs                DeviceIPs             `json:"deviceIPs,omitempty"`
+	Vendor                   string                `json:"vendor"`
+	IsNetworkPolicyAvailable bool                  `json:"isNetworkPolicyAvailable,omitempty"`
+	ChangeId                 string                `json:"changeId,omitempty"`
 }
 
 type Location struct {
@@ -867,4 +873,40 @@ type WrappedBareMetalSSHKeys struct {
 }
 type WrappedBareMetalSSHKey struct {
 	Data BareMetalSSHKey `json:"data,omitempty"`
+}
+
+type DeviceDetail struct {
+	ProductID        string         `json:"productId,omitempty"`
+	ServicePlan      string         `json:"servicePlan,omitempty"`
+	Processor        string         `json:"processor,omitempty"`
+	PrimaryHardDrive string         `json:"primaryHardDrive,omitempty"`
+	Memory           string         `json:"memory,omitempty"`
+	OperatingSystem  string         `json:"operatingSystem,omitempty"`
+	Bandwidth        string         `json:"bandwidth,omitempty"`
+	InternalNetwork  string         `json:"internalNetwork,omitempty"`
+	DDoS             string         `json:"ddos,omitempty"`
+	RaidSetUp        string         `json:"raidSetUp,omitempty"`
+	NextRenew        string         `json:"nextRenew,omitempty"`
+	DeviceIPDetail   DeviceIPDetail `json:"deviceIPDetail,omitempty"`
+}
+
+type DeviceIPDetail struct {
+	PrimaryIP   string   `json:"primaryIp,omitempty"`
+	Description string   `json:"description,omitempty"`
+	GatewayIP   string   `json:"gatewayIp,omitempty"`
+	SubnetMask  string   `json:"subnetMask,omitempty"`
+	UsableIPs   []string `json:"usableIps,omitempty"`
+}
+
+type DeviceInitialPassword struct {
+	PasswordReturnsUntil int    `json:"passwordReturnsUntil,omitempty"`
+	PasswordExpires      string `json:"passwordExpires,omitempty"`
+	Port                 int    `json:"port,omitempty"`
+	User                 string `json:"user,omitempty"`
+}
+
+type DeviceIPs struct {
+	Subnet    string   `json:"subnet,omitempty"`
+	Netmask   string   `json:"netmask,omitempty"`
+	UsableIPs []string `json:"usableIps,omitempty"`
 }

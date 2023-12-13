@@ -37,7 +37,7 @@ func dataSourceBareMetalRead(ctx context.Context, d *schema.ResourceData, m inte
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		if err := d.Set("baremetal_devices", flattenBareMetalDevicesData(&[]apiclient.BareMetalDevice{*bareMetalDevice})); err != nil {
+		if err := d.Set("baremetal_devices", flattenBareMetalDevicesData(&[]apiclient.BareMetalDevice{*bareMetalDevice}, true)); err != nil {
 			return diag.FromErr(err)
 		}
 	} else {
@@ -46,7 +46,7 @@ func dataSourceBareMetalRead(ctx context.Context, d *schema.ResourceData, m inte
 			return diag.FromErr(err)
 		}
 
-		if err := d.Set("baremetal_devices", flattenBareMetalDevicesData(&bareMetalDevices)); err != nil {
+		if err := d.Set("baremetal_devices", flattenBareMetalDevicesData(&bareMetalDevices, false)); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -57,7 +57,7 @@ func dataSourceBareMetalRead(ctx context.Context, d *schema.ResourceData, m inte
 
 }
 
-func flattenBareMetalDevicesData(bareMetalDevices *[]apiclient.BareMetalDevice) []interface{} {
+func flattenBareMetalDevicesData(bareMetalDevices *[]apiclient.BareMetalDevice, isId bool) []interface{} {
 	if bareMetalDevices != nil {
 		devices := make([]interface{}, len(*bareMetalDevices), len(*bareMetalDevices))
 
@@ -76,17 +76,63 @@ func flattenBareMetalDevicesData(bareMetalDevices *[]apiclient.BareMetalDevice) 
 			item["ipmi_address"] = device.IpmiAddress
 			item["power_status"] = device.PowerStatus
 			item["tags"] = device.Tags
+			item["vendor"] = device.Vendor
+			item["is_network_policy_available"] = device.IsNetworkPolicyAvailable
+			item["change_id"] = device.ChangeId
 
 			loc := make([]interface{}, 1, 1)
 			locItem := make(map[string]interface{})
 			locItem["facility"] = device.Location.Facility
 			locItem["facility_title"] = device.Location.FacilityTitle
 			loc[0] = locItem
-
 			item["location"] = loc
+
+			if isId {
+				deviceIpDetail := make([]interface{}, 1, 1)
+				ipDetail := make(map[string]interface{})
+				ipDetail["primary_ip"] = device.DeviceDetail.DeviceIPDetail.PrimaryIP
+				ipDetail["description"] = device.DeviceDetail.DeviceIPDetail.Description
+				ipDetail["gateway_ip"] = device.DeviceDetail.DeviceIPDetail.GatewayIP
+				ipDetail["subnet_mask"] = device.DeviceDetail.DeviceIPDetail.SubnetMask
+				ipDetail["usable_ips"] = device.DeviceDetail.DeviceIPDetail.UsableIPs
+				deviceIpDetail[0] = ipDetail
+
+				deviceDetail := make([]interface{}, 1, 1)
+				detail := make(map[string]interface{})
+				detail["product_id"] = device.DeviceDetail.ProductID
+				detail["service_plan"] = device.DeviceDetail.ServicePlan
+				detail["processor"] = device.DeviceDetail.Processor
+				detail["primary_hard_drive"] = device.DeviceDetail.PrimaryHardDrive
+				detail["memory"] = device.DeviceDetail.Memory
+				detail["operating_system"] = device.DeviceDetail.OperatingSystem
+				detail["bandwidth"] = device.DeviceDetail.Bandwidth
+				detail["internal_network"] = device.DeviceDetail.InternalNetwork
+				detail["ddos"] = device.DeviceDetail.DDoS
+				detail["raid_set_up"] = device.DeviceDetail.RaidSetUp
+				detail["next_renew"] = device.DeviceDetail.NextRenew
+				detail["device_ip_detail"] = deviceIpDetail
+				deviceDetail[0] = detail
+				item["device_detail"] = deviceDetail
+
+				deviceInitialPassword := make([]interface{}, 1, 1)
+				initialPassword := make(map[string]interface{})
+				initialPassword["password_returns_until"] = device.DeviceInitialPassword.PasswordReturnsUntil
+				initialPassword["password_expires"] = device.DeviceInitialPassword.PasswordExpires
+				initialPassword["port"] = device.DeviceInitialPassword.Port
+				initialPassword["user"] = device.DeviceInitialPassword.User
+				deviceInitialPassword[0] = initialPassword
+				item["device_initial_password"] = deviceInitialPassword
+
+				deviceIPs := make([]interface{}, 1, 1)
+				ips := make(map[string]interface{})
+				ips["subnet"] = device.DeviceIPs.Subnet
+				ips["netmask"] = device.DeviceIPs.Netmask
+				ips["usable_ips"] = device.DeviceIPs.UsableIPs
+				deviceIPs[0] = ips
+				item["device_ips"] = deviceIPs
+			}
 			devices[i] = item
 		}
-
 		return devices
 	}
 

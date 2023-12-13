@@ -62,11 +62,13 @@ provider "coxedge" {
 #  }
 #}
 
-data "coxedge_vpcs" "vpcs" {
-  environment = "test-backend"
+data "coxedge_baremetal_devices" "devices" {
+  environment_name = "sanityhiv"
+  organization_id  = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
+#  id               = "HV_10523"
 }
 
 output "out_vpc" {
-  value = data.coxedge_vpcs.vpcs
+  value = data.coxedge_baremetal_devices.devices
 }
 
