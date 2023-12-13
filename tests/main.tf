@@ -69,3 +69,4 @@ data "coxedge_vpcs" "vpcs" {
 output "out_vpc" {
   value = data.coxedge_vpcs.vpcs
 }
+

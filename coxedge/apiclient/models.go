@@ -795,3 +795,76 @@ type WrappedRoute struct {
 type WrappedRoutesData struct {
 	Data []Route `json:"data,omitempty"`
 }
+
+type BareMetalDevice struct {
+	Id            string   `json:"id,omitempty"`
+	ServicePlan   string   `json:"servicePlan,omitempty"`
+	Name          string   `json:"name,omitempty"`
+	Hostname      string   `json:"hostname,omitempty"`
+	DeviceType    string   `json:"deviceType,omitempty"`
+	PrimaryIp     string   `json:"primaryIp,omitempty"`
+	Status        string   `json:"status,omitempty"`
+	MonitorsTotal int      `json:"monitorsTotal,omitempty"`
+	MonitorsUp    int      `json:"monitorsUp,omitempty"`
+	IpmiAddress   string   `json:"ipmiAddress,omitempty"`
+	PowerStatus   string   `json:"powerStatus,omitempty"`
+	Tags          []string `json:"tags,omitempty"`
+	Location      Location `json:"location,omitempty"`
+}
+
+type Location struct {
+	Facility      string `json:"facility,omitempty"`
+	FacilityTitle string `json:"facility_title,omitempty"`
+}
+
+type WrappedBareMetalDevices struct {
+	Data []BareMetalDevice `json:"data"`
+}
+
+type WrappedBareMetalDevice struct {
+	Data BareMetalDevice `json:"data"`
+}
+
+type BareMetalDeviceChart struct {
+	Id         string `json:"id,omitempty"`
+	Filter     string `json:"filter,omitempty"`
+	GraphImage string `json:"graphImage,omitempty"`
+	Interfaces string `json:"interfaces,omitempty"`
+	SwitchId   string `json:"switchId,omitempty"`
+}
+
+type WrappedBareMetalDeviceCharts struct {
+	Data []BareMetalDeviceChart `json:"data,omitempty"`
+}
+
+type BareMetalDeviceSensor struct {
+	Id        string `json:"id,omitempty"`
+	IpmiField string `json:"ipmiField,omitempty"`
+	IpmiValue string `json:"ipmiValue,omitempty"`
+}
+
+type WrappedBareMetalDeviceSensors struct {
+	Data []BareMetalDeviceSensor `json:"data,omitempty"`
+}
+
+type BareMetalDeviceIP struct {
+	IPName string `json:"ipName,omitempty"`
+	Value  string `json:"value,omitempty"`
+}
+
+type WrappedBareMetalDeviceIPs struct {
+	Data []BareMetalDeviceIP `json:"data,omitempty"`
+}
+
+type BareMetalSSHKey struct {
+	Id        string `json:"id,omitempty"`
+	PublicKey string `json:"publicKey,omitempty"`
+	Name      string `json:"name,omitempty"`
+}
+
+type WrappedBareMetalSSHKeys struct {
+	Data []BareMetalSSHKey `json:"data,omitempty"`
+}
+type WrappedBareMetalSSHKey struct {
+	Data BareMetalSSHKey `json:"data,omitempty"`
+}

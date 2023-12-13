@@ -14,6 +14,7 @@ import (
 
 const CoxEdgeAPIBase = "https://portal.coxedge.com/api/v2"
 const CoxEdgeServiceCode = "edge-services"
+const CoxEdgeBareMetalServiceCode = "baremetal-services"
 
 //const CoxEdgeAPIBase = "https://cox.uat.cloudmc.io/api/v2"
 //const CoxEdgeServiceCode = "stackpath-cox-uat"

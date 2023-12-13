@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package coxedge
 
 import (
@@ -5411,6 +5412,441 @@ func getRoutes() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 			Computed: true,
+		},
+	}
+}
+
+func getBareMetalDeviceSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_devices": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"service_plan": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"hostname": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"device_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"primary_ip": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"monitors_total": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"monitors_up": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"ipmi_address": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"power_status": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				if value != "ON" && value != "OFF" {
+					diag := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%s is not a expected value. Value should be either ON or OFF", value),
+					}
+					diags = append(diags, diag)
+				}
+				return diags
+			},
+		},
+		"tags": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Optional: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		"location": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"facility": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"facility_title": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+				},
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"location_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"has_user_data": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"has_ssh_data": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"product_option_id": {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
+		"product_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"os_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"server": {
+			Type:     schema.TypeList,
+			Required: true,
+			MinItems: 1,
+			MaxItems: 5,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"hostname": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+				},
+			},
+		},
+		"ssh_key": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"ssh_key_name"},
+		},
+		"ssh_key_name": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"ssh_key"},
+		},
+		"ssh_key_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"user_data": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}
+
+func getBareMetalDeviceChartsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"custom": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Default:  false,
+		},
+		"start_date": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"end_date"},
+		},
+		"end_date": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			RequiredWith: []string{"start_date"},
+		},
+		"baremetal_device_charts": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceChartsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceChartsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"filter": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"graph_image": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"interfaces": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"switch_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getBareMetalDeviceSensorsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_device_sensors": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceSensorsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceSensorsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ipmi_field": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ipmi_value": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getBareMetalDeviceConnectIPMISchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"device_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"custom_ip": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}
+
+func getBareMetalDeviceIPsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_device_ips": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceIPsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceIPsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"ip_name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"value": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getBareMetalSSHKeysSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_ssh_keys": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalSSHKeysSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalSSHKeysSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"public_key": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getBareMetalSSHKeyResourceSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
+		},
+		"public_key": {
+			Type:     schema.TypeString,
+			Computed: true,
+			Optional: true,
 		},
 	}
 }
