@@ -205,8 +205,11 @@ func getWorkloadInstanceSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"ip_address": {
-			Type:     schema.TypeString,
-			Computed: true,
+			Type:     schema.TypeList,
+			Required: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
 		},
 		"public_ip_address": {
 			Type:     schema.TypeString,
@@ -460,6 +463,13 @@ func getWorkloadSchema() map[string]*schema.Schema {
 			},
 			Optional: true,
 		},
+		"network_names": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Optional: true,
+		},
 		"container_email": {
 			Type:     schema.TypeString,
 			Optional: true,
@@ -540,6 +550,288 @@ func getWorkloadSchema() map[string]*schema.Schema {
 		"slug": {
 			Type:     schema.TypeString,
 			Optional: true,
+		},
+		"probe_configuration": {
+			Type:     schema.TypeString,
+			Optional: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				val := false
+				if value == "NONE" || value == "LIVENESS" || value == "LIVENESS_AND_READINESS" {
+					val = true
+				}
+				if !val {
+					diagnostic := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "NONE, LIVENESS or LIVENESS_AND_READINESS"),
+					}
+					diags = append(diags, diagnostic)
+				}
+				return diags
+			},
+		},
+		"liveness_probe": {
+			Type:     schema.TypeList,
+			Optional: true,
+			MaxItems: 1,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"initial_delay_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"timeout_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"period_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"success_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"failure_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"protocol": {
+						Type:     schema.TypeString,
+						Required: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							val := false
+							if value == "TCP_SOCKET" || value == "HTTP_GET" {
+								val = true
+							}
+							if !val {
+								diagnostic := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "TCP_SOCKET or HTTP_GET"),
+								}
+								diags = append(diags, diagnostic)
+							}
+							return diags
+						},
+					},
+					"tcp_socket": {
+						Type:     schema.TypeList,
+						Optional: true,
+						MaxItems: 1,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+					"http_get": {
+						Type:     schema.TypeList,
+						Optional: true,
+						MaxItems: 1,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"http_headers": {
+									Type:     schema.TypeList,
+									Optional: true,
+									Elem: &schema.Resource{
+										Schema: map[string]*schema.Schema{
+											"header_name": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+											"header_value": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+										},
+									},
+								},
+								"scheme": {
+									Type:     schema.TypeString,
+									Required: true,
+									ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+										var diags diag.Diagnostics
+										value := i.(string)
+										val := false
+										if value == "HTTPS" || value == "HTTP" {
+											val = true
+										}
+										if !val {
+											diagnostic := diag.Diagnostic{
+												Severity: diag.Error,
+												Summary:  "wrong value",
+												Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "HTTPS or HTTP "),
+											}
+											diags = append(diags, diagnostic)
+										}
+										return diags
+									},
+								},
+								"path": {
+									Type:     schema.TypeString,
+									Required: true,
+								},
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"readiness_probe": {
+			Type:     schema.TypeList,
+			Optional: true,
+			MaxItems: 1,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"initial_delay_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"timeout_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"period_seconds": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"success_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"failure_threshold": {
+						Type:     schema.TypeInt,
+						Required: true,
+					},
+					"protocol": {
+						Type:     schema.TypeString,
+						Required: true,
+						ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+							var diags diag.Diagnostics
+							value := i.(string)
+							val := false
+							if value == "TCP_SOCKET" || value == "HTTP_GET" {
+								val = true
+							}
+							if !val {
+								diagnostic := diag.Diagnostic{
+									Severity: diag.Error,
+									Summary:  "wrong value",
+									Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "TCP_SOCKET or HTTP_GET"),
+								}
+								diags = append(diags, diagnostic)
+							}
+							return diags
+						},
+					},
+					"tcp_socket": {
+						Type:     schema.TypeList,
+						Optional: true,
+						MaxItems: 1,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+					"http_get": {
+						Type:     schema.TypeList,
+						Optional: true,
+						MaxItems: 1,
+						Elem: &schema.Resource{
+							Schema: map[string]*schema.Schema{
+								"http_headers": {
+									Type:     schema.TypeList,
+									Optional: true,
+									Elem: &schema.Resource{
+										Schema: map[string]*schema.Schema{
+											"header_name": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+											"header_value": {
+												Type:     schema.TypeString,
+												Required: true,
+											},
+										},
+									},
+								},
+								"scheme": {
+									Type:     schema.TypeString,
+									Required: true,
+									ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+										var diags diag.Diagnostics
+										value := i.(string)
+										val := false
+										if value == "HTTPS" || value == "HTTP" {
+											val = true
+										}
+										if !val {
+											diagnostic := diag.Diagnostic{
+												Severity: diag.Error,
+												Summary:  "wrong value",
+												Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "HTTPS or HTTP "),
+											}
+											diags = append(diags, diagnostic)
+										}
+										return diags
+									},
+								},
+								"path": {
+									Type:     schema.TypeString,
+									Required: true,
+								},
+								"port": {
+									Type:     schema.TypeInt,
+									Required: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"network_interfaces": {
+			Type:     schema.TypeList,
+			Required: true,
+			MaxItems: 5,
+			MinItems: 1,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"vpc_slug": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"ip_families": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"subnet_slug": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"is_public_ip": {
+						Type:     schema.TypeBool,
+						Optional: true,
+						Default:  true,
+					},
+				},
+			},
 		},
 	}
 }
@@ -4654,6 +4946,473 @@ func getScriptSchema() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 			Required: true,
+		},
+	}
+}
+
+
+func getVPCsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpcs": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsSchema(),
+			},
+		},
+	}
+}
+
+func getVPCsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"default_vpc": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		"created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subnets": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsSubnetsSchema(),
+			},
+		},
+		"routes": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsRoutesSchema(),
+			},
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getVPCsSubnetsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getVPCsRoutesSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"destination_cidrs": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Computed: true,
+		},
+		"next_hops": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getVPCSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"default_vpc": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"subnets": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsSubnetsSchema(),
+			},
+		},
+		"routes": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getVPCsRoutesSchema(),
+			},
+		},
+		"created": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+	}
+}
+
+func getSubnetsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"subnets": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getSubnetsSchema(),
+			},
+		},
+	}
+}
+
+func getSubnetsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getSubnets() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpc_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"vpc_slug": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}
+
+func getRoutesSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"routes": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getRoutesSchema(),
+			},
+		},
+	}
+}
+
+func getRoutesSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vpc_name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"destination_cidrs": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Computed: true,
+		},
+		"next_hops": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getRoutes() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpc_name": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"stack_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"slug": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+		"destination_cidrs": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Required: true,
+		},
+		"next_hops": {
+			Type: schema.TypeList,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Required: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
 		},
 	}
 }

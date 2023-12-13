@@ -16,7 +16,7 @@ Example Usage
 terraform {
   required_providers {
     coxedge = {
-      version = "0.4.4"
+      version = "0.4.9"
       source  = "coxedge/coxedge"
     
   }

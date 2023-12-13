@@ -3,6 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+
 package coxedge
 
 import (
@@ -40,6 +41,89 @@ func resourceWorkloadCreate(ctx context.Context, d *schema.ResourceData, m inter
 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+
+	prob := d.Get("probe_configuration").(string)
+	liveness := d.Get("liveness_probe").([]interface{})
+	readiness := d.Get("readiness_probe").([]interface{})
+	if prob == "LIVENESS" && len(liveness) == 0 {
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(liveness) == 0 {
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(readiness) == 0 {
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', readiness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
+		return diags
+	}
+
+	if prob == "LIVENESS" || prob == "LIVENESS_AND_READINESS" {
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryLivenessProbe["protocol"].(string)
+			tcp := convertedEntryLivenessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryLivenessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+		}
+
+		for _, entry := range d.Get("readiness_probe").([]interface{}) {
+			convertedEntryReadinessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryReadinessProbe["protocol"].(string)
+			tcp := convertedEntryReadinessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryReadinessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+		}
+	}
 
 	//Convert resource data to API Object
 	newWorkload := convertResourceDataToWorkloadCreateAPIObject(d)
@@ -112,6 +196,91 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 	//Get the resource Id
 	resourceId := d.Id()
 
+	var diags diag.Diagnostics
+
+	prob := d.Get("probe_configuration").(string)
+	liveness := d.Get("liveness_probe").([]interface{})
+	readiness := d.Get("readiness_probe").([]interface{})
+	if prob == "LIVENESS" && len(liveness) == 0 {
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(liveness) == 0 {
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', liveness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
+		return diags
+	}
+	if prob == "LIVENESS_AND_READINESS" && len(readiness) == 0 {
+		diagnostic := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Missing required argument",
+			Detail:   "When probe_configuration is set to 'LIVENESS_AND_READINESS', readiness_probe field is required. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+		}
+		diags = append(diags, diagnostic)
+		return diags
+	}
+
+	if prob == "LIVENESS" || prob == "LIVENESS_AND_READINESS" {
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryLivenessProbe["protocol"].(string)
+			tcp := convertedEntryLivenessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryLivenessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in liveness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+		}
+
+		for _, entry := range d.Get("readiness_probe").([]interface{}) {
+			convertedEntryReadinessProbe := entry.(map[string]interface{})
+			protocol := convertedEntryReadinessProbe["protocol"].(string)
+			tcp := convertedEntryReadinessProbe["tcp_socket"].([]interface{})
+			http := convertedEntryReadinessProbe["http_get"].([]interface{})
+			if protocol == "TCP_SOCKET" && len(tcp) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'TCP_SOCKET', tcp_socket field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+			if protocol == "HTTP_GET" && len(http) == 0 {
+				diagnostic := diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Missing required argument",
+					Detail:   "When protocol is set to 'HTTP_GET', http_get field is required in readiness_probe. Please ensure that both fields are configured correctly to avoid unexpected behavior.",
+				}
+				diags = append(diags, diagnostic)
+				return diags
+			}
+		}
+	}
+
 	//Convert resource data to API object
 	updatedWorkload := convertResourceDataToWorkloadCreateAPIObject(d)
 	organizationId := d.Get("organization_id").(string)
@@ -135,8 +304,7 @@ func resourceWorkloadUpdate(ctx context.Context, d *schema.ResourceData, m inter
 			time.Sleep(20 * time.Second)
 		}
 	}
-	//Set last_updated
-	//d.Set("last_updated", time.Now().Format(time.RFC850))
+
 	//Save the Id
 	d.SetId(taskResult.Data.Result.Id)
 
@@ -183,6 +351,18 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		ContainerUsername:   d.Get("container_username").(string),
 		ContainerPassword:   d.Get("container_password").(string),
 		Slug:                d.Get("slug").(string),
+		ProbeConfiguration:  d.Get("probe_configuration").(string),
+	}
+
+	for _, entry := range d.Get("network_interfaces").([]interface{}) {
+		convertedEntry := entry.(map[string]interface{})
+		networkInterface := apiclient.NetworkInterface{
+			VpcSlug:    convertedEntry["vpc_slug"].(string),
+			IpFamilies: convertedEntry["ip_families"].(string),
+			SubnetSlug: convertedEntry["subnet_slug"].(string),
+			IsPublicIP: convertedEntry["is_public_ip"].(bool),
+		}
+		updatedWorkload.NetworkInterfaces = append(updatedWorkload.NetworkInterfaces, networkInterface)
 	}
 
 	//Set commands
@@ -246,6 +426,182 @@ func convertResourceDataToWorkloadCreateAPIObject(d *schema.ResourceData) apicli
 		updatedWorkload.Deployments = append(updatedWorkload.Deployments, deploymentEntry)
 	}
 
+	if updatedWorkload.ProbeConfiguration == "NONE" {
+		updatedWorkload.LivenessProbe = nil
+		updatedWorkload.ReadinessProbe = nil
+	}
+
+	if updatedWorkload.ProbeConfiguration == "LIVENESS" {
+		updatedWorkload.ReadinessProbe = nil
+
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			delaySeconds := convertedEntryLivenessProbe["initial_delay_seconds"].(int)
+			timeoutSeconds := convertedEntryLivenessProbe["timeout_seconds"].(int)
+			periodSeconds := convertedEntryLivenessProbe["period_seconds"].(int)
+			successThreshold := convertedEntryLivenessProbe["success_threshold"].(int)
+			failureThreshold := convertedEntryLivenessProbe["failure_threshold"].(int)
+			livenessProbe := &apiclient.LivenessProbe{
+				InitialDelaySeconds: &delaySeconds,
+				TimeoutSeconds:      &timeoutSeconds,
+				PeriodSeconds:       &periodSeconds,
+				SuccessThreshold:    &successThreshold,
+				FailureThreshold:    &failureThreshold,
+				Protocol:            convertedEntryLivenessProbe["protocol"].(string),
+			}
+
+			if livenessProbe.Protocol == "TCP_SOCKET" {
+				for _, entry := range convertedEntryLivenessProbe["tcp_socket"].([]interface{}) {
+					convertedEntryTcpSocket := entry.(map[string]interface{})
+					port := convertedEntryTcpSocket["port"].(int)
+					tcpSocket := &apiclient.TCPSocket{
+						Port: &port,
+					}
+					livenessProbe.TcpSocket = tcpSocket
+				}
+			}
+
+			if livenessProbe.Protocol == "HTTP_GET" {
+				for _, entry := range convertedEntryLivenessProbe["http_get"].([]interface{}) {
+
+					convertedEntryHttpGet := entry.(map[string]interface{})
+
+					port := convertedEntryHttpGet["port"].(int)
+					httpGet := &apiclient.HTTPGet{
+						Scheme: convertedEntryHttpGet["scheme"].(string),
+						Path:   convertedEntryHttpGet["path"].(string),
+						Port:   &port,
+					}
+
+					for _, entry := range convertedEntryHttpGet["http_headers"].([]interface{}) {
+						convertedEntry := entry.(map[string]interface{})
+						httpHeaders := apiclient.HTTPHeaders{
+							HeaderName:  convertedEntry["header_name"].(string),
+							HeaderValue: convertedEntry["header_value"].(string),
+						}
+						httpGet.HttpHeaders = append(httpGet.HttpHeaders, httpHeaders)
+					}
+					livenessProbe.HttpGet = httpGet
+				}
+			}
+
+			updatedWorkload.LivenessProbe = livenessProbe
+		}
+	}
+
+	if updatedWorkload.ProbeConfiguration == "LIVENESS_AND_READINESS" {
+
+		for _, entry := range d.Get("liveness_probe").([]interface{}) {
+			convertedEntryLivenessProbe := entry.(map[string]interface{})
+			delaySeconds := convertedEntryLivenessProbe["initial_delay_seconds"].(int)
+			timeoutSeconds := convertedEntryLivenessProbe["timeout_seconds"].(int)
+			periodSeconds := convertedEntryLivenessProbe["period_seconds"].(int)
+			successThreshold := convertedEntryLivenessProbe["success_threshold"].(int)
+			failureThreshold := convertedEntryLivenessProbe["failure_threshold"].(int)
+			livenessProbe := &apiclient.LivenessProbe{
+				InitialDelaySeconds: &delaySeconds,
+				TimeoutSeconds:      &timeoutSeconds,
+				PeriodSeconds:       &periodSeconds,
+				SuccessThreshold:    &successThreshold,
+				FailureThreshold:    &failureThreshold,
+				Protocol:            convertedEntryLivenessProbe["protocol"].(string),
+			}
+
+			if livenessProbe.Protocol == "TCP_SOCKET" {
+				for _, entry := range convertedEntryLivenessProbe["tcp_socket"].([]interface{}) {
+					convertedEntryTcpSocket := entry.(map[string]interface{})
+					port := convertedEntryTcpSocket["port"].(int)
+					tcpSocket := &apiclient.TCPSocket{
+						Port: &port,
+					}
+					livenessProbe.TcpSocket = tcpSocket
+				}
+			}
+
+			if livenessProbe.Protocol == "HTTP_GET" {
+				for _, entry := range convertedEntryLivenessProbe["http_get"].([]interface{}) {
+
+					convertedEntryHttpGet := entry.(map[string]interface{})
+
+					port := convertedEntryHttpGet["port"].(int)
+					httpGet := &apiclient.HTTPGet{
+						Scheme: convertedEntryHttpGet["scheme"].(string),
+						Path:   convertedEntryHttpGet["path"].(string),
+						Port:   &port,
+					}
+
+					for _, entry := range convertedEntryHttpGet["http_headers"].([]interface{}) {
+						convertedEntry := entry.(map[string]interface{})
+						httpHeaders := apiclient.HTTPHeaders{
+							HeaderName:  convertedEntry["header_name"].(string),
+							HeaderValue: convertedEntry["header_value"].(string),
+						}
+						httpGet.HttpHeaders = append(httpGet.HttpHeaders, httpHeaders)
+					}
+					livenessProbe.HttpGet = httpGet
+				}
+			}
+
+			updatedWorkload.LivenessProbe = livenessProbe
+		}
+
+		for _, entry := range d.Get("readiness_probe").([]interface{}) {
+
+			convertedEntryReadinessProbe := entry.(map[string]interface{})
+
+			delaySeconds := convertedEntryReadinessProbe["initial_delay_seconds"].(int)
+			timeoutSeconds := convertedEntryReadinessProbe["timeout_seconds"].(int)
+			periodSeconds := convertedEntryReadinessProbe["period_seconds"].(int)
+			successThreshold := convertedEntryReadinessProbe["success_threshold"].(int)
+			failureThreshold := convertedEntryReadinessProbe["failure_threshold"].(int)
+			readinessProbe := &apiclient.ReadinessProbe{
+				InitialDelaySeconds: &delaySeconds,
+				TimeoutSeconds:      &timeoutSeconds,
+				PeriodSeconds:       &periodSeconds,
+				SuccessThreshold:    &successThreshold,
+				FailureThreshold:    &failureThreshold,
+				Protocol:            convertedEntryReadinessProbe["protocol"].(string),
+			}
+
+			if readinessProbe.Protocol == "TCP_SOCKET" {
+				for _, entry := range convertedEntryReadinessProbe["tcp_socket"].([]interface{}) {
+					convertedEntryTcpSocket := entry.(map[string]interface{})
+					port := convertedEntryTcpSocket["port"].(int)
+					tcpSocket := &apiclient.TCPSocket{
+						Port: &port,
+					}
+					readinessProbe.TcpSocket = tcpSocket
+				}
+			}
+
+			if readinessProbe.Protocol == "HTTP_GET" {
+				for _, entry := range convertedEntryReadinessProbe["http_get"].([]interface{}) {
+
+					convertedEntryHttpGet := entry.(map[string]interface{})
+
+					port := convertedEntryHttpGet["port"].(int)
+					httpGet := &apiclient.HTTPGet{
+						Scheme: convertedEntryHttpGet["scheme"].(string),
+						Path:   convertedEntryHttpGet["path"].(string),
+						Port:   &port,
+					}
+
+					for _, entry := range convertedEntryHttpGet["http_headers"].([]interface{}) {
+						convertedEntry := entry.(map[string]interface{})
+						httpHeaders := apiclient.HTTPHeaders{
+							HeaderName:  convertedEntry["header_name"].(string),
+							HeaderValue: convertedEntry["header_value"].(string),
+						}
+						httpGet.HttpHeaders = append(httpGet.HttpHeaders, httpHeaders)
+					}
+					readinessProbe.HttpGet = httpGet
+				}
+			}
+
+			updatedWorkload.ReadinessProbe = readinessProbe
+		}
+	}
+
 	return updatedWorkload
 }
 
@@ -263,6 +619,8 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 	d.Set("container_server", workload.ContainerServer)
 	d.Set("first_boot_ssh_key", workload.FirstBootSshKey)
 	d.Set("user_data", workload.UserData)
+	d.Set("probe_configuration", workload.ProbeConfiguration)
+	d.Set("network_names", workload.NetworkNames)
 	//Now the list structures
 	deployments := make([]map[string]interface{}, len(workload.Deployments), len(workload.Deployments))
 	for i, deployment := range workload.Deployments {
@@ -277,6 +635,17 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		deployments[i] = item
 	}
 	d.Set("deployment", deployments)
+
+	networkInterfaces := make([]map[string]interface{}, len(workload.NetworkInterfaces), len(workload.NetworkInterfaces))
+	for i, networkInterface := range workload.NetworkInterfaces {
+		item := make(map[string]interface{})
+		item["vpc_slug"] = networkInterface.VpcSlug
+		item["ip_families"] = networkInterface.IpFamilies
+		item["subnet_slug"] = networkInterface.SubnetSlug
+		item["is_public_ip"] = networkInterface.IsPublicIP
+		networkInterfaces[i] = item
+	}
+	d.Set("network_interfaces", networkInterfaces)
 
 	ports := make([]map[string]string, len(workload.Ports), len(workload.Ports))
 	for i, portObj := range workload.Ports {
@@ -309,4 +678,88 @@ func convertWorkloadAPIObjectToResourceData(d *schema.ResourceData, workload *ap
 		secretEnvVars[envVarObj.Key] = envVarObj.Value
 	}
 	d.Set("secret_environment_variables", secretEnvVars)
+
+	if workload.ProbeConfiguration != "" {
+		d.Set("probe_configuration", workload.ProbeConfiguration)
+	}
+	livenessProbes := make([]map[string]interface{}, 0, 0)
+	vlivenessProbe := map[string]interface{}{}
+	vlivenessProbe["initial_delay_seconds"] = workload.LivenessProbe.InitialDelaySeconds
+	vlivenessProbe["timeout_seconds"] = workload.LivenessProbe.TimeoutSeconds
+	vlivenessProbe["period_seconds"] = workload.LivenessProbe.PeriodSeconds
+	vlivenessProbe["success_threshold"] = workload.LivenessProbe.SuccessThreshold
+	vlivenessProbe["failure_threshold"] = workload.LivenessProbe.FailureThreshold
+	vlivenessProbe["protocol"] = workload.LivenessProbe.Protocol
+
+	if workload.LivenessProbe.TcpSocket != nil {
+		tcpSockets := make([]map[string]interface{}, 0, 0)
+		vtcpSocket := map[string]interface{}{}
+		vtcpSocket["port"] = *workload.LivenessProbe.TcpSocket.Port
+		tcpSockets = append(tcpSockets, vtcpSocket)
+		vlivenessProbe["tcp_socket"] = tcpSockets
+	}
+
+	if workload.LivenessProbe.HttpGet != nil {
+		httpGets := make([]map[string]interface{}, 0, 0)
+		vhttpGet := map[string]interface{}{}
+		if len(workload.LivenessProbe.HttpGet.HttpHeaders) > 0 {
+			httpHeaders := make([]map[string]interface{}, len(workload.LivenessProbe.HttpGet.HttpHeaders)-1, len(workload.LivenessProbe.HttpGet.HttpHeaders)-1)
+			for _, h := range workload.LivenessProbe.HttpGet.HttpHeaders {
+				vhttpHeader := map[string]interface{}{
+					"header_name":  h.HeaderName,
+					"header_value": h.HeaderValue,
+				}
+				httpHeaders = append(httpHeaders, vhttpHeader)
+			}
+			vhttpGet["http_headers"] = httpHeaders
+		}
+		vhttpGet["scheme"] = workload.LivenessProbe.HttpGet.Scheme
+		vhttpGet["path"] = workload.LivenessProbe.HttpGet.Path
+		vhttpGet["port"] = *workload.LivenessProbe.HttpGet.Port
+		httpGets = append(httpGets, vhttpGet)
+		vlivenessProbe["http_get"] = httpGets
+	}
+	livenessProbes = append(livenessProbes, vlivenessProbe)
+	d.Set("liveness_probe", livenessProbes)
+
+	readinessProbes := make([]map[string]interface{}, 0, 0)
+	readinessProbe := map[string]interface{}{}
+	readinessProbe["initial_delay_seconds"] = workload.ReadinessProbe.InitialDelaySeconds
+	readinessProbe["timeout_seconds"] = workload.ReadinessProbe.TimeoutSeconds
+	readinessProbe["period_seconds"] = workload.ReadinessProbe.PeriodSeconds
+	readinessProbe["success_threshold"] = workload.ReadinessProbe.SuccessThreshold
+	readinessProbe["failure_threshold"] = workload.ReadinessProbe.FailureThreshold
+	readinessProbe["protocol"] = workload.ReadinessProbe.Protocol
+
+	if workload.ReadinessProbe.TcpSocket != nil {
+		tcpSockets := make([]map[string]interface{}, 0, 0)
+		vtcpSocket := map[string]interface{}{}
+		vtcpSocket["port"] = *workload.ReadinessProbe.TcpSocket.Port
+		tcpSockets = append(tcpSockets, vtcpSocket)
+		readinessProbe["tcp_socket"] = tcpSockets
+	}
+
+	if workload.ReadinessProbe.HttpGet != nil {
+		httpGets := make([]map[string]interface{}, 0, 0)
+		vhttpGet := map[string]interface{}{}
+		if len(workload.ReadinessProbe.HttpGet.HttpHeaders) > 0 {
+			httpHeaders := make([]map[string]interface{}, len(workload.ReadinessProbe.HttpGet.HttpHeaders)-1, len(workload.ReadinessProbe.HttpGet.HttpHeaders)-1)
+			for _, h := range workload.ReadinessProbe.HttpGet.HttpHeaders {
+				vhttpHeader := map[string]interface{}{
+					"header_name":  h.HeaderName,
+					"header_value": h.HeaderValue,
+				}
+				httpHeaders = append(httpHeaders, vhttpHeader)
+			}
+			vhttpGet["http_headers"] = httpHeaders
+		}
+		vhttpGet["scheme"] = workload.ReadinessProbe.HttpGet.Scheme
+		vhttpGet["path"] = workload.ReadinessProbe.HttpGet.Path
+		vhttpGet["port"] = *workload.ReadinessProbe.HttpGet.Port
+		httpGets = append(httpGets, vhttpGet)
+		readinessProbe["http_get"] = httpGets
+	}
+	readinessProbes = append(readinessProbes, readinessProbe)
+	d.Set("readiness_probe", readinessProbes)
+
 }

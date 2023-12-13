@@ -8,14 +8,14 @@ terraform {
 }
 
 provider "coxedge" {
-  key = "GM3COPLOU6nOI12/NZ7HNg=="
+  key = ""
 }
-
 
 data "coxedge_vpcs" "vpcs" {
-  environment = "test-backend"
+  environment_name     = "<environment_name>"
+  organization_id = "<organization_id>"
 }
 
-output "out_vpc" {
+output "output_vpc" {
   value = data.coxedge_vpcs.vpcs
 }

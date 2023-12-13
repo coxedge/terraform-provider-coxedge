@@ -139,7 +139,6 @@ type WrappedUser struct {
 	Data User `json:"data"`
 }
 
-// Workloads
 type Workload struct {
 	AddImagePullCreationsOption bool                          `json:"addImagePullCredentialsOption,omitempty"`
 	AnycastIpAddress            string                        `json:"anycastIpAddress,omitempty"`
@@ -158,7 +157,7 @@ type Workload struct {
 	IsRemoteManagementEnabled   bool                          `json:"isRemoteManagementEnabled,omitempty"`
 	Memory                      string                        `json:"memory,omitempty"`
 	Name                        string                        `json:"name,omitempty"`
-	Network                     string                        `json:"network,omitempty"`
+	NetworkNames                []string                      `json:"networkNames,omitempty"`
 	PersistentStorages          []WorkloadPersistentStorage   `json:"persistentStorages,omitempty"`
 	Ports                       []WorkloadPort                `json:"ports,omitempty"`
 	SecretEnvironmentVariables  []WorkloadEnvironmentVariable `json:"secretEnvironmentVariables,omitempty"`
@@ -168,6 +167,17 @@ type Workload struct {
 	Status                      string                        `json:"status,omitempty"`
 	Type                        string                        `json:"type,omitempty"`
 	Version                     string                        `json:"version,omitempty"`
+	NetworkInterfaces           []NetworkInterface            `json:"networkInterfaces,omitempty"`
+	ProbeConfiguration          string                        `json:"probeConfiguration,omitempty"`
+	LivenessProbe               LivenessProbe                 `json:"livenessProbe,omitempty"`
+	ReadinessProbe              ReadinessProbe                `json:"readinessProbe,omitempty"`
+}
+
+type NetworkInterface struct {
+	VpcSlug    string `json:"vpcSlug"`
+	IpFamilies string `json:"ipFamilies"`
+	SubnetSlug string `json:"subnetSlug"`
+	IsPublicIP bool   `json:"isPublicIP"`
 }
 
 type WorkloadAutoscaleDeployment struct {
@@ -197,6 +207,44 @@ type WorkloadPersistentStorage struct {
 	Size int    `json:"size,omitempty"`
 }
 
+type LivenessProbe struct {
+	InitialDelaySeconds *int       `json:"initialDelaySeconds,omitempty"`
+	TimeoutSeconds      *int       `json:"timeoutSeconds,omitempty"`
+	PeriodSeconds       *int       `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int       `json:"successThreshold,omitempty"`
+	FailureThreshold    *int       `json:"failureThreshold,omitempty"`
+	Protocol            string     `json:"protocol,omitempty"`
+	TcpSocket           *TCPSocket `json:"tcpSocket,omitempty"'`
+	HttpGet             *HTTPGet   `json:"httpGet,omitempty"'`
+}
+
+type ReadinessProbe struct {
+	InitialDelaySeconds *int       `json:"initialDelaySeconds,omitempty"`
+	TimeoutSeconds      *int       `json:"timeoutSeconds,omitempty"`
+	PeriodSeconds       *int       `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int       `json:"successThreshold,omitempty"`
+	FailureThreshold    *int       `json:"failureThreshold,omitempty"`
+	Protocol            string     `json:"protocol,omitempty"`
+	TcpSocket           *TCPSocket `json:"tcpSocket,omitempty"'`
+	HttpGet             *HTTPGet   `json:"httpGet,omitempty"'`
+}
+
+type TCPSocket struct {
+	Port *int `json:"port,omitempty"`
+}
+
+type HTTPGet struct {
+	HttpHeaders []HTTPHeaders `json:"httpHeaders,omitempty"`
+	Scheme      string        `json:"scheme,omitempty"`
+	Path        string        `json:"path,omitempty"`
+	Port        *int          `json:"port,omitempty"`
+}
+
+type HTTPHeaders struct {
+	HeaderName  string `json:"headerName,omitempty"`
+	HeaderValue string `json:"headerValue,omitempty"`
+}
+
 type WrappedWorkloads struct {
 	Data []Workload `json:"data"`
 }
@@ -205,16 +253,16 @@ type WrappedWorkload struct {
 }
 
 type WorkloadInstance struct {
-	StackId         string `json:"stackId"`
-	WorkloadId      string `json:"workloadId"`
-	Name            string `json:"name"`
-	IPAddress       string `json:"ipAddress"`
-	PublicIPAddress string `json:"publicIpAddress"`
-	Location        string `json:"location"`
-	CreatedDate     string `json:"createdDate"`
-	StartedDate     string `json:"startedDate"`
-	Id              string `json:"id"`
-	Status          string `json:"status"`
+	StackId         string   `json:"stackId"`
+	WorkloadId      string   `json:"workloadId"`
+	Name            string   `json:"name"`
+	IPAddress       []string `json:"ipAddress"`
+	PublicIPAddress string   `json:"publicIpAddress"`
+	Location        string   `json:"location"`
+	CreatedDate     string   `json:"createdDate"`
+	StartedDate     string   `json:"startedDate"`
+	Id              string   `json:"id"`
+	Status          string   `json:"status"`
 }
 
 //Network Policy Rules
@@ -664,6 +712,88 @@ type EdgeLogic struct {
 }
 type WrappedEdgeLogic struct {
 	Data EdgeLogic `json:"data,omitempty"`
+}
+
+type VPCSubnets struct {
+	Id      string `json:"id,omitempty"`
+	StackId string `json:"stackId,omitempty"`
+	VpcId   string `json:"vpcId,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Slug    string `json:"slug,omitempty"`
+	Cidr    string `json:"cidr,omitempty"`
+	Status  string `json:"status,omitempty"`
+}
+
+type VPCRoutes struct {
+	Id               string   `json:"id,omitempty"`
+	StackId          string   `json:"stackId,omitempty"`
+	VpcId            string   `json:"vpcId,omitempty"`
+	Name             string   `json:"name,omitempty"`
+	Slug             string   `json:"slug,omitempty"`
+	DestinationCidrs []string `json:"destinationCidrs,omitempty"`
+	NextHops         []string `json:"nextHops,omitempty"`
+	Status           string   `json:"status,omitempty"`
+}
+
+type VPCs struct {
+	Id         string       `json:"id,omitempty"`
+	Name       string       `json:"name,omitempty"`
+	StackId    string       `json:"stackId,omitempty"`
+	Slug       string       `json:"slug,omitempty"`
+	Cidr       string       `json:"cidr,omitempty"`
+	DefaultVpc bool         `json:"defaultVpc,omitempty"`
+	Created    string       `json:"created,omitempty"`
+	Subnets    []VPCSubnets `json:"subnets,omitempty"`
+	Routes     []VPCRoutes  `json:"routes,omitempty"`
+	Status     string       `json:"status,omitempty"`
+}
+
+type WrappedVPCs struct {
+	Data VPCs `json:"data,omitempty"`
+}
+
+type WrappedVPCsData struct {
+	Data []VPCs `json:"data,omitempty"`
+}
+
+type Subnets struct {
+	Id      string `json:"id,omitempty"`
+	StackId string `json:"stackId,omitempty"`
+	VpcId   string `json:"vpcId,omitempty"`
+	VpcName string `json:"vpcName,omitempty"`
+	VpcSlug string `json:"vpcSlug,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Slug    string `json:"slug,omitempty"`
+	Cidr    string `json:"cidr,omitempty"`
+	Status  string `json:"status,omitempty"`
+}
+
+type WrappedSubnet struct {
+	Data Subnets `json:"data,omitempty"`
+}
+
+type WrappedSubnetsData struct {
+	Data []Subnets `json:"data,omitempty"`
+}
+
+type Route struct {
+	Id               string   `json:"id,omitempty"`
+	StackId          string   `json:"stackId,omitempty"`
+	VpcId            string   `json:"vpcId,omitempty"`
+	VpcName          string   `json:"vpcName,omitempty"`
+	Name             string   `json:"name,omitempty"`
+	Slug             string   `json:"slug,omitempty"`
+	DestinationCidrs []string `json:"destinationCidrs,omitempty"`
+	NextHops         []string `json:"nextHops,omitempty"`
+	Status           string   `json:"status,omitempty"`
+}
+
+type WrappedRoute struct {
+	Data Route `json:"data,omitempty"`
+}
+
+type WrappedRoutesData struct {
+	Data []Route `json:"data,omitempty"`
 }
 
 type BareMetalDevice struct {
