@@ -183,11 +183,11 @@ func (c *Client) EditBareMetalDeviceById(editRequest EditBareMetalDeviceRequest,
 /*
 EditBareMetalDevicePowerById edit BareMetal device power by Id
 */
-func (c *Client) EditBareMetalDevicePowerById(deviceId string, operation string, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+func (c *Client) EditBareMetalDevicePowerById(deviceId string, operation string, environmentName string, organizationId string, vendor string) (*TaskStatusResponse, error) {
 
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices/"+deviceId+"?operation="+operation+"&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices/"+deviceId+"?operation="+operation+"&org_id="+organizationId+"&vendor="+vendor,
 		nil)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request

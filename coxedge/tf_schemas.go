@@ -5503,11 +5503,11 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
 				var diags diag.Diagnostics
 				value := i.(string)
-				if value != "ON" && value != "OFF" {
+				if value != "ON" && value != "OFF" && value != "RESTART" && value != "SOFT-OFF" {
 					diag := diag.Diagnostic{
 						Severity: diag.Error,
 						Summary:  "wrong value",
-						Detail:   fmt.Sprintf("%s is not a expected value. Value should be either ON or OFF", value),
+						Detail:   fmt.Sprintf("%s is not a expected value. Value should be ON / OFF / RESTART / SOFT-OFF", value),
 					}
 					diags = append(diags, diag)
 				}

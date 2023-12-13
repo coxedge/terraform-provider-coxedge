@@ -18,5 +18,5 @@ resource "coxedge_baremetal_device" "device" {
   hostname         = "<hostname>"
   name             = "<name>"
   tags             = tolist(["<tags>"])
-  power_status     = "<power_status>" // ON or OFF
+  power_status     = "<power_status>" // ON / OFF / RESTART / SOFT-OFF
 }

@@ -71,12 +71,14 @@ func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
+	vendor := d.Get("vendor").(string)
+
 	//Get the resource Id
 	resourceId := d.Id()
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
 
-	editDevice := convertResourceDataToBareMetalDeviceEditAPIObject(d)
+	editDevice := convertResourceDataToBareMetalDeviceEditAPIObject(d, vendor)
 	//Edit the BareMetal device
 	editedDevice, err := coxEdgeClient.EditBareMetalDeviceById(editDevice, resourceId, environmentName, organizationId)
 	if err != nil {
@@ -95,10 +97,14 @@ func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, 
 		var operation string
 		if powerStatus == "ON" {
 			operation = "device-on"
-		} else {
+		} else if powerStatus == "OFF" {
 			operation = "device-off"
+		} else if powerStatus == "RESTART" {
+			operation = "device-restart"
+		} else {
+			operation = "soft-device-off"
 		}
-		powerStatusDevice, err := coxEdgeClient.EditBareMetalDevicePowerById(resourceId, operation, environmentName, organizationId)
+		powerStatusDevice, err := coxEdgeClient.EditBareMetalDevicePowerById(resourceId, operation, environmentName, organizationId, vendor)
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -157,21 +163,67 @@ func convertDeviceAPIObjectToResourceData(d *schema.ResourceData, bareMetalDevic
 	d.Set("ipmi_address", bareMetalDevice.IpmiAddress)
 	d.Set("power_status", bareMetalDevice.PowerStatus)
 	d.Set("tags", bareMetalDevice.Tags)
+	d.Set("vendor", bareMetalDevice.Vendor)
 
 	loc := make([]interface{}, 1, 1)
 	locItem := make(map[string]interface{})
 	locItem["facility"] = bareMetalDevice.Location.Facility
 	locItem["facility_title"] = bareMetalDevice.Location.FacilityTitle
 	loc[0] = locItem
-
 	d.Set("location", loc)
+
+	deviceIpDetail := make([]interface{}, 1, 1)
+	ipDetail := make(map[string]interface{})
+	ipDetail["primary_ip"] = bareMetalDevice.DeviceDetail.DeviceIPDetail.PrimaryIP
+	ipDetail["description"] = bareMetalDevice.DeviceDetail.DeviceIPDetail.Description
+	ipDetail["gateway_ip"] = bareMetalDevice.DeviceDetail.DeviceIPDetail.GatewayIP
+	ipDetail["subnet_mask"] = bareMetalDevice.DeviceDetail.DeviceIPDetail.SubnetMask
+	ipDetail["usable_ips"] = bareMetalDevice.DeviceDetail.DeviceIPDetail.UsableIPs
+	deviceIpDetail[0] = ipDetail
+
+	deviceDetail := make([]interface{}, 1, 1)
+	detail := make(map[string]interface{})
+	detail["product_id"] = bareMetalDevice.DeviceDetail.ProductID
+	detail["service_plan"] = bareMetalDevice.DeviceDetail.ServicePlan
+	detail["processor"] = bareMetalDevice.DeviceDetail.Processor
+	detail["primary_hard_drive"] = bareMetalDevice.DeviceDetail.PrimaryHardDrive
+	detail["memory"] = bareMetalDevice.DeviceDetail.Memory
+	detail["operating_system"] = bareMetalDevice.DeviceDetail.OperatingSystem
+	detail["bandwidth"] = bareMetalDevice.DeviceDetail.Bandwidth
+	detail["internal_network"] = bareMetalDevice.DeviceDetail.InternalNetwork
+	detail["ddos"] = bareMetalDevice.DeviceDetail.DDoS
+	detail["raid_set_up"] = bareMetalDevice.DeviceDetail.RaidSetUp
+	detail["next_renew"] = bareMetalDevice.DeviceDetail.NextRenew
+	detail["device_ip_detail"] = deviceIpDetail
+	deviceDetail[0] = detail
+	d.Set("device_detail", deviceDetail)
+
+	deviceInitialPassword := make([]interface{}, 1, 1)
+	initialPassword := make(map[string]interface{})
+	initialPassword["password_returns_until"] = bareMetalDevice.DeviceInitialPassword.PasswordReturnsUntil
+	initialPassword["password_expires"] = bareMetalDevice.DeviceInitialPassword.PasswordExpires
+	initialPassword["port"] = bareMetalDevice.DeviceInitialPassword.Port
+	initialPassword["user"] = bareMetalDevice.DeviceInitialPassword.User
+	deviceInitialPassword[0] = initialPassword
+	d.Set("device_initial_password", deviceInitialPassword)
+
+	deviceIPs := make([]interface{}, 1, 1)
+	ips := make(map[string]interface{})
+	ips["subnet"] = bareMetalDevice.DeviceIPs.Subnet
+	ips["netmask"] = bareMetalDevice.DeviceIPs.Netmask
+	ips["usable_ips"] = bareMetalDevice.DeviceIPs.UsableIPs
+	deviceIPs[0] = ips
+	d.Set("device_ips", deviceIPs)
 }
 
-func convertResourceDataToBareMetalDeviceEditAPIObject(d *schema.ResourceData) apiclient.EditBareMetalDeviceRequest {
+func convertResourceDataToBareMetalDeviceEditAPIObject(d *schema.ResourceData, vendor string) apiclient.EditBareMetalDeviceRequest {
 
 	editDevice := apiclient.EditBareMetalDeviceRequest{
-		Name:     d.Get("name").(string),
-		Hostname: d.Get("hostname").(string),
+		Name: d.Get("name").(string),
+	}
+
+	if vendor == "HIVELOCITY" {
+		editDevice.Hostname = d.Get("hostname").(string)
 	}
 
 	tgs := d.Get("tags").([]interface{})
