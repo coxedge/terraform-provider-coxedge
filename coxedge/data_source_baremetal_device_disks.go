@@ -5,6 +5,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"golang.org/x/net/context"
+	"strings"
 )
 
 func dataSourceBareMetalDeviceDisks() *schema.Resource {
@@ -24,6 +25,16 @@ func dataSourceBareMetalDeviceDisksRead(ctx context.Context, data *schema.Resour
 	organizationId := data.Get("organization_id").(string)
 
 	requestedId := data.Get("id").(string)
+
+	if strings.HasPrefix(requestedId, "HV_") {
+		diag := diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Device disk is not available for HIVELOCITY devices",
+			Detail:   "Device disk is not available for HIVELOCITY devices",
+		}
+		diags = append(diags, diag)
+		return diags
+	}
 
 	bareMetalDeviceDisks, err := coxEdgeClient.GetBareMetalDeviceDisksById(environmentName, organizationId, requestedId)
 	if err != nil {
