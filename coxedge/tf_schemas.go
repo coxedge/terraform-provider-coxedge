@@ -6037,3 +6037,73 @@ func getBareMetalSSHKeyResourceSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getBareMetalDeviceDiskSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_device_disks": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalDeviceDisksSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalDeviceDisksSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"server_disk_id": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"server_disk_model": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"server_disk_size_gb": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"server_id": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"server_disk_serial": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"server_disk_vendor": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"server_disk_status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"server_disk_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"server_raid_controller_id": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+
+}

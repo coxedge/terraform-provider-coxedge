@@ -910,3 +910,20 @@ type DeviceIPs struct {
 	Netmask   string   `json:"netmask,omitempty"`
 	UsableIPs []string `json:"usableIps,omitempty"`
 }
+
+type BareMetalDeviceDisk struct {
+	ServerDiskID           int    `json:"server_disk_id,omitempty"`
+	ServerDiskModel        string `json:"server_disk_model,omitempty"`
+	ServerDiskSizeGB       int    `json:"server_disk_size_gb,omitempty"`
+	ServerID               int    `json:"server_id,omitempty"`
+	ServerDiskSerial       string `json:"server_disk_serial,omitempty"`
+	ServerDiskVendor       string `json:"server_disk_vendor,omitempty"`
+	ServerDiskStatus       string `json:"server_disk_status,omitempty"`
+	ServerDiskType         string `json:"server_disk_type,omitempty"`
+	ServerRaidControllerID int    `json:"server_raid_controller_id,omitempty"`
+	Type                   string `json:"type,omitempty"`
+}
+
+type WrappedBareMetalDeviceDisks struct {
+	Data []BareMetalDeviceDisk `json:"data,omitempty"`
+}

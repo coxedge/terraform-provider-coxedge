@@ -38,6 +38,7 @@ func Provider() *schema.Provider {
 			"coxedge_baremetal_device_sensors": dataSourceBareMetalDeviceSensors(),
 			"coxedge_baremetal_device_ips":     dataSourceBareMetalDeviceIPs(),
 			"coxedge_baremetal_ssh_keys":       dataSourceBareMetalSSHKeys(),
+			"coxedge_baremetal_device_disk":    dataSourceBareMetalDeviceDisks(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			//"coxedge_cdn_purge":             resourceCDNPurgeResource(),
