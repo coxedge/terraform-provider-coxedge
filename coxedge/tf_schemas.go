@@ -6105,5 +6105,196 @@ func getBareMetalDeviceDisksSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
+}
 
+func getBareMetalLocationsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_locations": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalLocationsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalLocationsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"location_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"code": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vendor": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getBareMetalLocationProductsSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"code": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_products": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalLocationProductsSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalLocationProductsSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"drive": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cpu": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"sub_title": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"memory": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"bandwidth": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"monthly_price": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"monthly_premium": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"stock": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cpu_cores": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"gpu": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"hourly_price": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"hourly_premium": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vendor_product_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vendor": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		// ProcessorInfo fields
+		"cores": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"sockets": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"threads": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"vcpus": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+	}
+}
+
+func getBareMetalLocationProductOSSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vendor_product_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"baremetal_os": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getBareMetalLocationProductOSSchema(),
+			},
+		},
+	}
+}
+
+func getBareMetalLocationProductOSSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"name": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
 }

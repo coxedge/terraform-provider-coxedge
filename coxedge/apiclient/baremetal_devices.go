@@ -388,3 +388,66 @@ func (c *Client) GetBareMetalDeviceDisksById(environmentName string, organizatio
 	}
 	return wrappedAPIStruct.Data, nil
 }
+
+func (c *Client) GetBareMetalLocations(environmentName string, organizationId string) ([]BareMetalLocation, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/locations?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedBareMetalLocations
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetBareMetalLocationProducts(environmentName string, organizationId string, id string, code string) ([]BareMetalLocationProduct, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/products?id="+id+"&code="+code+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedBareMetalLocationProduct
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetBareMetalLocationProductOSs(environmentName string, organizationId string, vendorProductId string) ([]BareMetalLocationProductOS, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/operating-system?vendorProductId="+vendorProductId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrappedBareMetalLocationProductOS
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}

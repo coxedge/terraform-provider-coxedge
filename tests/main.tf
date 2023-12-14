@@ -50,14 +50,13 @@ provider "coxedge" {
 #  name         = "terraformtest"
 #}
 
-data "coxedge_baremetal_device_disk" "disk" {
-  environment_name = "sanityhiv"
-  organization_id  = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
-  id               = "MS_250"
+data "coxedge_baremetal_location_product_os" "os" {
+  environment_name  = "sanityhiv"
+  organization_id   = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
+  vendor_product_id = "HV_504"
 }
 
 output "output_disk" {
-  value = data.coxedge_baremetal_device_disk.disk
+  value = data.coxedge_baremetal_location_product_os.os
 }
-
 

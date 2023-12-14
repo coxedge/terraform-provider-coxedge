@@ -927,3 +927,54 @@ type BareMetalDeviceDisk struct {
 type WrappedBareMetalDeviceDisks struct {
 	Data []BareMetalDeviceDisk `json:"data,omitempty"`
 }
+
+type BareMetalLocation struct {
+	ID         string `json:"id"`
+	LocationID string `json:"locationId"`
+	Code       string `json:"code"`
+	Name       string `json:"name"`
+	Vendor     string `json:"vendor"`
+}
+
+type WrappedBareMetalLocations struct {
+	Data []BareMetalLocation `json:"data,omitempty"`
+}
+
+type ProductProcessorInfo struct {
+	Cores   int `json:"cores"`
+	Sockets int `json:"sockets"`
+	Threads int `json:"threads"`
+	VCPUs   int `json:"vcpus"`
+}
+
+type BareMetalLocationProduct struct {
+	ID              string               `json:"id"`
+	Drive           string               `json:"drive"`
+	CPU             string               `json:"cpu"`
+	SubTitle        string               `json:"subTitle"`
+	Memory          string               `json:"memory"`
+	Bandwidth       string               `json:"bandwidth"`
+	MonthlyPrice    string               `json:"monthlyPrice"`
+	MonthlyPremium  string               `json:"monthlyPremium"`
+	Stock           string               `json:"stock"`
+	ProcessorInfo   ProductProcessorInfo `json:"processorInfo"`
+	CPUCores        string               `json:"cpuCores"`
+	GPU             string               `json:"gpu"`
+	HourlyPrice     string               `json:"hourlyPrice"`
+	HourlyPremium   string               `json:"hourlyPremium"`
+	VendorProductID string               `json:"vendorProductId"`
+	Vendor          string               `json:"vendor"`
+}
+
+type WrappedBareMetalLocationProduct struct {
+	Data []BareMetalLocationProduct `json:"data,omitempty"`
+}
+
+type BareMetalLocationProductOS struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type WrappedBareMetalLocationProductOS struct {
+	Data []BareMetalLocationProductOS `json:"data,omitempty"`
+}
