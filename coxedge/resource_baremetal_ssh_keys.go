@@ -77,9 +77,15 @@ func resourceBareMetalSSHKeyCreate(ctx context.Context, d *schema.ResourceData, 
 		return diag.FromErr(err)
 	}
 
-	//Save the Id
+	sshList, err := coxEdgeClient.GetBareMetalSSHKeys(environmentName, organizationId)
+	for _, ssh := range sshList {
+		if ssh.PublicKey == createRequest.PublicKey {
+			//Save the Id
+			d.SetId(ssh.Id)
+			return diags
+		}
+	}
 	d.SetId(taskResult.Data.Result.Id)
-
 	return diags
 }
 

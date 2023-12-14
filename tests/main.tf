@@ -50,10 +50,11 @@ provider "coxedge" {
 #  name         = "terraformtest"
 #}
 
-resource "coxedge_baremetal_device_ipmi" "ipmi" {
-  device_id        = "HV_14000"
+resource "coxedge_baremetal_ssh_key" "ssh" {
   environment_name = "sanityhiv"
   organization_id  = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
-  custom_ip        = "103.147.209.3"
+  name             = "test nmee"
+  public_key       = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC28MhlAF0RuLA8/heTjrWTnbC46wEbtix7CebL4lRapH88D3cyLlvOaSCXAhOGpRdi6c5+863bF1e3QkTQdwA20QgOMPAhpkjoZVsKgyBP/zV9NO/UzX+TmsxInvIjsSQkVhSAftJ7nWZ78cbJ7tUvYiIAHd8d3W1wcZraf0ufaw=="
 }
+
 
