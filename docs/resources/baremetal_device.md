@@ -26,7 +26,7 @@ resource "coxedge_baremetal_device" "test" {
   hostname         = "<hostname>"
   name             = "<name>"
   tags             = tolist(["<tags>"])
-  power_status     = "<power_status>" // ON or OFF
+  power_status     = "<power_status>" // ON or OFF or RESTART or SOFT-OFF
   timeouts {
     update = "20m"
     delete = "20m"
@@ -51,6 +51,6 @@ The following arguments are supported:
 - `hostname` (String) - A FQDN for the device. For example: example.coxedge.com
 - `name` (String) - User given custom name.
 - `tags` (List of String) - List of all user set device tags.
-- `power_status` (String) - ON/OFF
+- `power_status` (String) - ON/OFF/RESTART/SOFT_OFF
 - `timeouts` (Block List, Min: 1) - Can pass custom timeout while update / delete . Example: update = "20m"  - such as "
   60m" for 60 minutes, "10s" for ten seconds, or "2h" for two hours.
