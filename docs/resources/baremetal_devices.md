@@ -43,7 +43,7 @@ resource "coxedge_baremetal_devices" "device" {
   product_id       = "1"
   vendor           = "METALSOFT"
   os_id            = "4"
-  server_label     = "testterraformmm2"
+  server_label     = "example"
   tags             = tolist(["tag added"])
 }
 ```
