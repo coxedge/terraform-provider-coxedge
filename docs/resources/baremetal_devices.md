@@ -16,6 +16,7 @@ Example Usage
 ---
 
 ```
+//for Hivelocity
 resource "coxedge_baremetal_devices" "device" {
   environment_name  = "<environment_name>"
   organization_id   = "<organization_id>"
@@ -28,9 +29,22 @@ resource "coxedge_baremetal_devices" "device" {
   server {
     hostname = "example.coxedge.com"
   }
+  vendor           = "HIVELOCITY"
   timeouts {
     create = "20m"
   }
+}
+
+//for Metalsoft
+resource "coxedge_baremetal_devices" "device" {
+  environment_name  = "<environment_name>"
+  organization_id   = "<organization_id>"
+  location_name    = "cox-dvtc"
+  product_id       = "1"
+  vendor           = "METALSOFT"
+  os_id            = "4"
+  server_label     = "testterraformmm2"
+  tags             = tolist(["tag added"])
 }
 ```
 
@@ -45,13 +59,16 @@ The following arguments are supported:
 - `environment_name` (String) - The name of the environment.
 - `organization_id` (String) - The id of the organization.
 - `location_name` (String) - A facility code. For example NYC1.
-- `has_user_data` (Boolean) - True if we're passing user data.
-- `has_ssh_data` (Boolean) - True if we're passing SSH key.
-- `product_option_id` (Number) - The unique ID of the desired product option.
+- `has_user_data` (Boolean) - True if we're passing user data(HIVELOCITY).
+- `has_ssh_data` (Boolean) - True if we're passing SSH key(HIVELOCITY).
+- `product_option_id` (Number) - The unique ID of the desired product option(HIVELOCITY).
 - `product_id` (String) - The unique ID of the desired product to provision.
+- `os_id` (String) - The unique ID of the operating system (METALSOFT).
+- `server_label` (String) - The name of server (METALSOFT).
+- `vendor` (String) - HIVELOCITY / METALSOFT.
 - `os_name` (String) - The name of the Operating System to provision on this device. Must match name of an operating
-  system product option.
-- `server` (List of Objects) (see [below for nested schema](#nestedblock--server)) - List of servers.
+  system product option (HIVELOCITY).
+- `server` (List of Objects) (see [below for nested schema](#nestedblock--server)) - List of servers (HIVELOCITY).
 
 ### Optional
 
@@ -59,6 +76,7 @@ The following arguments are supported:
 - `ssh_key` (String) - SSH key value.
 - `ssh_key_name` (String) - Name for newly adding SSH key.
 - `ssh_key_id` (String) - The unique ID of the SSH key.
+- `tags` (List of String) - List of tags (METALSOFT).
 - `timeouts` (Block List, Min: 1) - Can pass custom timeout while create . Example: create = "20m"  - such as "60m" for
   60 minutes, "10s" for ten seconds, or "2h" for two hours.
 
