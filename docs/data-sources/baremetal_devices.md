@@ -66,7 +66,6 @@ output "testing" {
 - `ipmi_address` (String) - IP address for IPMI connection. Requires you to whitelist your current IP or be on IPMI VPN.
 - `power_status` (String) - ON/OFF
 - `tags` (List of String) - List of all user set device tags.
-- `vendor` (String) - HIVELOCITY / METALSOFT
 - `change_id` (String) - This property helps ensure that edit operations don’t overwrite other, more recent changes made
   to the same object. It gets updated automatically after each successful edit operation.(METALSOFT)
 - `location` (Object) (see [below for nested schema](#nestedobjatt--location)) - Object of Location

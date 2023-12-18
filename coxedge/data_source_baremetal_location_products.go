@@ -60,7 +60,6 @@ func flattenBareMetalLocationProductsData(products *[]apiclient.BareMetalLocatio
 			flattenedProduct["hourly_price"] = product.HourlyPrice
 			flattenedProduct["hourly_premium"] = product.HourlyPremium
 			flattenedProduct["vendor_product_id"] = product.VendorProductID
-			flattenedProduct["vendor"] = product.Vendor
 
 			// Flatten ProductProcessorInfo
 			flattenedProduct["cores"] = product.ProcessorInfo.Cores

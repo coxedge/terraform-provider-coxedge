@@ -36,7 +36,7 @@ output "locations_output" {
 
 - `environment_name` (String) - Name of the environment belonging to the organization.
 - `organization_id` (String) - The id of the organization.
-- `id` (String) - The id of the lcoation with vendor prefix.
+- `id` (String) - The id of the location.
 - `code` (String) - The code of location.
 
 ### Read-Only
@@ -59,13 +59,12 @@ output "locations_output" {
 - `monthly_price` (String) - Monthly price
 - `monthly_premium` (String) - Monthly premium
 - `stock` (String) - Availability of product
-- `cpu_cores` (String) - 
-- `gpu` (String) - 
+- `cpu_cores` (String) -
+- `gpu` (String) -
 - `hourly_price` (String) - Hourly price
 - `hourly_premium` (String) - Hourly premium
-- `vendor_product_id` (String) - Id of product with vendor prefix
-- `vendor` (String) - HIVELOCITY / METALSOFT
-- `cores` (Integer) - 
-- `sockets` (Integer) - 
-- `threads` (Integer) - 
+- `vendor_product_id` (String) - Id of product with prefix
+- `cores` (Integer) -
+- `sockets` (Integer) -
+- `threads` (Integer) -
 - `vcpus` (Integer) - 

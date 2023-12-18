@@ -37,14 +37,29 @@ func resourceBareMetalDevicesCreate(ctx context.Context, d *schema.ResourceData,
 	coxEdgeClient := m.(apiclient.Client)
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
-	vendor := d.Get("vendor").(string)
+
+	metalSoftLocationCodes := []string{"cox-dvtc", "cox-nwst", "cox-prov", "cox-tuls"}
+	locationCode := d.Get("location_code").(string)
+
+	var vendor string
+	for _, code := range metalSoftLocationCodes {
+		if code == locationCode {
+			vendor = "METALSOFT"
+			break
+		}
+	}
+
+	if vendor == "" {
+		vendor = "HIVELOCITY"
+	}
+
 	if vendor == "HIVELOCITY" {
 		osName := d.Get("os_name").(string)
 		if osName == "" {
 			diag := diag.Diagnostic{
 				Severity: diag.Error,
-				Summary:  "os_name is required when vendor is HIVELOCITY",
-				Detail:   "os_name is required when vendor is HIVELOCITY",
+				Summary:  "os_name is required given location code",
+				Detail:   "os_name is required given location code",
 			}
 			diags = append(diags, diag)
 			return diags
@@ -54,8 +69,8 @@ func resourceBareMetalDevicesCreate(ctx context.Context, d *schema.ResourceData,
 		if server == nil {
 			diag := diag.Diagnostic{
 				Severity: diag.Error,
-				Summary:  "server is required when vendor is HIVELOCITY",
-				Detail:   "server is required when vendor is HIVELOCITY",
+				Summary:  "server is required given location code",
+				Detail:   "server is required given location code",
 			}
 			diags = append(diags, diag)
 			return diags
@@ -93,8 +108,8 @@ func resourceBareMetalDevicesCreate(ctx context.Context, d *schema.ResourceData,
 		if osId == "" {
 			diag := diag.Diagnostic{
 				Severity: diag.Error,
-				Summary:  "os_id is required when vendor is METALSOFT",
-				Detail:   "os_id is required when vendor is METALSOFT",
+				Summary:  "os_id is required given location code",
+				Detail:   "os_id is required given location code",
 			}
 			diags = append(diags, diag)
 			return diags
@@ -103,14 +118,14 @@ func resourceBareMetalDevicesCreate(ctx context.Context, d *schema.ResourceData,
 		if serverLabel == "" {
 			diag := diag.Diagnostic{
 				Severity: diag.Error,
-				Summary:  "server_label is required when vendor is METALSOFT",
-				Detail:   "server_label is required when vendor is METALSOFT",
+				Summary:  "server_label is required given location code",
+				Detail:   "server_label is required given location code",
 			}
 			diags = append(diags, diag)
 			return diags
 		}
 	}
-	createRequest := convertResourceDataToBareMetalDeviceCreateAPIObject(d)
+	createRequest := convertResourceDataToBareMetalDeviceCreateAPIObject(d, vendor)
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
 
@@ -147,13 +162,13 @@ func resourceBareMetalDevicesDelete(ctx context.Context, d *schema.ResourceData,
 	return diag.Errorf("Unfortunately, it is not possible to delete BareMetal devices from this resource. For guidance on deleting devices, please refer to the documentation.")
 }
 
-func convertResourceDataToBareMetalDeviceCreateAPIObject(d *schema.ResourceData) apiclient.CreateBareMetalDeviceRequest {
+func convertResourceDataToBareMetalDeviceCreateAPIObject(d *schema.ResourceData, vendor string) apiclient.CreateBareMetalDeviceRequest {
 	//Create/update BareMetal device struct
 
 	hasUserData := d.Get("has_user_data").(bool)
 	hasSshData := d.Get("has_ssh_data").(bool)
 	bareMetalDevice := apiclient.CreateBareMetalDeviceRequest{
-		LocationName:    d.Get("location_name").(string),
+		LocationName:    d.Get("location_code").(string),
 		HasUserData:     &hasUserData,
 		HasSshData:      &hasSshData,
 		ProductOptionId: d.Get("product_option_id").(int),
@@ -162,7 +177,7 @@ func convertResourceDataToBareMetalDeviceCreateAPIObject(d *schema.ResourceData)
 		SshKey:          d.Get("ssh_key").(string),
 		SshKeyName:      d.Get("ssh_key_name").(string),
 		SshKeyId:        d.Get("ssh_key_id").(string),
-		Vendor:          d.Get("vendor").(string),
+		Vendor:          vendor,
 		OsId:            d.Get("os_id").(string),
 	}
 

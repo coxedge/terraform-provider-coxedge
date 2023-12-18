@@ -24,7 +24,7 @@ output "device_details" {
 resource "coxedge_baremetal_devices" "device" {
   environment_name  = "bm-env"
   organization_id   = "e5290682-44f4-481b-9327-34f677a1c46c"
-  location_name     = "LAX2"
+  location_code     = "LAX2"
   has_user_data     = true
   has_ssh_data      = true
   product_option_id = 143004
@@ -42,9 +42,8 @@ resource "coxedge_baremetal_devices" "device" {
 resource "coxedge_baremetal_devices" "device" {
   environment_name = "sanityhiv"
   organization_id  = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
-  location_name    = "cox-dvtc"
+  location_code    = "cox-dvtc"
   product_id       = "1"
-  vendor           = "METALSOFT"
   os_id            = "4"
   server_label     = "testterraformmm2"
   tags             = tolist(["tag added"])

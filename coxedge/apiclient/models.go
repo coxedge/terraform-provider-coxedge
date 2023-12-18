@@ -813,7 +813,6 @@ type BareMetalDevice struct {
 	DeviceDetail             DeviceDetail          `json:"deviceDetail,omitempty"`
 	DeviceInitialPassword    DeviceInitialPassword `json:"deviceInitialPassword,omitempty"`
 	DeviceIPs                DeviceIPs             `json:"deviceIPs,omitempty"`
-	Vendor                   string                `json:"vendor"`
 	IsNetworkPolicyAvailable bool                  `json:"isNetworkPolicyAvailable,omitempty"`
 	ChangeId                 string                `json:"changeId,omitempty"`
 }
@@ -933,7 +932,6 @@ type BareMetalLocation struct {
 	LocationID string `json:"locationId"`
 	Code       string `json:"code"`
 	Name       string `json:"name"`
-	Vendor     string `json:"vendor"`
 }
 
 type WrappedBareMetalLocations struct {
@@ -963,7 +961,6 @@ type BareMetalLocationProduct struct {
 	HourlyPrice     string               `json:"hourlyPrice"`
 	HourlyPremium   string               `json:"hourlyPremium"`
 	VendorProductID string               `json:"vendorProductId"`
-	Vendor          string               `json:"vendor"`
 }
 
 type WrappedBareMetalLocationProduct struct {

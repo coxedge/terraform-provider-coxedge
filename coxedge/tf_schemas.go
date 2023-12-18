@@ -5522,11 +5522,6 @@ func getBareMetalDeviceSchema() map[string]*schema.Schema {
 				Type: schema.TypeString,
 			},
 		},
-		"vendor": {
-			Type:     schema.TypeString,
-			Computed: true,
-			Optional: true,
-		},
 		"is_network_policy_available": {
 			Type:     schema.TypeBool,
 			Computed: true,
@@ -5711,7 +5706,7 @@ func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"location_name": {
+		"location_code": {
 			Type:     schema.TypeString,
 			Required: true,
 		},
@@ -5766,23 +5761,6 @@ func getBareMetalDeviceResourceSchema() map[string]*schema.Schema {
 		"user_data": {
 			Type:     schema.TypeString,
 			Optional: true,
-		},
-		"vendor": {
-			Type:     schema.TypeString,
-			Required: true,
-			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
-				var diags diag.Diagnostics
-				value := i.(string)
-				if value != "HIVELOCITY" && value != "METALSOFT" {
-					diag := diag.Diagnostic{
-						Severity: diag.Error,
-						Summary:  "wrong value",
-						Detail:   fmt.Sprintf("%s is not a expected value. Value should be either HIVELOCITY or METALSOFT", value),
-					}
-					diags = append(diags, diag)
-				}
-				return diags
-			},
 		},
 		"os_id": {
 			Type:     schema.TypeString,
@@ -6145,10 +6123,6 @@ func getBareMetalLocationsSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		"vendor": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
 	}
 }
 
@@ -6235,10 +6209,6 @@ func getBareMetalLocationProductsSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"vendor_product_id": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"vendor": {
 			Type:     schema.TypeString,
 			Computed: true,
 		},

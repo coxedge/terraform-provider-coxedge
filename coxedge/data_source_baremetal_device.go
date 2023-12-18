@@ -76,7 +76,6 @@ func flattenBareMetalDevicesData(bareMetalDevices *[]apiclient.BareMetalDevice, 
 			item["ipmi_address"] = device.IpmiAddress
 			item["power_status"] = device.PowerStatus
 			item["tags"] = device.Tags
-			item["vendor"] = device.Vendor
 			item["is_network_policy_available"] = device.IsNetworkPolicyAvailable
 			item["change_id"] = device.ChangeId
 

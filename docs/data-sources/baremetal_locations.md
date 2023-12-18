@@ -46,8 +46,7 @@ output "locations_output" {
 
 ### Read-Only:
 
-- `id` (Integer) - Id of Location with vendor prefix
+- `id` (Integer) - Id of Location with prefix
 - `location_id` (String) - Id of Location
 - `code` (String) - Code of Location
 - `name` (String) - Name of Location
-- `vendor` (String) - HIVELOCITY / METALSOFT

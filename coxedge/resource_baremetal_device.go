@@ -71,13 +71,17 @@ func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, 
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	vendor := d.Get("vendor").(string)
-
 	//Get the resource Id
 	resourceId := d.Id()
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
 
+	var vendor string
+	if strings.HasPrefix(resourceId, "HV_") {
+		vendor = "HIVELOCITY"
+	} else {
+		vendor = "METALSOFT"
+	}
 	editDevice := convertResourceDataToBareMetalDeviceEditAPIObject(d, vendor)
 	//Edit the BareMetal device
 	editedDevice, err := coxEdgeClient.EditBareMetalDeviceById(editDevice, resourceId, environmentName, organizationId)
@@ -92,26 +96,29 @@ func resourceBareMetalDeviceUpdate(ctx context.Context, d *schema.ResourceData, 
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	powerStatus := d.Get("power_status").(string)
-	if powerStatus != "" {
-		var operation string
-		if powerStatus == "ON" {
-			operation = "device-on"
-		} else if powerStatus == "OFF" {
-			operation = "device-off"
-		} else if powerStatus == "RESTART" {
-			operation = "device-restart"
-		} else {
-			operation = "soft-device-off"
-		}
-		powerStatusDevice, err := coxEdgeClient.EditBareMetalDevicePowerById(resourceId, operation, environmentName, organizationId, vendor)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		//Await
-		_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, powerStatusDevice.TaskId, timeout)
-		if err != nil {
-			return diag.FromErr(err)
+	oldValue, newValue := d.GetChange("power_status")
+	if newValue != oldValue {
+		powerStatus := d.Get("power_status").(string)
+		if powerStatus != "" {
+			var operation string
+			if powerStatus == "ON" {
+				operation = "device-on"
+			} else if powerStatus == "OFF" {
+				operation = "device-off"
+			} else if powerStatus == "RESTART" {
+				operation = "device-restart"
+			} else if powerStatus == "soft-device-off" {
+				operation = "soft-device-off"
+			}
+			powerStatusDevice, err := coxEdgeClient.EditBareMetalDevicePowerById(resourceId, operation, environmentName, organizationId, vendor)
+			if err != nil {
+				return diag.FromErr(err)
+			}
+			//Await
+			_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, powerStatusDevice.TaskId, timeout)
+			if err != nil {
+				return diag.FromErr(err)
+			}
 		}
 	}
 	return diags
@@ -163,7 +170,6 @@ func convertDeviceAPIObjectToResourceData(d *schema.ResourceData, bareMetalDevic
 	d.Set("ipmi_address", bareMetalDevice.IpmiAddress)
 	d.Set("power_status", bareMetalDevice.PowerStatus)
 	d.Set("tags", bareMetalDevice.Tags)
-	d.Set("vendor", bareMetalDevice.Vendor)
 
 	loc := make([]interface{}, 1, 1)
 	locItem := make(map[string]interface{})

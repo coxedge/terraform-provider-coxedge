@@ -47,7 +47,6 @@ func flattenBareMetalLocationsData(locations *[]apiclient.BareMetalLocation) []i
 			item["location_id"] = location.LocationID
 			item["code"] = location.Code
 			item["name"] = location.Name
-			item["vendor"] = location.Vendor
 			locationList[i] = item
 		}
 		return locationList
