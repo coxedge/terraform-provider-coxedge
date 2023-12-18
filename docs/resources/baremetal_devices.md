@@ -16,7 +16,7 @@ Example Usage
 ---
 
 ```
-//for Hivelocity
+//for Baremetal
 resource "coxedge_baremetal_devices" "device" {
   environment_name  = "<environment_name>"
   organization_id   = "<organization_id>"
@@ -34,7 +34,7 @@ resource "coxedge_baremetal_devices" "device" {
   }
 }
 
-//for Metalsoft
+//for Edge Fabric
 resource "coxedge_baremetal_devices" "device" {
   environment_name  = "<environment_name>"
   organization_id   = "<organization_id>"
