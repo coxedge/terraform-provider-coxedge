@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-//const CoxEdgeAPIBase = "https://portal.coxedge.com/api/v2"
+const CoxEdgeAPIBase = "https://portal.coxedge.com/api/v2"
 const CoxEdgeServiceCode = "edge-services"
 const CoxEdgeBareMetalServiceCode = "baremetal-services"
 
