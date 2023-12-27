@@ -796,6 +796,190 @@ type WrappedRoutesData struct {
 	Data []Route `json:"data,omitempty"`
 }
 
+//BareMetal
+
+type BareMetalDevice struct {
+	Id                       string                `json:"id,omitempty"`
+	ServicePlan              string                `json:"servicePlan,omitempty"`
+	Name                     string                `json:"name,omitempty"`
+	Hostname                 string                `json:"hostname,omitempty"`
+	DeviceType               string                `json:"deviceType,omitempty"`
+	PrimaryIp                string                `json:"primaryIp,omitempty"`
+	Status                   string                `json:"status,omitempty"`
+	MonitorsTotal            int                   `json:"monitorsTotal,omitempty"`
+	MonitorsUp               int                   `json:"monitorsUp,omitempty"`
+	IpmiAddress              string                `json:"ipmiAddress,omitempty"`
+	PowerStatus              string                `json:"powerStatus,omitempty"`
+	Tags                     []string              `json:"tags,omitempty"`
+	Location                 Location              `json:"location,omitempty"`
+	DeviceDetail             DeviceDetail          `json:"deviceDetail,omitempty"`
+	DeviceInitialPassword    DeviceInitialPassword `json:"deviceInitialPassword,omitempty"`
+	DeviceIPs                DeviceIPs             `json:"deviceIPs,omitempty"`
+	IsNetworkPolicyAvailable bool                  `json:"isNetworkPolicyAvailable,omitempty"`
+	ChangeId                 string                `json:"changeId,omitempty"`
+}
+
+type Location struct {
+	Facility      string `json:"facility,omitempty"`
+	FacilityTitle string `json:"facility_title,omitempty"`
+}
+
+type WrappedBareMetalDevices struct {
+	Data []BareMetalDevice `json:"data"`
+}
+
+type WrappedBareMetalDevice struct {
+	Data BareMetalDevice `json:"data"`
+}
+
+type BareMetalDeviceChart struct {
+	Id         string `json:"id,omitempty"`
+	Filter     string `json:"filter,omitempty"`
+	GraphImage string `json:"graphImage,omitempty"`
+	Interfaces string `json:"interfaces,omitempty"`
+	SwitchId   string `json:"switchId,omitempty"`
+}
+
+type WrappedBareMetalDeviceCharts struct {
+	Data []BareMetalDeviceChart `json:"data,omitempty"`
+}
+
+type BareMetalDeviceSensor struct {
+	Id        string `json:"id,omitempty"`
+	IpmiField string `json:"ipmiField,omitempty"`
+	IpmiValue string `json:"ipmiValue,omitempty"`
+}
+
+type WrappedBareMetalDeviceSensors struct {
+	Data []BareMetalDeviceSensor `json:"data,omitempty"`
+}
+
+type BareMetalDeviceIP struct {
+	IPName string `json:"ipName,omitempty"`
+	Value  string `json:"value,omitempty"`
+}
+
+type WrappedBareMetalDeviceIPs struct {
+	Data []BareMetalDeviceIP `json:"data,omitempty"`
+}
+
+type BareMetalSSHKey struct {
+	Id        string `json:"id,omitempty"`
+	PublicKey string `json:"publicKey,omitempty"`
+	Name      string `json:"name,omitempty"`
+}
+
+type WrappedBareMetalSSHKeys struct {
+	Data []BareMetalSSHKey `json:"data,omitempty"`
+}
+type WrappedBareMetalSSHKey struct {
+	Data BareMetalSSHKey `json:"data,omitempty"`
+}
+
+type DeviceDetail struct {
+	ProductID        string         `json:"productId,omitempty"`
+	ServicePlan      string         `json:"servicePlan,omitempty"`
+	Processor        string         `json:"processor,omitempty"`
+	PrimaryHardDrive string         `json:"primaryHardDrive,omitempty"`
+	Memory           string         `json:"memory,omitempty"`
+	OperatingSystem  string         `json:"operatingSystem,omitempty"`
+	Bandwidth        string         `json:"bandwidth,omitempty"`
+	InternalNetwork  string         `json:"internalNetwork,omitempty"`
+	DDoS             string         `json:"ddos,omitempty"`
+	RaidSetUp        string         `json:"raidSetUp,omitempty"`
+	NextRenew        string         `json:"nextRenew,omitempty"`
+	DeviceIPDetail   DeviceIPDetail `json:"deviceIPDetail,omitempty"`
+}
+
+type DeviceIPDetail struct {
+	PrimaryIP   string   `json:"primaryIp,omitempty"`
+	Description string   `json:"description,omitempty"`
+	GatewayIP   string   `json:"gatewayIp,omitempty"`
+	SubnetMask  string   `json:"subnetMask,omitempty"`
+	UsableIPs   []string `json:"usableIps,omitempty"`
+}
+
+type DeviceInitialPassword struct {
+	PasswordReturnsUntil int    `json:"passwordReturnsUntil,omitempty"`
+	PasswordExpires      string `json:"passwordExpires,omitempty"`
+	Port                 int    `json:"port,omitempty"`
+	User                 string `json:"user,omitempty"`
+}
+
+type DeviceIPs struct {
+	Subnet    string   `json:"subnet,omitempty"`
+	Netmask   string   `json:"netmask,omitempty"`
+	UsableIPs []string `json:"usableIps,omitempty"`
+}
+
+type BareMetalDeviceDisk struct {
+	ServerDiskID           int    `json:"server_disk_id,omitempty"`
+	ServerDiskModel        string `json:"server_disk_model,omitempty"`
+	ServerDiskSizeGB       int    `json:"server_disk_size_gb,omitempty"`
+	ServerID               int    `json:"server_id,omitempty"`
+	ServerDiskSerial       string `json:"server_disk_serial,omitempty"`
+	ServerDiskVendor       string `json:"server_disk_vendor,omitempty"`
+	ServerDiskStatus       string `json:"server_disk_status,omitempty"`
+	ServerDiskType         string `json:"server_disk_type,omitempty"`
+	ServerRaidControllerID int    `json:"server_raid_controller_id,omitempty"`
+	Type                   string `json:"type,omitempty"`
+}
+
+type WrappedBareMetalDeviceDisks struct {
+	Data []BareMetalDeviceDisk `json:"data,omitempty"`
+}
+
+type BareMetalLocation struct {
+	ID         string `json:"id"`
+	LocationID string `json:"locationId"`
+	Code       string `json:"code"`
+	Name       string `json:"name"`
+}
+
+type WrappedBareMetalLocations struct {
+	Data []BareMetalLocation `json:"data,omitempty"`
+}
+
+type ProductProcessorInfo struct {
+	Cores   int `json:"cores"`
+	Sockets int `json:"sockets"`
+	Threads int `json:"threads"`
+	VCPUs   int `json:"vcpus"`
+}
+
+type BareMetalLocationProduct struct {
+	ID              string               `json:"id"`
+	Drive           string               `json:"drive"`
+	CPU             string               `json:"cpu"`
+	SubTitle        string               `json:"subTitle"`
+	Memory          string               `json:"memory"`
+	Bandwidth       string               `json:"bandwidth"`
+	MonthlyPrice    string               `json:"monthlyPrice"`
+	MonthlyPremium  string               `json:"monthlyPremium"`
+	Stock           string               `json:"stock"`
+	ProcessorInfo   ProductProcessorInfo `json:"processorInfo"`
+	CPUCores        string               `json:"cpuCores"`
+	GPU             string               `json:"gpu"`
+	HourlyPrice     string               `json:"hourlyPrice"`
+	HourlyPremium   string               `json:"hourlyPremium"`
+	VendorProductID string               `json:"vendorProductId"`
+}
+
+type WrappedBareMetalLocationProduct struct {
+	Data []BareMetalLocationProduct `json:"data,omitempty"`
+}
+
+type BareMetalLocationProductOS struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type WrappedBareMetalLocationProductOS struct {
+	Data []BareMetalLocationProductOS `json:"data,omitempty"`
+}
+
+//Edge Compute 2.0
+
 type ComputeWorkload struct {
 	Id               string   `json:"id"`
 	Hostname         string   `json:"hostname"`
