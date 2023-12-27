@@ -32,6 +32,10 @@ type ComputeWorkloadFirewallGroupRequest struct {
 	FirewallId string `json:"firewallId"`
 }
 
+type ComputeWorkloadHostnameRequest struct {
+	Hostname string `json:"hostname"`
+}
+
 func (c *Client) GetComputeWorkloads(environmentName string, organizationId string) ([]ComputeWorkload, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads?&org_id="+organizationId,
@@ -286,4 +290,32 @@ func (c *Client) GetComputeWorkloadHostnameById(environmentName string, organiza
 		return nil, err
 	}
 	return &wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) UpdateComputeWorkloadHostname(hostnameRequest ComputeWorkloadHostnameRequest, environmentName string, organizationId string, workloadId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(hostnameRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("PATCH",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-hostname/"+workloadId+"?org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
 }

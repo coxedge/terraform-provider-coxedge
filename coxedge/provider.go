@@ -72,6 +72,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_workload":                  resourceComputeWorkload(),
 			"coxedge_compute_workload_ipv6_reverse_dns": resourceComputeWorkloadIPv6ReverseDNS(),
 			"coxedge_compute_workload_firewall_group":   resourceComputeWorkloadFirewallGroup(),
+			"coxedge_compute_workload_hostname":         resourceComputeWorkloadHostname(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
