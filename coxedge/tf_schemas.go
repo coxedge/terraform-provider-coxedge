@@ -6845,3 +6845,69 @@ func getResourceComputeWorkloadPlanSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeWorkloadOSSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"os": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeWorkloadOSSchema(),
+			},
+		},
+	}
+}
+
+func getComputeWorkloadOSSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"plan_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"os_label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"os_id": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+	}
+}
+
+func getResourceComputeWorkloadOSSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"selected_os_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}

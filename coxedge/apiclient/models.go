@@ -1084,3 +1084,14 @@ type WorkloadPlan struct {
 type WrapperWorkloadPlan struct {
 	Data WorkloadPlan
 }
+
+type ComputeWorkloadOS struct {
+	ID      string `json:"id"`
+	OsID    int    `json:"osId"`
+	OsLabel string `json:"osLabel"`
+	PlanId  string `json:"planId"`
+}
+
+type WrapperComputeWorkloadOS struct {
+	Data ComputeWorkloadOS
+}
