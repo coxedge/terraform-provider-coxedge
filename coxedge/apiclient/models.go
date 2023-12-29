@@ -1095,3 +1095,12 @@ type ComputeWorkloadOS struct {
 type WrapperComputeWorkloadOS struct {
 	Data ComputeWorkloadOS
 }
+
+type ComputeWorkloadUserData struct {
+	ID       string `json:"id"`
+	UserData string `json:"userdata"`
+}
+
+type WrapperComputeWorkloadUserData struct {
+	Data ComputeWorkloadUserData
+}

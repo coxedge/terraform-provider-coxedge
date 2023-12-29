@@ -6911,3 +6911,61 @@ func getResourceComputeWorkloadOSSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeWorkloadUserDataSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"user_data": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeWorkloadUserDataSchema(),
+			},
+		},
+	}
+}
+
+func getComputeWorkloadUserDataSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"user_data": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getResourceComputeWorkloadUserDataSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"user_data": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}
