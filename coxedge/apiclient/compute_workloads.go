@@ -475,3 +475,23 @@ func (c *Client) UpdateComputeWorkloadUserData(userDataRequest ComputeWorkloadUs
 	}
 	return &wrappedAPIStruct, nil
 }
+
+func (c *Client) GetComputeWorkloadTagById(environmentName string, organizationId string, workloadId string) ([]ComputeWorkloadTag, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-tag?workloadId="+workloadId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeWorkloadTag
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}

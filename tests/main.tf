@@ -10,22 +10,22 @@ terraform {
 provider "coxedge" {
   key = "GM3COPLOU6nOI12/NZ7HNg=="
 }
-#data "coxedge_compute_workload_user_data" "user_data" {
-#  environment_name = "test"
-#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  workload_id      = "3a4a313e-d960-4a35-a284-d575baac2747"
-#}
-#
-#output "output_os" {
-#  value = data.coxedge_compute_workload_user_data.user_data
-#}
-
-resource "coxedge_compute_workload_user_data" "user_data" {
+data "coxedge_compute_workload_tags" "tags" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
   workload_id      = "3a4a313e-d960-4a35-a284-d575baac2747"
-  user_data   = "test data update"
 }
+
+output "output_tag" {
+  value = data.coxedge_compute_workload_tags.tags
+}
+
+#resource "coxedge_compute_workload_user_data" "user_data" {
+#  environment_name = "test"
+#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#  workload_id      = "3a4a313e-d960-4a35-a284-d575baac2747"
+#  user_data   = "test data update"
+#}
 
 #data "coxedge_baremetal_ssh_keys" "ssh" {
 #  environment_name = "sanityhiv"

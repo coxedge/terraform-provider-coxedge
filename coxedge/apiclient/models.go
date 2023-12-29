@@ -1104,3 +1104,12 @@ type ComputeWorkloadUserData struct {
 type WrapperComputeWorkloadUserData struct {
 	Data ComputeWorkloadUserData
 }
+
+type ComputeWorkloadTag struct {
+	ID  string `json:"id"`
+	Tag string `json:"tag"`
+}
+
+type WrapperComputeWorkloadTag struct {
+	Data []ComputeWorkloadTag
+}

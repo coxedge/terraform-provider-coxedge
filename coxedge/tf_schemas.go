@@ -6969,3 +6969,40 @@ func getResourceComputeWorkloadUserDataSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeWorkloadTagSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"tags": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeWorkloadTagSchema(),
+			},
+		},
+	}
+}
+
+func getComputeWorkloadTagSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"tag": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
