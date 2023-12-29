@@ -48,6 +48,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_workload_ipv6_reverse_dns": dataSourceComputeWorkloadIPv6ReverseDNS(),
 			"coxedge_compute_workload_firewall_group":   dataSourceComputeWorkloadFirewallGroup(),
 			"coxedge_compute_workload_hostname":         dataSourceComputeWorkloadHostname(),
+			"coxedge_compute_workload_plan":             dataSourceComputeWorkloadPlan(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			//"coxedge_cdn_purge":           resourceCDNPurgeResource(),
@@ -73,6 +74,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_workload_ipv6_reverse_dns": resourceComputeWorkloadIPv6ReverseDNS(),
 			"coxedge_compute_workload_firewall_group":   resourceComputeWorkloadFirewallGroup(),
 			"coxedge_compute_workload_hostname":         resourceComputeWorkloadHostname(),
+			"coxedge_compute_workload_plan":             resourceComputeWorkloadPlan(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

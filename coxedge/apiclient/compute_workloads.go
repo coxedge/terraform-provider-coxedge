@@ -36,6 +36,10 @@ type ComputeWorkloadHostnameRequest struct {
 	Hostname string `json:"hostname"`
 }
 
+type ComputeWorkloadPlanRequest struct {
+	SelectedPlanId string `json:"selectedPlanId"`
+}
+
 func (c *Client) GetComputeWorkloads(environmentName string, organizationId string) ([]ComputeWorkload, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads?&org_id="+organizationId,
@@ -303,6 +307,54 @@ func (c *Client) UpdateComputeWorkloadHostname(hostnameRequest ComputeWorkloadHo
 	//Create the request
 	request, err := http.NewRequest("PATCH",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-hostname/"+workloadId+"?org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) GetComputeWorkloadPlanById(environmentName string, organizationId string, workloadId string) (*WorkloadPlan, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-plan/"+workloadId+"?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperWorkloadPlan
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) UpdateComputeWorkloadPlan(planRequest ComputeWorkloadPlanRequest, environmentName string, organizationId string, workloadId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(planRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("PATCH",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-plan/"+workloadId+"?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")

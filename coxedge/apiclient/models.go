@@ -1071,3 +1071,16 @@ type Hostname struct {
 type WrapperHostname struct {
 	Data Hostname
 }
+
+type WorkloadPlan struct {
+	ID        string `json:"id"`
+	PlanID    string `json:"planId"`
+	Region    string `json:"region"`
+	Server    string `json:"server"`
+	PlanLabel string `json:"planLabel"`
+	VCPUCount int    `json:"vCPUCount"`
+}
+
+type WrapperWorkloadPlan struct {
+	Data WorkloadPlan
+}

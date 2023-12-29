@@ -6771,3 +6771,77 @@ func getResourceComputeWorkloadHostnameSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeWorkloadPlanSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"plan": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeWorkloadPlanSchema(),
+			},
+		},
+	}
+}
+
+func getComputeWorkloadPlanSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"plan_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"server": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"plan_label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"vcpu_count": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+	}
+}
+
+func getResourceComputeWorkloadPlanSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"selected_plan_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}
