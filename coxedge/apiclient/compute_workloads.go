@@ -48,6 +48,10 @@ type ComputeWorkloadUserDataRequest struct {
 	UserData string `json:"userdata"`
 }
 
+type ComputeWorkloadTagRequest struct {
+	Tag string `json:"tag"`
+}
+
 func (c *Client) GetComputeWorkloads(environmentName string, organizationId string) ([]ComputeWorkload, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads?&org_id="+organizationId,
@@ -488,10 +492,58 @@ func (c *Client) GetComputeWorkloadTagById(environmentName string, organizationI
 		return nil, err
 	}
 
-	var wrappedAPIStruct WrapperComputeWorkloadTag
+	var wrappedAPIStruct WrapperComputeWorkloadTags
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err
 	}
 	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetComputeWorkloadTagByTagId(environmentName string, organizationId string, workloadId string, tag string) (*ComputeWorkloadTag, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-tag/"+tag+"?workloadId="+workloadId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeWorkloadTag
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) AddComputeWorkloadTag(tagRequest ComputeWorkloadTagRequest, environmentName string, organizationId string, workloadId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(tagRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/add-workload-tag-request?workloadId="+workloadId+"&org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
 }

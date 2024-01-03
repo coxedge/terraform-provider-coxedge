@@ -1110,6 +1110,10 @@ type ComputeWorkloadTag struct {
 	Tag string `json:"tag"`
 }
 
-type WrapperComputeWorkloadTag struct {
+type WrapperComputeWorkloadTags struct {
 	Data []ComputeWorkloadTag
+}
+
+type WrapperComputeWorkloadTag struct {
+	Data ComputeWorkloadTag
 }
