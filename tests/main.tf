@@ -23,8 +23,8 @@ provider "coxedge" {
 resource "coxedge_compute_workload_tags" "tag" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  workload_id      = "3a4a313e-d960-4a35-a284-d575baac2747"
-  tag              = "test tag 002"
+  workload_id      = "0a93f1ef-814a-4148-8951-69f175344e3a"
+  tag              = "test tag four"
 }
 
 #data "coxedge_baremetal_ssh_keys" "ssh" {

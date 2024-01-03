@@ -49,6 +49,7 @@ type ComputeWorkloadUserDataRequest struct {
 }
 
 type ComputeWorkloadTagRequest struct {
+	Id  string `json:"id"`
 	Tag string `json:"tag"`
 }
 
@@ -546,4 +547,27 @@ func (c *Client) AddComputeWorkloadTag(tagRequest ComputeWorkloadTagRequest, env
 		return nil, err
 	}
 	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) DeleteComputeWorkloadTag(tagRequest ComputeWorkloadTagRequest, environmentName string, organizationId string, workloadId string) error {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(tagRequest)
+	if err != nil {
+		return err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workload-tag/"+tagRequest.Tag+"?workloadId="+workloadId+"&operation=delete-workload-tag&org_id="+organizationId,
+		bReader)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
 }

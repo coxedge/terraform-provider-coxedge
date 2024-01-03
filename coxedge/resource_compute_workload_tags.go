@@ -96,38 +96,37 @@ func resourceComputeWorkloadTagsRead(ctx context.Context, data *schema.ResourceD
 }
 
 func resourceComputeWorkloadTagsUpdate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
-	////Get the API Client
-	//coxEdgeClient := i.(apiclient.Client)
-
 	var diags diag.Diagnostics
-	//resourceId := data.Get("workload_id").(string)
-	//organizationId := data.Get("organization_id").(string)
-	//environmentName := data.Get("environment_name").(string)
-	//userDataRequest := apiclient.ComputeWorkloadUserDataRequest{
-	//	UserData: data.Get("user_data").(string),
-	//}
-	////Call the API
-	//userDataResponse, err := coxEdgeClient.UpdateComputeWorkloadUserData(userDataRequest, environmentName, organizationId, resourceId)
-	//if err != nil {
-	//	return diag.FromErr(err)
-	//}
-	//
-	//tflog.Info(ctx, "Initiated Update. Awaiting task result.")
-	//
-	//timeout := data.Timeout(schema.TimeoutCreate)
-	////Await
-	//_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, userDataResponse.TaskId, timeout)
-	//if err != nil {
-	//	return diag.FromErr(err)
-	//}
-	//
-	////Save the Id
-	//data.SetId(resourceId)
 	return diags
 }
 
 func resourceComputeWorkloadTagsDelete(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
-	return nil
+	//Get the API Client
+	coxEdgeClient := i.(apiclient.Client)
+
+	// Warning or errors can be collected in a slice type
+	var diags diag.Diagnostics
+
+	//Get the resource Id
+	resourceId := data.Get("workload_id").(string)
+	organizationId := data.Get("organization_id").(string)
+	environmentName := data.Get("environment_name").(string)
+
+	tagRequest := apiclient.ComputeWorkloadTagRequest{
+		Id:  data.Get("tag").(string),
+		Tag: data.Get("tag").(string),
+	}
+	//Get the resource
+	err := coxEdgeClient.DeleteComputeWorkloadTag(tagRequest, environmentName, organizationId, resourceId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// From Docs: d.SetId("") is automatically called assuming delete returns no errors, but
+	// it is added here for explicitness.
+	data.SetId("")
+
+	return diags
 }
 
 func convertComputeWorkloadTagAPIObjectToResourceData(d *schema.ResourceData, userData *apiclient.ComputeWorkloadTag) {
