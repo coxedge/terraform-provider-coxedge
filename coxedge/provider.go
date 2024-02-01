@@ -81,6 +81,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_workload_os":               resourceComputeWorkloadOS(),
 			"coxedge_compute_workload_user_data":        resourceComputeWorkloadUserData(),
 			"coxedge_compute_workload_tags":             resourceComputeWorkloadTags(),
+			"coxedge_compute_workload_power":            resourceComputeWorkloadPower(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

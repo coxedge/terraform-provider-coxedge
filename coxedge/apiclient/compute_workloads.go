@@ -571,3 +571,24 @@ func (c *Client) DeleteComputeWorkloadTag(tagRequest ComputeWorkloadTagRequest, 
 	}
 	return nil
 }
+
+func (c *Client) UpdateComputeWorkloadPower(environmentName string, organizationId string, workloadId string, power string) (*TaskStatusResponse, error) {
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads/"+workloadId+"?operation="+power+"&org_id="+organizationId,
+		nil,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}

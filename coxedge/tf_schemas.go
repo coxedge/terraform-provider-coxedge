@@ -7027,3 +7027,41 @@ func getResourceComputeWorkloadTagsSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeWorkloadPowerSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"workload_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"power": {
+			Type:     schema.TypeString,
+			Required: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				val := false
+				if value == "workload-on" || value == "workload-off" {
+					val = true
+				}
+				if !val {
+					diagnostic := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "workload-on or workload-off"),
+					}
+					diags = append(diags, diagnostic)
+				}
+				return diags
+			},
+		},
+	}
+}

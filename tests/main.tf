@@ -20,11 +20,11 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
-resource "coxedge_compute_workload_tags" "tag" {
+resource "coxedge_compute_workload_power" "power" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  workload_id      = "0a93f1ef-814a-4148-8951-69f175344e3a"
-  tag              = "test tag four"
+  workload_id      = "d77b413a-f826-4a51-9b2f-59b2f1c8dc43"
+  power              = "workload-off"
 }
 
 #data "coxedge_baremetal_ssh_keys" "ssh" {
