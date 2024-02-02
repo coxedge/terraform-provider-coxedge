@@ -9,12 +9,12 @@ import (
 	"time"
 )
 
-func resourceComputeWorkloadPower() *schema.Resource {
+func resourceComputeWorkloadOperation() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: resourceComputeWorkloadPowerCreate,
-		ReadContext:   resourceComputeWorkloadPowerRead,
-		UpdateContext: resourceComputeWorkloadPowerUpdate,
-		DeleteContext: resourceComputeWorkloadPowerDelete,
+		CreateContext: resourceComputeWorkloadOperationCreate,
+		ReadContext:   resourceComputeWorkloadOperationRead,
+		UpdateContext: resourceComputeWorkloadOperationUpdate,
+		DeleteContext: resourceComputeWorkloadOperationDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -28,28 +28,28 @@ func resourceComputeWorkloadPower() *schema.Resource {
 	}
 }
 
-func resourceComputeWorkloadPowerCreate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeWorkloadOperationCreate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	var diags diag.Diagnostics
-	resourceComputeWorkloadPowerUpdate(ctx, data, i)
+	resourceComputeWorkloadOperationUpdate(ctx, data, i)
 	return diags
 }
 
-func resourceComputeWorkloadPowerRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeWorkloadOperationRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	var diags diag.Diagnostics
-	resourceComputeWorkloadPowerUpdate(ctx, data, i)
+	resourceComputeWorkloadOperationUpdate(ctx, data, i)
 	return diags
 }
 
-func resourceComputeWorkloadPowerUpdate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeWorkloadOperationUpdate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	//Get the API Client
 	coxEdgeClient := i.(apiclient.Client)
 	var diags diag.Diagnostics
 	resourceId := data.Get("workload_id").(string)
 	organizationId := data.Get("organization_id").(string)
 	environmentName := data.Get("environment_name").(string)
-	power := data.Get("power").(string)
+	operation := data.Get("operation").(string)
 
-	powerResponse, err := coxEdgeClient.UpdateComputeWorkloadPower(environmentName, organizationId, resourceId, power)
+	operationResponse, err := coxEdgeClient.UpdateComputeWorkloadOperation(environmentName, organizationId, resourceId, operation)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -58,7 +58,7 @@ func resourceComputeWorkloadPowerUpdate(ctx context.Context, data *schema.Resour
 
 	timeout := data.Timeout(schema.TimeoutCreate)
 	//Await
-	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, powerResponse.TaskId, timeout)
+	_, err = coxEdgeClient.AwaitTaskResolveWithCustomTimeout(ctx, operationResponse.TaskId, timeout)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -67,6 +67,6 @@ func resourceComputeWorkloadPowerUpdate(ctx context.Context, data *schema.Resour
 	return diags
 }
 
-func resourceComputeWorkloadPowerDelete(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeWorkloadOperationDelete(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	return diag.Errorf("Unfortunately, this operation is not available")
 }

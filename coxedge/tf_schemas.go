@@ -7042,21 +7042,21 @@ func getResourceComputeWorkloadPowerSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"power": {
+		"operation": {
 			Type:     schema.TypeString,
 			Required: true,
 			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
 				var diags diag.Diagnostics
 				value := i.(string)
 				val := false
-				if value == "workload-on" || value == "workload-off" {
+				if value == "workload-on" || value == "workload-off" || value == "restart-workload" || value == "reinstall-workload" {
 					val = true
 				}
 				if !val {
 					diagnostic := diag.Diagnostic{
 						Severity: diag.Error,
 						Summary:  "wrong value",
-						Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "workload-on or workload-off"),
+						Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "workload-on or workload-off or restart-workload or reinstall-workload"),
 					}
 					diags = append(diags, diagnostic)
 				}

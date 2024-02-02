@@ -572,10 +572,10 @@ func (c *Client) DeleteComputeWorkloadTag(tagRequest ComputeWorkloadTagRequest, 
 	return nil
 }
 
-func (c *Client) UpdateComputeWorkloadPower(environmentName string, organizationId string, workloadId string, power string) (*TaskStatusResponse, error) {
+func (c *Client) UpdateComputeWorkloadOperation(environmentName string, organizationId string, workloadId string, operation string) (*TaskStatusResponse, error) {
 	//Create the request
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads/"+workloadId+"?operation="+power+"&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/workloads/"+workloadId+"?operation="+operation+"&org_id="+organizationId,
 		nil,
 	)
 	request.Header.Set("Content-Type", "application/json")
