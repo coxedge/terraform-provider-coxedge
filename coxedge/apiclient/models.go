@@ -1117,3 +1117,35 @@ type WrapperComputeWorkloadTags struct {
 type WrapperComputeWorkloadTag struct {
 	Data ComputeWorkloadTag
 }
+
+type ComputeStorage struct {
+	ID                    string `json:"id"`
+	DateCreated           string `json:"date_created"`
+	Cost                  string `json:"cost"`
+	Status                string `json:"status"`
+	SizeGB                string `json:"size_gb"`
+	Region                string `json:"region"`
+	AttachedToInstance    string `json:"attached_to_instance"`
+	Label                 string `json:"label"`
+	MountID               string `json:"mount_id"`
+	BlockType             string `json:"block_type"`
+	Description           string `json:"description"`
+	Type                  string `json:"type"`
+	Location              string `json:"location"`
+	AttachedTo            string `json:"attached_to"`
+	ManageLabel           string `json:"manage_label"`
+	Price                 string `json:"price"`
+	SizeInGB              string `json:"size_in_gb"`
+	EditBlockStorageLabel string `json:"edit_block_storage_label"`
+	None                  string `json:"none"`
+	Detach                string `json:"detach"`
+	Attach                string `json:"attach"`
+}
+
+type WrapperComputeStorage struct {
+	Data ComputeStorage
+}
+
+type WrapperComputeStorages struct {
+	Data []ComputeStorage
+}

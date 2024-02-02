@@ -7065,3 +7065,116 @@ func getResourceComputeWorkloadPowerSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeStorageSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"storage_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"storages": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeStorageSchema(),
+			},
+		},
+	}
+}
+
+func getComputeStorageSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cost": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"size_gb": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"attached_to_instance": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"mount_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"block_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"location": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"attached_to": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"manage_label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"price": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"size_in_gb": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"edit_block_storage_label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"none": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"detach": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"attach": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}

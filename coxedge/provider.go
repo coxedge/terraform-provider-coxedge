@@ -52,6 +52,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_workload_os":               dataSourceComputeWorkloadOS(),
 			"coxedge_compute_workload_user_data":        dataSourceComputeWorkloadUserData(),
 			"coxedge_compute_workload_tags":             dataSourceComputeWorkloadTags(),
+			"coxedge_compute_storages":                  dataSourceComputeStorages(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			//"coxedge_cdn_purge":           resourceCDNPurgeResource(),

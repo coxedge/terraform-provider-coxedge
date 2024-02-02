@@ -11,10 +11,12 @@ provider "coxedge" {
   key = "[INSERT API KEY HERE]"
 }
 
-resource "coxedge_compute_workload_operation" "operation" {
+data "coxedge_compute_storages" "storage" {
   organization_id  = "<organization_id>"
   environment_name = "<environment name>"
-  workload_id      = "<workload_id>"
-  operation        = "<operation>" #workload-on/workload-off/reinstall-workload/restart-workload
+  storage_id      = "<storage_id>"
 }
 
+output "output_storage" {
+  value = data.coxedge_compute_storages.storage
+}
