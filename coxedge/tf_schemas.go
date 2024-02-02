@@ -7178,3 +7178,32 @@ func getComputeStorageSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeStorageSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"storage_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"size_gb": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"label": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}

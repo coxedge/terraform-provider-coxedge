@@ -20,22 +20,23 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
+resource "coxedge_compute_storage" "storage" {
+  environment_name = "test"
+  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+  region=""
+  size_gb=""
+}
+
 #data "coxedge_compute_storages" "storage" {
 #  environment_name = "test"
 #  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  #  workload_id      = "d77b413a-f826-4a51-9b2f-59b2f1c8dc43"
+#  storage_id       = "a14ca98d-d80b-42f9-b16b-986574773fc4"
 #}
-
-data "coxedge_compute_storages" "storage" {
-  environment_name = "test"
-  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  storage_id       = "a14ca98d-d80b-42f9-b16b-986574773fc4"
-}
-
-
-output "output_storage" {
-  value = data.coxedge_compute_storages.storage
-}
+#
+#
+#output "output_storage" {
+#  value = data.coxedge_compute_storages.storage
+#}
 
 #resource "coxedge_baremetal_devices" "device" {
 #  environment_name = "sanityhiv"
