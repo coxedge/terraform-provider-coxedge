@@ -20,11 +20,14 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
-resource "coxedge_compute_storage" "storage" {
+resource "coxedge_compute_storage_attach_instance" "attach" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  region=""
-  size_gb=""
+  storage_id       = "bcb9931d-81ce-49d9-8abe-eb6dc65ae7d3"
+  live             = false
+#  instance_id      = "c564fbe2-103a-4f87-8da8-a69f27e1c934"
+  action           = "detachss"
+
 }
 
 #data "coxedge_compute_storages" "storage" {

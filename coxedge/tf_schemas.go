@@ -7205,5 +7205,115 @@ func getResourceComputeStorageSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"cost": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"attached_to_instance": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"mount_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"block_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"location": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"attached_to": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"manage_label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"price": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"size_in_gb": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"edit_block_storage_label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"none": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getResourceComputeStorageAttachSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"storage_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"live": {
+			Type:     schema.TypeBool,
+			Required: true,
+		},
+		"instance_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"action": {
+			Type:     schema.TypeString,
+			Required: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				val := false
+				if value == "attach" || value == "detach" {
+					val = true
+				}
+				if !val {
+					diagnostic := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "attach or detach"),
+					}
+					diags = append(diags, diagnostic)
+				}
+				return diags
+			},
+		},
 	}
 }

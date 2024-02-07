@@ -39,3 +39,7 @@ go build -o build/terraform-provider-coxedge
 mkdir -p ~/.terraform.d/plugins/coxedge.com/cox/coxedge/0.1/${OS}_${ARCH}/
 rm ~/.terraform.d/plugins/coxedge.com/cox/coxedge/0.1/${OS}_${ARCH}/* || true
 mv build/terraform-provider-coxedge ~/.terraform.d/plugins/coxedge.com/cox/coxedge/0.1/${OS}_${ARCH}/
+
+
+
+#go build -o C:/Users/"Shehzab Ahammad"/AppData/Roaming/terraform.d/plugins/coxedge.com/cox/coxedge/0.1/windows_amd64/terraform-provider-coxedge.exe

@@ -13,6 +13,23 @@ type ComputeStorageRequest struct {
 	BlockType string `json:"block_type"`
 }
 
+type UpdateComputeStorageSizeRequest struct {
+	SizeGB string `json:"size_gb"`
+}
+
+type UpdateComputeStorageLabelRequest struct {
+	Label string `json:"label"`
+}
+
+type AttachComputeStorageInstanceRequest struct {
+	Live       bool   `json:"live"`
+	InstanceId string `json:"instance_id"`
+}
+
+type DetachComputeStorageInstanceRequest struct {
+	Live bool `json:"live"`
+}
+
 func (c *Client) GetComputeStorages(environmentName string, organizationId string) ([]ComputeStorage, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/storages?&org_id="+organizationId,
@@ -64,6 +81,118 @@ func (c *Client) CreateComputeStorage(storageRequest ComputeStorageRequest, envi
 	//Create the request
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/add-storage-request?org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) UpdateComputeStorageSize(sizeRequest UpdateComputeStorageSizeRequest, environmentName string, organizationId string, storageId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(sizeRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/update-storage-size-request/"+storageId+"?operation=update-storage-size&org_id="+organizationId+"&storageId="+storageId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) UpdateComputeStorageLabel(labelRequest UpdateComputeStorageLabelRequest, environmentName string, organizationId string, storageId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(labelRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/update-storage-label-request/"+storageId+"?operation=update-storage-label&org_id="+organizationId+"&storageId="+storageId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) AttachComputeStorageInstance(attachRequest AttachComputeStorageInstanceRequest, environmentName string, organizationId string, storageId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(attachRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/update-storage-attach-to-instance-request/"+storageId+"?operation=update-storage-attach-to-instance&org_id="+organizationId+"&storageId="+storageId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) DetachComputeStorageInstance(detachRequest DetachComputeStorageInstanceRequest, environmentName string, organizationId string, storageId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(detachRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/update-storage-detach-from-instance-request/"+storageId+"?operation=update-storage-detach-from-instance&org_id="+organizationId+"&storageId="+storageId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")
