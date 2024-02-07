@@ -146,7 +146,27 @@ func resourceComputeStorageUpdate(ctx context.Context, data *schema.ResourceData
 }
 
 func resourceComputeStorageDelete(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
+
+	//Get the API Client
+	coxEdgeClient := i.(apiclient.Client)
+
+	//Get the resource Id
+	resourceId := data.Id()
+	organizationId := data.Get("organization_id").(string)
+	environmentName := data.Get("environment_name").(string)
+
+	//Delete the Workload
+	err := coxEdgeClient.DeleteComputeStorageById(environmentName, organizationId, resourceId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// From Docs: d.SetId("") is automatically called assuming delete returns no errors, but
+	// it is added here for explicitness.
+	data.SetId("")
+
 	return diags
 }
 

@@ -209,3 +209,19 @@ func (c *Client) DetachComputeStorageInstance(detachRequest DetachComputeStorage
 	}
 	return &wrappedAPIStruct, nil
 }
+
+func (c *Client) DeleteComputeStorageById(environmentName string, organizationId string, storageId string) error {
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/storages/"+storageId+"?operation=delete-storage&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
+}
