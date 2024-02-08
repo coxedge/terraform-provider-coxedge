@@ -7313,3 +7313,60 @@ func getResourceComputeStorageAttachSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeFirewallSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"firewall_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"firewalls": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeFirewallSchema(),
+			},
+		},
+	}
+}
+
+func getComputeFirewallSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_modified": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"instance_count": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"rule_count": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"max_rule_count": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+	}
+}

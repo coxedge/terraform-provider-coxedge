@@ -1149,3 +1149,21 @@ type WrapperComputeStorage struct {
 type WrapperComputeStorages struct {
 	Data []ComputeStorage
 }
+
+type ComputeFirewall struct {
+	ID            string `json:"id"`
+	Description   string `json:"description"`
+	DateCreated   string `json:"date_created"`
+	DateModified  string `json:"date_modified"`
+	InstanceCount int    `json:"instance_count"`
+	RuleCount     int    `json:"rule_count"`
+	MaxRuleCount  int    `json:"max_rule_count"`
+}
+
+type WrapperComputeFirewall struct {
+	Data ComputeFirewall
+}
+
+type WrapperComputeFirewalls struct {
+	Data []ComputeFirewall
+}
