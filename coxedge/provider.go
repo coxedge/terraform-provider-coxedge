@@ -86,6 +86,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_workload_operation":             resourceComputeWorkloadOperation(),
 			"coxedge_compute_storage":                        resourceComputeStorage(),
 			"coxedge_compute_storage_attach_detach_instance": resourceComputeStorageAttachDetachInstance(),
+			"coxedge_compute_firewalls":                      resourceComputeFirewall(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
