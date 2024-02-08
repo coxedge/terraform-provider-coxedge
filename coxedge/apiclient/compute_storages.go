@@ -30,6 +30,10 @@ type DetachComputeStorageInstanceRequest struct {
 	Live bool `json:"live"`
 }
 
+type DeleteComputeStorageRequest struct {
+	AttachedToInstance string `json:"attached_to_instance"`
+}
+
 func (c *Client) GetComputeStorages(environmentName string, organizationId string) ([]ComputeStorage, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/storages?&org_id="+organizationId,
@@ -210,10 +214,17 @@ func (c *Client) DetachComputeStorageInstance(detachRequest DetachComputeStorage
 	return &wrappedAPIStruct, nil
 }
 
-func (c *Client) DeleteComputeStorageById(environmentName string, organizationId string, storageId string) error {
+func (c *Client) DeleteComputeStorageById(deleteRequest DeleteComputeStorageRequest, environmentName string, organizationId string, storageId string) error {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(deleteRequest)
+	if err != nil {
+		return err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/storages/"+storageId+"?operation=delete-storage&org_id="+organizationId,
-		nil)
+		bReader)
 	if err != nil {
 		return err
 	}

@@ -14,7 +14,7 @@ provider "coxedge" {
 resource "coxedge_compute_storage" "storage" {
   organization_id  = "<organization_id>"
   environment_name = "<environment name>"
-  storage_id       = "<storage_id>"
+  region           = "<region>"
   size_gb          = "<size>"
   label            = "<label>"
 }

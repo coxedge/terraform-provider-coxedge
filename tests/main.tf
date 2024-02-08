@@ -25,8 +25,7 @@ resource "coxedge_compute_storage" "storage" {
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
   region           = "atl"
   size_gb          = "40"
-  label            = "testterr"
-  id               = "9b6da74a-f8ab-4bb1-a3d8-62a214a0a005"
+  label            = "testterrup"
 }
 
 #data "coxedge_compute_storages" "storage" {

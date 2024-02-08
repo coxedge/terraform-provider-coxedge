@@ -7189,9 +7189,9 @@ func getResourceComputeStorageSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"storage_id": {
+		"id": {
 			Type:     schema.TypeString,
-			Optional: true,
+			Computed: true,
 		},
 		"region": {
 			Type:     schema.TypeString,
@@ -7204,10 +7204,6 @@ func getResourceComputeStorageSchema() map[string]*schema.Schema {
 		"label": {
 			Type:     schema.TypeString,
 			Optional: true,
-		},
-		"id": {
-			Type:     schema.TypeString,
-			Computed: true,
 		},
 		"date_created": {
 			Type:     schema.TypeString,

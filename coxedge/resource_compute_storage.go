@@ -42,6 +42,14 @@ func resourceComputeStorageCreate(ctx context.Context, data *schema.ResourceData
 	environmentName := data.Get("environment_name").(string)
 	organizationId := data.Get("organization_id").(string)
 
+	existingList, err := coxEdgeClient.GetComputeStorages(environmentName, organizationId)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	existingIDs := make(map[string]bool)
+	for _, item := range existingList {
+		existingIDs[item.ID] = true
+	}
 	//Call the API
 	createdStorage, err := coxEdgeClient.CreateComputeStorage(storageRequest, environmentName, organizationId)
 	if err != nil {
@@ -56,7 +64,20 @@ func resourceComputeStorageCreate(ctx context.Context, data *schema.ResourceData
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
+	if taskResult.Data.TaskStatus == "SUCCESS" {
+		afterList, err := coxEdgeClient.GetComputeStorages(environmentName, organizationId)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		var missingItem *apiclient.ComputeStorage
+		for _, item := range afterList {
+			if !existingIDs[item.ID] {
+				missingItem = &item
+				data.SetId(missingItem.ID)
+				return diags
+			}
+		}
+	}
 	//Save the Id
 	data.SetId(taskResult.Data.TaskId)
 	return diags
@@ -73,14 +94,14 @@ func resourceComputeStorageRead(ctx context.Context, data *schema.ResourceData, 
 	//format is <storage_id>:<environment_name>:<organization_id>
 	if strings.Contains(data.Id(), ":") {
 		keys := strings.Split(data.Id(), ":")
-		data.Set("storage_id", keys[0])
+		data.SetId(keys[0])
 		data.Set("environment_name", keys[1])
 		data.Set("organization_id", keys[2])
 	}
 
 	environmentName := data.Get("environment_name").(string)
 	organizationId := data.Get("organization_id").(string)
-	storageId := data.Get("storage_id").(string)
+	storageId := data.Id()
 
 	computeStorage, err := coxEdgeClient.GetComputeStorageById(environmentName, organizationId, storageId)
 	if err != nil {
@@ -100,7 +121,7 @@ func resourceComputeStorageUpdate(ctx context.Context, data *schema.ResourceData
 
 	environmentName := data.Get("environment_name").(string)
 	organizationId := data.Get("organization_id").(string)
-	storageId := data.Get("storage_id").(string)
+	storageId := data.Id()
 
 	tflog.Info(ctx, "Initiated Update. Awaiting task result.")
 
@@ -157,8 +178,11 @@ func resourceComputeStorageDelete(ctx context.Context, data *schema.ResourceData
 	organizationId := data.Get("organization_id").(string)
 	environmentName := data.Get("environment_name").(string)
 
-	//Delete the Workload
-	err := coxEdgeClient.DeleteComputeStorageById(environmentName, organizationId, resourceId)
+	deleteRequest := apiclient.DeleteComputeStorageRequest{
+		AttachedToInstance: "",
+	}
+	//Delete the Storage
+	err := coxEdgeClient.DeleteComputeStorageById(deleteRequest, environmentName, organizationId, resourceId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
