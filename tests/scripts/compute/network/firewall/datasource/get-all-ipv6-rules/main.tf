@@ -11,13 +11,17 @@ provider "coxedge" {
   key = "[INSERT API KEY HERE]"
 }
 
-data "coxedge_compute_firewall_ipv4_rule" "ipv4" {
+data "coxedge_compute_firewalls" "firewalls" {
+  organization_id  = "<organization_id>"
+  environment_name = "<environment name>"
+}
+
+data "coxedge_compute_firewall_ipv6_rule" "ipv6" {
   organization_id  = "<organization_id>"
   environment_name = "<environment name>"
   firewall_id      = "<firewall_id>"
-  ip_rule_id       = "<ipv4_rule_id>"
 }
 
 output "output_ipv4" {
-  value = data.coxedge_compute_firewall_ipv4_rule.ipv4
+  value = data.coxedge_compute_firewall_ipv6_rule.ipv6
 }

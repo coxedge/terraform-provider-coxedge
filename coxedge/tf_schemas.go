@@ -7449,7 +7449,7 @@ func getResourceComputeFirewallIPRuleSchema() map[string]*schema.Schema {
 	}
 }
 
-func getComputeFirewallIPv4RuleSetSchema() map[string]*schema.Schema {
+func getComputeFirewallIPRuleSetSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"environment_name": {
 			Type:     schema.TypeString,
@@ -7463,21 +7463,21 @@ func getComputeFirewallIPv4RuleSetSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"ipv4_rule_id": {
+		"ip_rule_id": {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
-		"ipv4_rules": {
+		"ip_rules": {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
-				Schema: getComputeFirewallIPv4RuleSchema(),
+				Schema: getComputeFirewallIPv6RuleSchema(),
 			},
 		},
 	}
 }
 
-func getComputeFirewallIPv4RuleSchema() map[string]*schema.Schema {
+func getComputeFirewallIPv6RuleSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"id": {
 			Type:     schema.TypeString,

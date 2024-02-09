@@ -9,14 +9,14 @@ import (
 	"time"
 )
 
-func dataSourceComputeFirewallIPv4Rules() *schema.Resource {
+func dataSourceComputeFirewallIPv6Rules() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceComputeFirewallIPv4RulesRead,
+		ReadContext: dataSourceComputeFirewallIPv6RulesRead,
 		Schema:      getComputeFirewallIPRuleSetSchema(),
 	}
 }
 
-func dataSourceComputeFirewallIPv4RulesRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func dataSourceComputeFirewallIPv6RulesRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	coxEdgeClient := i.(apiclient.Client)
 
 	// Warning or errors can be collected in a slice type
@@ -25,22 +25,22 @@ func dataSourceComputeFirewallIPv4RulesRead(ctx context.Context, data *schema.Re
 	environmentName := data.Get("environment_name").(string)
 	organizationId := data.Get("organization_id").(string)
 	firewallId := data.Get("firewall_id").(string)
-	ipv4Id := data.Get("ip_rule_id").(string)
+	ipv6Id := data.Get("ip_rule_id").(string)
 
-	if ipv4Id != "" {
-		computeFirewall, err := coxEdgeClient.GetComputeFirewallsIPv4RuleById(environmentName, organizationId, firewallId, ipv4Id)
+	if ipv6Id != "" {
+		computeFirewall, err := coxEdgeClient.GetComputeFirewallsIPv6RuleById(environmentName, organizationId, firewallId, ipv6Id)
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		if err := data.Set("ip_rules", flattenComputeFirewallIPv4RulesData(&[]apiclient.ComputeFirewallRule{*computeFirewall})); err != nil {
+		if err := data.Set("ip_rules", flattenComputeFirewallIPv6RulesData(&[]apiclient.ComputeFirewallRule{*computeFirewall})); err != nil {
 			return diag.FromErr(err)
 		}
 	} else {
-		computeFirewalls, err := coxEdgeClient.GetComputeFirewallsIPv4Rules(environmentName, organizationId, firewallId)
+		computeFirewalls, err := coxEdgeClient.GetComputeFirewallsIPv6Rules(environmentName, organizationId, firewallId)
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		if err := data.Set("ip_rules", flattenComputeFirewallIPv4RulesData(&computeFirewalls)); err != nil {
+		if err := data.Set("ip_rules", flattenComputeFirewallIPv6RulesData(&computeFirewalls)); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -49,7 +49,7 @@ func dataSourceComputeFirewallIPv4RulesRead(ctx context.Context, data *schema.Re
 
 }
 
-func flattenComputeFirewallIPv4RulesData(computeFirewalls *[]apiclient.ComputeFirewallRule) []interface{} {
+func flattenComputeFirewallIPv6RulesData(computeFirewalls *[]apiclient.ComputeFirewallRule) []interface{} {
 	if computeFirewalls != nil {
 		firewalls := make([]interface{}, len(*computeFirewalls))
 
