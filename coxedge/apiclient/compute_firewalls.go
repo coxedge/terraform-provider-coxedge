@@ -15,6 +15,14 @@ type UpdateComputeFirewallRequest struct {
 	Description string `json:"description"`
 }
 
+type ComputeFirewallIPv4RuleRequest struct {
+	CIDR         string `json:"cidr"`
+	Protocol     string `json:"protocol"`
+	SourceOption string `json:"source_option"`
+	Port         string `json:"port"`
+	Notes        string `json:"notes"`
+}
+
 func (c *Client) GetComputeFirewalls(environmentName string, organizationId string) ([]ComputeFirewall, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/firewalls?&org_id="+organizationId,
@@ -114,6 +122,90 @@ func (c *Client) UpdateComputeFirewall(firewallUpdateRequest UpdateComputeFirewa
 func (c *Client) DeleteComputeFirewallById(environmentName string, organizationId string, firewallId string) error {
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/firewalls/"+firewallId+"?operation=delete-firewall&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Client) CreateComputeFirewallIPv4Rule(firewallIPv4Request ComputeFirewallIPv4RuleRequest, environmentName string, organizationId string, firewallId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(firewallIPv4Request)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/add-ipv4-rule-request?firewallId="+firewallId+"&org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) GetComputeFirewallsIPv4Rules(environmentName string, organizationId string, firewallId string) ([]ComputeFirewallRule, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/ipv4-rule?firewallId="+firewallId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeFirewallRules
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetComputeFirewallsIPv4RuleById(environmentName string, organizationId string, firewallId string, ipv4RuleId string) (*ComputeFirewallRule, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/ipv4-rule/"+ipv4RuleId+"?firewallId="+firewallId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeFirewallRule
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) DeleteComputeFirewallIPv4RuleById(environmentName string, organizationId string, firewallId string, ipv4RuleId string) error {
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/ipv4-rule/"+ipv4RuleId+"?firewallId="+firewallId+"&operation=delete-ipv4-rule&org_id="+organizationId,
 		nil)
 	if err != nil {
 		return err

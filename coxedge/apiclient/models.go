@@ -1167,3 +1167,24 @@ type WrapperComputeFirewall struct {
 type WrapperComputeFirewalls struct {
 	Data []ComputeFirewall
 }
+
+type ComputeFirewallRule struct {
+	ID         string `json:"id"`
+	Type       string `json:"type"`
+	IPType     string `json:"ip_type"`
+	Action     string `json:"action"`
+	Protocol   string `json:"protocol"`
+	Port       string `json:"port"`
+	Subnet     string `json:"subnet"`
+	SubnetSize string `json:"subnet_size"`
+	Source     string `json:"source"`
+	Notes      string `json:"notes"`
+}
+
+type WrapperComputeFirewallRule struct {
+	Data ComputeFirewallRule
+}
+
+type WrapperComputeFirewallRules struct {
+	Data []ComputeFirewallRule
+}

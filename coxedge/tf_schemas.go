@@ -7411,3 +7411,40 @@ func getResourceComputeFirewallSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeFirewallIPv4RuleSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"firewall_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"cidr": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"protocol": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"source_option": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"port": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"notes": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}

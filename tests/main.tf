@@ -20,10 +20,15 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
-resource "coxedge_compute_firewalls" "firewalls" {
+resource "coxedge_compute_firewall_ipv4_rule" "ipv4" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  description ="testerraform"
+  firewall_id      = "aa839331-d61b-4c79-8c93-a8a466c2b34c"
+  cidr             = "0.0.0.0/0"
+  protocol         = "tcp"
+  source_option    = "anywhere"
+  port             = "8080"
+  notes            = "sdadsadsdsadsfewfadsa"
 }
 
 #data "coxedge_compute_firewalls" "firewalls" {
