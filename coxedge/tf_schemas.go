@@ -7412,7 +7412,7 @@ func getResourceComputeFirewallSchema() map[string]*schema.Schema {
 	}
 }
 
-func getResourceComputeFirewallIPv4RuleSchema() map[string]*schema.Schema {
+func getResourceComputeFirewallIPRuleSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"environment_name": {
 			Type:     schema.TypeString,

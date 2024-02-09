@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-func resourceComputeFirewallIPv4Rule() *schema.Resource {
+func resourceComputeFirewallIPv6Rule() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: resourceComputeFirewallIPv4RuleCreate,
-		ReadContext:   resourceComputeFirewallIPv4RuleRead,
-		UpdateContext: resourceComputeFirewallIPv4RuleUpdate,
-		DeleteContext: resourceComputeFirewallIPv4RuleDelete,
+		CreateContext: resourceComputeFirewallIPv6RuleCreate,
+		ReadContext:   resourceComputeFirewallIPv6RuleRead,
+		UpdateContext: resourceComputeFirewallIPv6RuleUpdate,
+		DeleteContext: resourceComputeFirewallIPv6RuleDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -29,7 +29,7 @@ func resourceComputeFirewallIPv4Rule() *schema.Resource {
 	}
 }
 
-func resourceComputeFirewallIPv4RuleCreate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeFirewallIPv6RuleCreate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	//Get the API Client
 	coxEdgeClient := i.(apiclient.Client)
 
@@ -40,9 +40,9 @@ func resourceComputeFirewallIPv4RuleCreate(ctx context.Context, data *schema.Res
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	ipv4request := convertResourceDataToComputeFirewallIPv4RuleCreateAPIObject(data)
+	ipv6request := convertResourceDataToComputeFirewallIPv6RuleCreateAPIObject(data)
 
-	existingList, err := coxEdgeClient.GetComputeFirewallsIPv4Rules(environmentName, organizationId, firewallId)
+	existingList, err := coxEdgeClient.GetComputeFirewallsIPv6Rules(environmentName, organizationId, firewallId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -52,7 +52,7 @@ func resourceComputeFirewallIPv4RuleCreate(ctx context.Context, data *schema.Res
 	}
 
 	//Call the API
-	firewallResponse, err := coxEdgeClient.CreateComputeFirewallIPv4Rule(ipv4request, environmentName, organizationId, firewallId)
+	firewallResponse, err := coxEdgeClient.CreateComputeFirewallIPv6Rule(ipv6request, environmentName, organizationId, firewallId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -67,7 +67,7 @@ func resourceComputeFirewallIPv4RuleCreate(ctx context.Context, data *schema.Res
 	}
 
 	if taskResult.Data.TaskStatus == "SUCCESS" {
-		afterList, err := coxEdgeClient.GetComputeFirewallsIPv4Rules(environmentName, organizationId, firewallId)
+		afterList, err := coxEdgeClient.GetComputeFirewallsIPv6Rules(environmentName, organizationId, firewallId)
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -85,7 +85,7 @@ func resourceComputeFirewallIPv4RuleCreate(ctx context.Context, data *schema.Res
 	return diags
 }
 
-func resourceComputeFirewallIPv4RuleRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeFirewallIPv6RuleRead(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	//Get the API Client
 	coxEdgeClient := i.(apiclient.Client)
 
@@ -105,23 +105,23 @@ func resourceComputeFirewallIPv4RuleRead(ctx context.Context, data *schema.Resou
 	environmentName := data.Get("environment_name").(string)
 	organizationId := data.Get("organization_id").(string)
 	firewallId := data.Get("firewall_id").(string)
-	ipv4RuleId := data.Id()
+	ipv6RuleId := data.Id()
 
-	computeFirewallIPv4, err := coxEdgeClient.GetComputeFirewallsIPv4RuleById(environmentName, organizationId, firewallId, ipv4RuleId)
+	computeFirewallIPv6, err := coxEdgeClient.GetComputeFirewallsIPv6RuleById(environmentName, organizationId, firewallId, ipv6RuleId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	convertFirewallIPv4RuleToResourceData(data, computeFirewallIPv4)
-	data.SetId(ipv4RuleId)
+	convertFirewallIPv6RuleToResourceData(data, computeFirewallIPv6)
+	data.SetId(ipv6RuleId)
 	return diags
 }
 
-func resourceComputeFirewallIPv4RuleUpdate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeFirewallIPv6RuleUpdate(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	var diags diag.Diagnostics
 	return diags
 }
 
-func resourceComputeFirewallIPv4RuleDelete(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
+func resourceComputeFirewallIPv6RuleDelete(ctx context.Context, data *schema.ResourceData, i interface{}) diag.Diagnostics {
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
@@ -135,7 +135,7 @@ func resourceComputeFirewallIPv4RuleDelete(ctx context.Context, data *schema.Res
 	firewallId := data.Get("firewall_id").(string)
 
 	//Delete the Storage
-	err := coxEdgeClient.DeleteComputeFirewallIPv4RuleById(environmentName, organizationId, firewallId, resourceId)
+	err := coxEdgeClient.DeleteComputeFirewallIPv6RuleById(environmentName, organizationId, firewallId, resourceId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -147,7 +147,7 @@ func resourceComputeFirewallIPv4RuleDelete(ctx context.Context, data *schema.Res
 	return diags
 }
 
-func convertResourceDataToComputeFirewallIPv4RuleCreateAPIObject(data *schema.ResourceData) apiclient.ComputeFirewallRuleRequest {
+func convertResourceDataToComputeFirewallIPv6RuleCreateAPIObject(data *schema.ResourceData) apiclient.ComputeFirewallRuleRequest {
 	firewallRequest := apiclient.ComputeFirewallRuleRequest{
 		CIDR:         data.Get("cidr").(string),
 		Protocol:     data.Get("protocol").(string),
@@ -158,7 +158,7 @@ func convertResourceDataToComputeFirewallIPv4RuleCreateAPIObject(data *schema.Re
 	return firewallRequest
 }
 
-func convertFirewallIPv4RuleToResourceData(d *schema.ResourceData, rule *apiclient.ComputeFirewallRule) {
+func convertFirewallIPv6RuleToResourceData(d *schema.ResourceData, rule *apiclient.ComputeFirewallRule) {
 	d.Set("id", rule.ID)
 	d.Set("type", rule.Type)
 	d.Set("ip_type", rule.IPType)
