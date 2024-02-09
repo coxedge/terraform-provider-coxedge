@@ -20,27 +20,27 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
-resource "coxedge_compute_firewall_ipv4_rule" "ipv4" {
+#resource "coxedge_compute_firewall_ipv4_rule" "ipv4" {
+#  environment_name = "test"
+#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#  firewall_id      = "aa839331-d61b-4c79-8c93-a8a466c2b34c"
+#  cidr             = "0.0.0.0/0"
+#  protocol         = "tcp"
+#  source_option    = "anywhere"
+#  port             = "8080"
+#  notes            = "sdadsadsdsadsfewfadsa"
+#}
+
+data "coxedge_compute_firewall_ipv4_rule" "ipv4" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
   firewall_id      = "aa839331-d61b-4c79-8c93-a8a466c2b34c"
-  cidr             = "0.0.0.0/0"
-  protocol         = "tcp"
-  source_option    = "anywhere"
-  port             = "8080"
-  notes            = "sdadsadsdsadsfewfadsa"
+  ipv4_rule_id     = "1"
 }
 
-#data "coxedge_compute_firewalls" "firewalls" {
-#  environment_name = "test"
-#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  firewall_id      = "0ecf26a8-21d7-440b-9388-e23673ff2a34"
-#}
-#
-#
-#output "output_storage" {
-#  value = data.coxedge_compute_firewalls.firewalls
-#}
+output "output_storage" {
+  value = data.coxedge_compute_firewall_ipv4_rule.ipv4
+}
 
 #resource "coxedge_baremetal_devices" "device" {
 #  environment_name = "sanityhiv"

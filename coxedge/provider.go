@@ -54,6 +54,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_workload_tags":             dataSourceComputeWorkloadTags(),
 			"coxedge_compute_storages":                  dataSourceComputeStorages(),
 			"coxedge_compute_firewalls":                 dataSourceComputeFirewalls(),
+			"coxedge_compute_firewall_ipv4_rule":        dataSourceComputeFirewallIPv4Rules(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			//"coxedge_cdn_purge":           resourceCDNPurgeResource(),

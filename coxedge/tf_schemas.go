@@ -7448,3 +7448,76 @@ func getResourceComputeFirewallIPv4RuleSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeFirewallIPv4RuleSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"firewall_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"ipv4_rule_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"ipv4_rules": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeFirewallIPv4RuleSchema(),
+			},
+		},
+	}
+}
+
+func getComputeFirewallIPv4RuleSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ip_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"action": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"protocol": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"port": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subnet": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subnet_size": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"source": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"notes": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
