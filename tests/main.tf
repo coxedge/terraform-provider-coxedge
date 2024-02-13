@@ -20,27 +20,23 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
-#resource "coxedge_compute_firewall_ipv6_rule" "ipv6" {
-#  environment_name = "test"
-#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  firewall_id      = "aa839331-d61b-4c79-8c93-a8a466c2b34c"
-#  cidr             = "::/0"
-#  protocol         = "tcp"
-#  source_option    = "anywhere"
-#  port             = "8080"
-#  notes            = "sdadsadsdsadsfewfadsa"
+resource "coxedge_compute_firewall_linked_instances" "linked_instance" {
+  environment_name = "test"
+  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+  firewall_id      = "0ecf26a8-21d7-440b-9388-e23673ff2a34"
+  workload_id      = "9947840b-c514-46f1-8769-d2932b7b21bc"
+}
+
+#data "coxedge_compute_firewall_linked_instances" "linked_instances" {
+#  environment_name   = "test"
+#  organization_id    = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#  firewall_id        = "0ecf26a8-21d7-440b-9388-e23673ff2a34"
+#  linked_instance_id = "1beb0ec5-a74c-46a7-b08c-690f96d34542"
 #}
-
-data "coxedge_compute_firewall_linked_instances" "linked_instances" {
-  environment_name   = "test"
-  organization_id    = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  firewall_id        = "0ecf26a8-21d7-440b-9388-e23673ff2a34"
-  linked_instance_id = "1beb0ec5-a74c-46a7-b08c-690f96d34542"
-}
-
-output "output_storage" {
-  value = data.coxedge_compute_firewall_linked_instances.linked_instances
-}
+#
+#output "output_storage" {
+#  value = data.coxedge_compute_firewall_linked_instances.linked_instances
+#}
 
 #resource "coxedge_baremetal_devices" "device" {
 #  environment_name = "sanityhiv"

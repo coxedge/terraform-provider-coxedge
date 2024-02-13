@@ -23,6 +23,11 @@ type ComputeFirewallRuleRequest struct {
 	Notes        string `json:"notes"`
 }
 
+type ComputeFirewallLinkedInstanceRequest struct {
+	Id         string `json:"id"`
+	WorkloadId string `json:"workloadId"`
+}
+
 func (c *Client) GetComputeFirewalls(environmentName string, organizationId string) ([]ComputeFirewall, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/firewalls?&org_id="+organizationId,
@@ -341,4 +346,48 @@ func (c *Client) GetComputeFirewallLinkedInstanceById(environmentName string, or
 		return nil, err
 	}
 	return &wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) CreateComputeFirewallLinkedInstance(firewallLinkedInstanceRequest ComputeFirewallLinkedInstanceRequest, environmentName string, organizationId string, firewallId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(firewallLinkedInstanceRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/link-instance-request?id="+firewallId+"&org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) DeleteComputeFirewallLinkedInstanceById(environmentName string, organizationId string, firewallId string, linkedInstanceId string) error {
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/linked_instances/"+linkedInstanceId+"?firewallId="+firewallId+"&operation=unlink-instance&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
 }
