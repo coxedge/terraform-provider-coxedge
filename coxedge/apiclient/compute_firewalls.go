@@ -303,3 +303,42 @@ func (c *Client) DeleteComputeFirewallIPv6RuleById(environmentName string, organ
 	return nil
 }
 
+func (c *Client) GetComputeFirewallLinkedInstances(environmentName string, organizationId string, firewallId string) ([]ComputeFirewallLinkedInstance, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/linked_instances?firewallId="+firewallId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeFirewallLinkedInstances
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetComputeFirewallLinkedInstanceById(environmentName string, organizationId string, firewallId string, linkedInstanceId string) (*ComputeFirewallLinkedInstance, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/linked_instances/"+linkedInstanceId+"?firewallId="+firewallId+"&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeFirewallLinkedInstance
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}
