@@ -7844,3 +7844,64 @@ func getComputeVPCSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeVPCSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"location_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"v4_subnet_mask": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"network_prefix": {
+			Type:     schema.TypeInt,
+			Optional: true,
+		},
+		"ip_range": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"route_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"v4_subnet": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"routes": {
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"destination": {
+						Type:     schema.TypeString,
+						Required: true,
+					},
+					"network_prefix": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+					"target_address": {
+						Type:     schema.TypeString,
+						Optional: true,
+					},
+				},
+			},
+		},
+	}
+}

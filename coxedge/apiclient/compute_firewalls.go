@@ -36,6 +36,23 @@ type ComputeVPC2Request struct {
 	Description  string `json:"description"`
 }
 
+type ComputeVPCRequest struct {
+	LocationID    string                   `json:"locationId"`
+	V4SubnetMask  int                      `json:"v4SubnetMask"`
+	NetworkPrefix int                      `json:"networkPrefix"`
+	Routes        []ComputeVPCRouteRequest `json:"routes"`
+	IPRange       string                   `json:"ipRange"`
+	RouteID       string                   `json:"routeId"`
+	V4Subnet      string                   `json:"v4Subnet"`
+	Description   string                   `json:"description"`
+}
+
+type ComputeVPCRouteRequest struct {
+	Destination   string `json:"destination"`
+	NetworkPrefix string `json:"networkPrefix"`
+	TargetAddress string `json:"targetAddress"`
+}
+
 func (c *Client) GetComputeFirewalls(environmentName string, organizationId string) ([]ComputeFirewall, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/firewalls?&org_id="+organizationId,
@@ -522,4 +539,48 @@ func (c *Client) GetComputeVPCById(environmentName string, organizationId string
 		return nil, err
 	}
 	return &wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) CreateComputeVPC(vpc2Request ComputeVPCRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(vpc2Request)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/add-vpc-request?org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) DeleteComputeVPCById(environmentName string, organizationId string, vpcId string) error {
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/vpc/"+vpcId+"?operation=delete-vpc&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
 }
