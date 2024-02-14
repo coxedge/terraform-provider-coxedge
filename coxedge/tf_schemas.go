@@ -7783,3 +7783,64 @@ func getResourceComputeVPC2Schema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeVPCSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpc_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"vpcs": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeVPCSchema(),
+			},
+		},
+	}
+}
+
+func getComputeVPCSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"v4_subnet": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"v4_subnet_mask": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subnet": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"location": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}

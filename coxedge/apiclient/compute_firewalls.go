@@ -483,3 +483,43 @@ func (c *Client) DeleteComputeVPC2ById(environmentName string, organizationId st
 	}
 	return nil
 }
+
+func (c *Client) GetComputeVPC(environmentName string, organizationId string) ([]ComputeVPC, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/vpc?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeVPCs
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetComputeVPCById(environmentName string, organizationId string, vpcId string) (*ComputeVPC, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/vpc/"+vpcId+"?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeVPC
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}

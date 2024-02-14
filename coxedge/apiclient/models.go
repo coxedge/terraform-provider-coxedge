@@ -1229,14 +1229,14 @@ type WrapperComputeFirewallLinkedInstances struct {
 }
 
 type ComputeVPC2 struct {
-	ID           string    `json:"id"`
+	ID           string `json:"id"`
 	DateCreated  string `json:"date_created"`
-	Region       string    `json:"region"`
-	Location     string    `json:"location"`
-	Description  string    `json:"description"`
-	IPBlock      string    `json:"ip_block"`
-	PrefixLength int       `json:"prefix_length"`
-	Subnet       string    `json:"subnet"`
+	Region       string `json:"region"`
+	Location     string `json:"location"`
+	Description  string `json:"description"`
+	IPBlock      string `json:"ip_block"`
+	PrefixLength int    `json:"prefix_length"`
+	Subnet       string `json:"subnet"`
 }
 
 type WrapperComputeVPC2 struct {
@@ -1245,4 +1245,23 @@ type WrapperComputeVPC2 struct {
 
 type WrapperComputeVPC2s struct {
 	Data []ComputeVPC2
+}
+
+type ComputeVPC struct {
+	ID           string `json:"id"`
+	DateCreated  string `json:"date_created"`
+	Region       string `json:"region"`
+	Description  string `json:"description"`
+	V4Subnet     string `json:"v4_subnet"`
+	V4SubnetMask string `json:"v4_subnet_mask"`
+	Subnet       string `json:"subnet"`
+	Location     string `json:"location"`
+}
+
+type WrapperComputeVPC struct {
+	Data ComputeVPC
+}
+
+type WrapperComputeVPCs struct {
+	Data []ComputeVPC
 }
