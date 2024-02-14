@@ -7689,3 +7689,64 @@ func getResourceComputeFirewallLinkedInstanceSchema() map[string]*schema.Schema 
 		},
 	}
 }
+
+func getComputeVPC2SetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"vpc2_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"vpc2s": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeVPC2Schema(),
+			},
+		},
+	}
+}
+
+func getComputeVPC2Schema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"location": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ip_block": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"prefix_length": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"subnet": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}

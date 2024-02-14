@@ -391,3 +391,43 @@ func (c *Client) DeleteComputeFirewallLinkedInstanceById(environmentName string,
 	}
 	return nil
 }
+
+func (c *Client) GetComputeVPC2(environmentName string, organizationId string) ([]ComputeVPC2, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/vpc2?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeVPC2s
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) GetComputeVPC2ById(environmentName string, organizationId string, vpc2Id string) (*ComputeVPC2, error) {
+	request, err := http.NewRequest("GET",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/vpc2/"+vpc2Id+"?org_id="+organizationId,
+		nil)
+	if err != nil {
+		return nil, err
+	}
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+
+	var wrappedAPIStruct WrapperComputeVPC2
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct.Data, nil
+}

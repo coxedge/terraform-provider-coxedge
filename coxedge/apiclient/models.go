@@ -1190,34 +1190,34 @@ type WrapperComputeFirewallRules struct {
 }
 
 type ComputeFirewallLinkedInstance struct {
-	ID             string   `json:"id"`
-	Hostname       string   `json:"hostname"`
-	Label          string   `json:"label"`
-	Status         string   `json:"status"`
-	OS             string   `json:"os"`
-	RAM            string   `json:"ram"`
-	DateCreated    string   `json:"date_created"`
-	Region         string   `json:"region"`
-	Disk           string   `json:"disk"`
-	MainIP         string   `json:"main_ip"`
-	VCPUCount      int      `json:"vcpu_count"`
-	Plan           string   `json:"plan"`
-	AllowedBandwidth int     `json:"allowed_bandwidth"`
-	NetmaskV4      string   `json:"netmask_v4"`
-	GatewayV4      string   `json:"gateway_v4"`
-	PowerStatus    string   `json:"power_status"`
-	ServerStatus   string   `json:"server_status"`
-	V6Network      string   `json:"v6_network"`
-	V6MainIP       string   `json:"v6_main_ip"`
-	V6NetworkSize  int      `json:"v6_network_size"`
-	InternalIP     string   `json:"internal_ip"`
-	KVM            string   `json:"kvm"`
-	OSID           int      `json:"os_id"`
-	AppID          int      `json:"app_id"`
-	ImageID        string   `json:"image_id"`
-	FirewallGroupID string  `json:"firewall_group_id"`
-	Features       []string `json:"features"`
-	Tags           []string `json:"tags"`
+	ID               string   `json:"id"`
+	Hostname         string   `json:"hostname"`
+	Label            string   `json:"label"`
+	Status           string   `json:"status"`
+	OS               string   `json:"os"`
+	RAM              string   `json:"ram"`
+	DateCreated      string   `json:"date_created"`
+	Region           string   `json:"region"`
+	Disk             string   `json:"disk"`
+	MainIP           string   `json:"main_ip"`
+	VCPUCount        int      `json:"vcpu_count"`
+	Plan             string   `json:"plan"`
+	AllowedBandwidth int      `json:"allowed_bandwidth"`
+	NetmaskV4        string   `json:"netmask_v4"`
+	GatewayV4        string   `json:"gateway_v4"`
+	PowerStatus      string   `json:"power_status"`
+	ServerStatus     string   `json:"server_status"`
+	V6Network        string   `json:"v6_network"`
+	V6MainIP         string   `json:"v6_main_ip"`
+	V6NetworkSize    int      `json:"v6_network_size"`
+	InternalIP       string   `json:"internal_ip"`
+	KVM              string   `json:"kvm"`
+	OSID             int      `json:"os_id"`
+	AppID            int      `json:"app_id"`
+	ImageID          string   `json:"image_id"`
+	FirewallGroupID  string   `json:"firewall_group_id"`
+	Features         []string `json:"features"`
+	Tags             []string `json:"tags"`
 }
 
 type WrapperComputeFirewallLinkedInstance struct {
@@ -1226,4 +1226,23 @@ type WrapperComputeFirewallLinkedInstance struct {
 
 type WrapperComputeFirewallLinkedInstances struct {
 	Data []ComputeFirewallLinkedInstance
+}
+
+type ComputeVPC2 struct {
+	ID           string    `json:"id"`
+	DateCreated  string `json:"date_created"`
+	Region       string    `json:"region"`
+	Location     string    `json:"location"`
+	Description  string    `json:"description"`
+	IPBlock      string    `json:"ip_block"`
+	PrefixLength int       `json:"prefix_length"`
+	Subnet       string    `json:"subnet"`
+}
+
+type WrapperComputeVPC2 struct {
+	Data ComputeVPC2
+}
+
+type WrapperComputeVPC2s struct {
+	Data []ComputeVPC2
 }

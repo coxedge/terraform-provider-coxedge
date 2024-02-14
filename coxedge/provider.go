@@ -57,6 +57,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_firewall_ipv4_rule":        dataSourceComputeFirewallIPv4Rules(),
 			"coxedge_compute_firewall_ipv6_rule":        dataSourceComputeFirewallIPv6Rules(),
 			"coxedge_compute_firewall_linked_instances": dataSourceComputeFirewallLinkedInstances(),
+			"coxedge_compute_vpc2":                      dataSourceComputeVPC2(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			//"coxedge_cdn_purge":           resourceCDNPurgeResource(),
