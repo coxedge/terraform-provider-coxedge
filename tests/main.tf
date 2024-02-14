@@ -20,22 +20,24 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
-#resource "coxedge_compute_firewall_linked_instances" "linked_instance" {
-#  environment_name = "test"
-#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  firewall_id      = "0ecf26a8-21d7-440b-9388-e23673ff2a34"
-#  workload_id      = "9947840b-c514-46f1-8769-d2932b7b21bc"
-#}
-
-data "coxedge_compute_vpc2" "vpc2" {
+resource "coxedge_compute_vpc2" "vpc2" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  vpc2_id          = "aaae626a-3985-4e68-bb0e-c5a969d3d817"
+  location_id      = "atl"
+  prefix_length    = "0"
+  ip_block         = ""
+  description      = "testterraformaaaa"
 }
 
-output "output_storage" {
-  value = data.coxedge_compute_vpc2.vpc2
-}
+#data "coxedge_compute_vpc2" "vpc2" {
+#  environment_name = "test"
+#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#  vpc2_id          = "aaae626a-3985-4e68-bb0e-c5a969d3d817"
+#}
+#
+#output "output_storage" {
+#  value = data.coxedge_compute_vpc2.vpc2
+#}
 
 #resource "coxedge_baremetal_devices" "device" {
 #  environment_name = "sanityhiv"

@@ -94,6 +94,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_firewall_ipv4_rule":             resourceComputeFirewallIPv4Rule(),
 			"coxedge_compute_firewall_ipv6_rule":             resourceComputeFirewallIPv6Rule(),
 			"coxedge_compute_firewall_linked_instances":      resourceComputeFirewallLinkedInstance(),
+			"coxedge_compute_vpc2":                           resourceComputeVPC2(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

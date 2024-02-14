@@ -7750,3 +7750,36 @@ func getComputeVPC2Schema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeVPC2Schema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"location_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"prefix_length": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"ip_range": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"ip_block": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}
