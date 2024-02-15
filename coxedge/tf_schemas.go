@@ -7974,3 +7974,27 @@ func getComputeReservedIPSchema() map[string]*schema.Schema {
 		},
 	}
 }
+func getResourceComputeReservedIPSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"ip_type": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"label": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}

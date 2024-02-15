@@ -53,6 +53,16 @@ type ComputeVPCRouteRequest struct {
 	TargetAddress string `json:"targetAddress"`
 }
 
+type ComputeReservedIPRequest struct {
+	Region string `json:"region"`
+	IpType string `json:"ipType"`
+	Label  string `json:"label"`
+}
+
+type UpdateComputeReservedIPRequest struct {
+	Label string `json:"label"`
+}
+
 func (c *Client) GetComputeFirewalls(environmentName string, organizationId string) ([]ComputeFirewall, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/firewalls?&org_id="+organizationId,
@@ -623,4 +633,76 @@ func (c *Client) GetComputeReservedIPById(environmentName string, organizationId
 		return nil, err
 	}
 	return &wrappedAPIStruct.Data, nil
+}
+
+func (c *Client) CreateComputeReservedIP(reservedIPRequest ComputeReservedIPRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(reservedIPRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/add-reserved-ip-request?org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) DeleteComputeReservedIPById(environmentName string, organizationId string, reservedIPId string) error {
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/reserved-ip/"+reservedIPId+"?operation=delete-reserved-ip&org_id="+organizationId,
+		nil)
+	if err != nil {
+		return err
+	}
+
+	//Execute request
+	_, err = c.doRequest(request)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Client) UpdateComputeReservedIP(reservedIPRequest UpdateComputeReservedIPRequest, environmentName string, organizationId string, reservedIPId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(reservedIPRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/reserved-ip/"+reservedIPId+"?operation=edit-reserved-ip&org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
 }
