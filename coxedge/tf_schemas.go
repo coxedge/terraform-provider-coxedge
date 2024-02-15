@@ -7905,3 +7905,72 @@ func getResourceComputeVPCSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeReservedIPSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"reserved_ip_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"reserved_ips": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeReservedIPSchema(),
+			},
+		},
+	}
+}
+
+func getComputeReservedIPSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"region": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"location": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"ip_type": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subnet": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"subnet_size": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"label": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"instance_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"reserved_ip": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"is_workload_attached": {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+	}
+}

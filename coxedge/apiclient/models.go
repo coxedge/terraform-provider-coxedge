@@ -1265,3 +1265,24 @@ type WrapperComputeVPC struct {
 type WrapperComputeVPCs struct {
 	Data []ComputeVPC
 }
+
+type ComputeReservedIP struct {
+	ID                 string `json:"id"`
+	Region             string `json:"region"`
+	Location           string `json:"location"`
+	IPType             string `json:"ip_type"`
+	Subnet             string `json:"subnet"`
+	SubnetSize         int    `json:"subnet_size"`
+	Label              string `json:"label"`
+	InstanceID         string `json:"instance_id"`
+	ReservedIP         string `json:"reservedIp"`
+	IsWorkloadAttached bool   `json:"isWorkloadAttached"`
+}
+
+type WrapperComputeReservedIP struct {
+	Data ComputeReservedIP
+}
+
+type WrapperComputeReservedIPs struct {
+	Data []ComputeReservedIP
+}
