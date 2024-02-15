@@ -7998,3 +7998,24 @@ func getResourceComputeReservedIPSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getResourceComputeConvertReservedIPSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"ip_type": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"ip_address": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}

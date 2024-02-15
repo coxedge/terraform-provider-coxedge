@@ -63,6 +63,11 @@ type UpdateComputeReservedIPRequest struct {
 	Label string `json:"label"`
 }
 
+type ComputeReservedIPConvertRequest struct {
+	IpType    string `json:"ipType"`
+	IpAddress string `json:"ipAddress"`
+}
+
 func (c *Client) GetComputeFirewalls(environmentName string, organizationId string) ([]ComputeFirewall, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/firewalls?&org_id="+organizationId,
@@ -690,6 +695,34 @@ func (c *Client) UpdateComputeReservedIP(reservedIPRequest UpdateComputeReserved
 	//Create the request
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/reserved-ip/"+reservedIPId+"?operation=edit-reserved-ip&org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) CreateComputeReservedIPConvert(reservedIPRequest ComputeReservedIPConvertRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(reservedIPRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("POST",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/convert-ip-request?org_id="+organizationId,
 		bReader,
 	)
 	request.Header.Set("Content-Type", "application/json")

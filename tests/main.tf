@@ -20,12 +20,11 @@ provider "coxedge" {
 #  value = data.coxedge_compute_workload_tags.tags
 #}
 
-resource "coxedge_compute_reserved_ips" "reserved-ip" {
+resource "coxedge_compute_reserved_ip_convert" "convert-reserved-ip" {
   environment_name = "test"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  region           = "atl"
   ip_type          = "v4"
-  label            = "testv4aaa"
+  ip_address       = "140.82.8.218"
 }
 
 #data "coxedge_compute_reserved_ips" "reserved_ip" {
