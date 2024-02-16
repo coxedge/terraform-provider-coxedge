@@ -17,6 +17,6 @@ data "coxedge_compute_workload_ipv6" "ipv6" {
   workload_id      = "<workload_id>"
 }
 
-output "output_ipv4s" {
+output "output_ipv6s" {
   value = data.coxedge_compute_workload_ipv6.ipv6
 }
