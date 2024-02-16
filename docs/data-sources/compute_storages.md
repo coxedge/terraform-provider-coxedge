@@ -51,7 +51,7 @@ output "output_storage" {
 
 ### Read-Only:
 
-- `id` (String) - The unique ID of the workload.
+- `id` (String) - The unique ID of the firewall.
 - `environment_name` (String) - The name of the environment.
 - `organization_id` (String) - The id of the organization.
 - `date_created` (String) - The date this Block Storage was created.
