@@ -11,10 +11,9 @@ provider "coxedge" {
   key = "[INSERT API KEY HERE]"
 }
 
-resource "coxedge_compute_reserved_ips" "reserved-ip" {
+resource "coxedge_compute_reserved_ip_convert" "convert-reserved-ip" {
   organization_id  = "<organization_id>"
   environment_name = "<environment name>"
-  region           = "<region>"
   ip_type          = "<ip_type>"
-  label            = "<label>"
+  ip_address       = "<ip_address>"
 }
