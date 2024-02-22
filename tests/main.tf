@@ -8,9 +8,36 @@ terraform {
 }
 
 provider "coxedge" {
-  key = "GM3COPLOU6nOI12/NZ7HNg=="
+  key = "cJqctxd5QjVlwNXm/hOfcg=="
 }
 
+#resource "coxedge_baremetal_devices" "device" {
+#  environment_name = "resellerenv"
+#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#  location_code    = "cox-dvtc"
+#  product_id       = "3"
+#  os_id            = "14"
+#  server_label     = "testterraform"
+#  tags             = tolist(["tag added"])
+#}
+
+resource "coxedge_baremetal_device" "device" {
+  environment_name = "resellerenv"
+  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+  id               = "MS_372"
+  tags             = tolist(["tag added", "tag 3"])
+  power_status     = "ON"
+}
+
+#data "coxedge_baremetal_device_sensors" "sensors" {
+#  environment_name = "resellerenv"
+#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+#  id               = "MS_370"
+#}
+#
+#output "output" {
+#  value = data.coxedge_baremetal_device_sensors.sensors
+#}
 #data "coxedge_baremetal_ssh_keys" "ssh" {
 #  environment_name = "sanityhiv"
 #  organization_id  = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
@@ -44,11 +71,11 @@ provider "coxedge" {
 #  tags             = tolist(["tag added"])
 #}
 
-resource "coxedge_baremetal_device" "device" {
-  power_status = "OFF"
-#  tags         = tolist(["hello2"])
-#  name         = "terraformtest"
-}
+#resource "coxedge_baremetal_device" "device" {
+#  power_status = "OFF"
+##  tags         = tolist(["hello2"])
+##  name         = "terraformtest"
+#}
 
 #data "coxedge_baremetal_location_product_os" "os" {
 #  environment_name = "sanityhiv"
