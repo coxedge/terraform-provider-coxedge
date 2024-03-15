@@ -52,6 +52,10 @@ type ConnectIPMIRequest struct {
 	CustomIP string `json:"customIP,omitempty"`
 }
 
+type DeleteDeviceRequest struct {
+	Status string `json:"status"`
+}
+
 /*
 GetBareMetalDevices get all BareMetal devices
 */
@@ -131,10 +135,18 @@ func (c *Client) CreateBareMetalDevice(createRequest CreateBareMetalDeviceReques
 /*
 DeleteBareMetalDeviceById delete BareMetal device by Id
 */
-func (c *Client) DeleteBareMetalDeviceById(deviceId string, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+func (c *Client) DeleteBareMetalDeviceById(deleteRequest DeleteDeviceRequest, deviceId string, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(deleteRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeBareMetalServiceCode+"/"+environmentName+"/devices/"+deviceId+"?operation=delete&org_id="+organizationId,
-		nil)
+		bReader)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request
 	respBytes, err := c.doRequest(request)

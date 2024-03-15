@@ -135,8 +135,11 @@ func resourceBareMetalDeviceDelete(ctx context.Context, d *schema.ResourceData, 
 	environmentName := d.Get("environment_name").(string)
 	organizationId := d.Get("organization_id").(string)
 
+	request := apiclient.DeleteDeviceRequest{
+		Status: "active",
+	}
 	//Delete the BareMetal device
-	deletedDevice, err := coxEdgeClient.DeleteBareMetalDeviceById(resourceId, environmentName, organizationId)
+	deletedDevice, err := coxEdgeClient.DeleteBareMetalDeviceById(request,resourceId, environmentName, organizationId)
 	if err != nil {
 		return diag.FromErr(err)
 	}
