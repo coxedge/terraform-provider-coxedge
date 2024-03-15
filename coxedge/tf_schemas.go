@@ -8019,3 +8019,81 @@ func getResourceComputeConvertReservedIPSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeISOSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"iso_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"isos": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeISOSchema(),
+			},
+		},
+	}
+}
+
+func getComputeISOSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"prefix_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"filename": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"size": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"md5sum": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"sha512sum": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getResourceComputeISOSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"url": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+	}
+}

@@ -1286,3 +1286,22 @@ type WrapperComputeReservedIP struct {
 type WrapperComputeReservedIPs struct {
 	Data []ComputeReservedIP
 }
+
+type ComputeISO struct {
+	ID          string    `json:"id"`
+	PrefixID    string    `json:"prefixId"`
+	DateCreated string `json:"date_created"`
+	Filename    string    `json:"filename"`
+	Size        int64     `json:"size"`
+	MD5Sum      string    `json:"md5sum"`
+	SHA512Sum   string    `json:"sha512sum"`
+	Status      string    `json:"status"`
+}
+
+type WrapperComputeISO struct {
+	Data ComputeISO
+}
+
+type WrapperComputeISOs struct {
+	Data []ComputeISO
+}

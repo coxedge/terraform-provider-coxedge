@@ -60,6 +60,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_vpc2":                      dataSourceComputeVPC2(),
 			"coxedge_compute_vpc":                       dataSourceComputeVPC(),
 			"coxedge_compute_reserved_ips":              dataSourceComputeReservedIP(),
+			"coxedge_compute_isos":                      dataSourceComputeISO(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			//"coxedge_cdn_purge":           resourceCDNPurgeResource(),
@@ -100,6 +101,7 @@ func Provider() *schema.Provider {
 			"coxedge_compute_vpc":                            resourceComputeVPC(),
 			"coxedge_compute_reserved_ips":                   resourceComputeReservedIP(),
 			"coxedge_compute_reserved_ip_convert":            resourceComputeReservedIPConvert(),
+			"coxedge_compute_isos":                           resourceComputeISO(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

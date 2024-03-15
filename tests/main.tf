@@ -8,24 +8,24 @@ terraform {
 }
 
 provider "coxedge" {
-  key = "cJqctxd5QjVlwNXm/hOfcg=="
+  key = "GM3COPLOU6nOI12/NZ7HNg=="
 }
-#data "coxedge_compute_workload_tags" "tags" {
-#  environment_name = "test"
+
+#data "coxedge_compute_isos" "isos" {
+#  environment_name = "cm-env"
 #  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  workload_id      = "3a4a313e-d960-4a35-a284-d575baac2747"
+#  iso_id           = "50973e37-84a6-4dbb-b9a9-82643e78dcd6"
 #}
 #
 #output "output_tag" {
-#  value = data.coxedge_compute_workload_tags.tags
+#  value = data.coxedge_compute_isos.isos
 #}
 
-#resource "coxedge_compute_reserved_ip_convert" "convert-reserved-ip" {
-#  environment_name = "test"
-#  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  ip_type          = "v4"
-#  ip_address       = "140.82.8.218"
-#}
+resource "coxedge_compute_isos" "iso" {
+  environment_name = "cm-env"
+  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
+  url         = "http://205.185.126.191/web/iso/Server2022x64.iso"
+}
 
 #data "coxedge_compute_reserved_ips" "reserved_ip" {
 #  environment_name = "test"
