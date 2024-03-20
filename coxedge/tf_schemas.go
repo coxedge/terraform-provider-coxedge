@@ -8097,3 +8097,89 @@ func getResourceComputeISOSchema() map[string]*schema.Schema {
 		},
 	}
 }
+
+func getComputeSnapshotSetSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"snapshot_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"snapshots": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: getComputeSnapshotSchema(),
+			},
+		},
+	}
+}
+
+func getComputeSnapshotSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"prefix_id": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"date_created": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"size": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"compressed_size": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"os_id": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"app_id": {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		"status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+}
+
+func getResourceComputeSnapshotSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"environment_name": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"organization_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"instance_id": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"description": {
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+	}
+}

@@ -6,13 +6,14 @@ import (
 	"net/http"
 )
 
-type ComputeISORequest struct {
-	Url string `json:"url"`
+type ComputeSnapshotRequest struct {
+	InstanceId  string `json:"instance_id"`
+	Description string `json:"description"`
 }
 
-func (c *Client) GetComputeISOs(environmentName string, organizationId string) ([]ComputeISO, error) {
+func (c *Client) GetComputeSnapshots(environmentName string, organizationId string) ([]ComputeSnapshot, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/iso?org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/snapshots?org_id="+organizationId,
 		nil)
 	if err != nil {
 		return nil, err
@@ -22,7 +23,7 @@ func (c *Client) GetComputeISOs(environmentName string, organizationId string) (
 		return nil, err
 	}
 
-	var wrappedAPIStruct WrapperComputeISOs
+	var wrappedAPIStruct WrapperComputeSnapshots
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err
@@ -30,9 +31,9 @@ func (c *Client) GetComputeISOs(environmentName string, organizationId string) (
 	return wrappedAPIStruct.Data, nil
 }
 
-func (c *Client) GetComputeISOById(environmentName string, organizationId string, isoId string) (*ComputeISO, error) {
+func (c *Client) GetComputeSnapshotById(environmentName string, organizationId string, snapshotId string) (*ComputeSnapshot, error) {
 	request, err := http.NewRequest("GET",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/iso/"+isoId+"?org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/snapshots/"+snapshotId+"?org_id="+organizationId,
 		nil)
 	if err != nil {
 		return nil, err
@@ -42,7 +43,7 @@ func (c *Client) GetComputeISOById(environmentName string, organizationId string
 		return nil, err
 	}
 
-	var wrappedAPIStruct WrapperComputeISO
+	var wrappedAPIStruct WrapperComputeSnapshot
 	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
 	if err != nil {
 		return nil, err
@@ -50,9 +51,9 @@ func (c *Client) GetComputeISOById(environmentName string, organizationId string
 	return &wrappedAPIStruct.Data, nil
 }
 
-func (c *Client) CreateComputeISO(isoRequest ComputeISORequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
+func (c *Client) CreateComputeSnapshot(snapshotRequest ComputeSnapshotRequest, environmentName string, organizationId string) (*TaskStatusResponse, error) {
 	//Marshal the request
-	jsonBytes, err := json.Marshal(isoRequest)
+	jsonBytes, err := json.Marshal(snapshotRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -78,9 +79,9 @@ func (c *Client) CreateComputeISO(isoRequest ComputeISORequest, environmentName 
 	return &wrappedAPIStruct, nil
 }
 
-func (c *Client) DeleteComputeISOById(environmentName string, organizationId string, isoId string) error {
+func (c *Client) DeleteComputeSnapshotById(environmentName string, organizationId string, snapshotId string) error {
 	request, err := http.NewRequest("POST",
-		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/iso/"+isoId+"?operation=delete-iso&org_id="+organizationId,
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/snapshots/"+snapshotId+"?operation=delete-snapshot&org_id="+organizationId,
 		nil)
 	if err != nil {
 		return err

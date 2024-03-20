@@ -11,20 +11,20 @@ provider "coxedge" {
   key = "GM3COPLOU6nOI12/NZ7HNg=="
 }
 
-#data "coxedge_compute_isos" "isos" {
+#data "coxedge_compute_snapshots" "snapshots" {
 #  environment_name = "cm-env"
 #  organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-#  iso_id           = "50973e37-84a6-4dbb-b9a9-82643e78dcd6"
+#  snapshot_id      = "89176bbf-d496-4d52-88c4-40b8292b592d"
 #}
 #
 #output "output_tag" {
-#  value = data.coxedge_compute_isos.isos
+#  value = data.coxedge_compute_snapshots.snapshots
 #}
 
-resource "coxedge_compute_isos" "iso" {
+resource "coxedge_compute_snapshots" "snapshot" {
   environment_name = "cm-env"
   organization_id  = "b0d424e4-4f78-4cb3-8c7c-26781bea9f7e"
-  url         = "http://205.185.126.191/web/iso/Server2022x64.iso"
+  instance_id         = "a9f1ff05-6e14-4aea-bc65-9a836bd69eaf"
 }
 
 #data "coxedge_compute_reserved_ips" "reserved_ip" {

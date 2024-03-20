@@ -1288,14 +1288,14 @@ type WrapperComputeReservedIPs struct {
 }
 
 type ComputeISO struct {
-	ID          string    `json:"id"`
-	PrefixID    string    `json:"prefixId"`
+	ID          string `json:"id"`
+	PrefixID    string `json:"prefixId"`
 	DateCreated string `json:"date_created"`
-	Filename    string    `json:"filename"`
-	Size        int64     `json:"size"`
-	MD5Sum      string    `json:"md5sum"`
-	SHA512Sum   string    `json:"sha512sum"`
-	Status      string    `json:"status"`
+	Filename    string `json:"filename"`
+	Size        int64  `json:"size"`
+	MD5Sum      string `json:"md5sum"`
+	SHA512Sum   string `json:"sha512sum"`
+	Status      string `json:"status"`
 }
 
 type WrapperComputeISO struct {
@@ -1304,4 +1304,24 @@ type WrapperComputeISO struct {
 
 type WrapperComputeISOs struct {
 	Data []ComputeISO
+}
+
+type ComputeSnapshot struct {
+	ID             string `json:"id"`
+	PrefixID       string `json:"prefixId"`
+	DateCreated    string `json:"date_created"`
+	Description    string `json:"description"`
+	Size           int    `json:"size"`
+	CompressedSize int    `json:"compressed_size"`
+	Status         string `json:"status"`
+	OSID           int    `json:"os_id"`
+	AppID          int    `json:"app_id"`
+}
+
+type WrapperComputeSnapshot struct {
+	Data ComputeSnapshot
+}
+
+type WrapperComputeSnapshots struct {
+	Data []ComputeSnapshot
 }
