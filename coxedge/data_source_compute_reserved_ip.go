@@ -53,16 +53,20 @@ func flattenComputeReservedIPData(dataSlice *[]apiclient.ComputeReservedIP) []in
 
 		for i, instance := range *dataSlice {
 			item := map[string]interface{}{
-				"id":                 instance.ID,
-				"region":             instance.Region,
-				"location":           instance.Location,
-				"ip_type":            instance.IPType,
-				"subnet":             instance.Subnet,
-				"subnet_size":        instance.SubnetSize,
-				"label":              instance.Label,
-				"instance_id":        instance.InstanceID,
-				"reserved_ip":         instance.ReservedIP,
-				"is_workload_attached": instance.IsWorkloadAttached,
+				"id":          instance.ID,
+				"region":      instance.Region,
+				"location":    instance.Location,
+				"ip_type":     instance.IPType,
+				"subnet":      instance.Subnet,
+				"subnet_size": instance.SubnetSize,
+				"label":       instance.Label,
+				"instance_id": instance.InstanceID,
+				"reserved_ip": instance.ReservedIP,
+			}
+			if instance.InstanceID != "" {
+				item["is_workload_attached"] = true
+			} else {
+				item["is_workload_attached"] = false
 			}
 
 			flattened[i] = item

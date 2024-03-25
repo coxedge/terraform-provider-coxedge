@@ -143,7 +143,6 @@ func resourceComputeReservedIPUpdate(ctx context.Context, data *schema.ResourceD
 		return diag.FromErr(err)
 	}
 
-
 	//Save the Id
 	data.SetId(reservedIPId)
 	return diags
@@ -193,5 +192,10 @@ func convertReservedIPToResourceData(d *schema.ResourceData, reservedIP *apiclie
 	d.Set("label", reservedIP.Label)
 	d.Set("instance_id", reservedIP.InstanceID)
 	d.Set("reserved_ip", reservedIP.ReservedIP)
-	d.Set("is_workload_attached", reservedIP.IsWorkloadAttached)
+	if reservedIP.InstanceID != "" {
+		d.Set("is_workload_attached", true)
+	} else {
+		d.Set("is_workload_attached", false)
+	}
+
 }

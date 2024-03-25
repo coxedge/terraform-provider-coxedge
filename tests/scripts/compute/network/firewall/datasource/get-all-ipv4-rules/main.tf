@@ -11,11 +11,6 @@ provider "coxedge" {
   key = "[INSERT API KEY HERE]"
 }
 
-data "coxedge_compute_firewalls" "firewalls" {
-  organization_id  = "<organization_id>"
-  environment_name = "<environment name>"
-}
-
 data "coxedge_compute_firewall_ipv4_rule" "ipv4" {
   organization_id  = "<organization_id>"
   environment_name = "<environment name>"

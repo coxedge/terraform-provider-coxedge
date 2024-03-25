@@ -18,6 +18,6 @@ data "coxedge_compute_firewall_ipv6_rule" "ipv6" {
   ip_rule_id       = "<ipv6_rule_id>"
 }
 
-output "output_ipv4" {
+output "output_ipv6" {
   value = data.coxedge_compute_firewall_ipv6_rule.ipv6
 }

@@ -16,7 +16,6 @@ data "coxedge_compute_firewalls" "firewalls" {
   environment_name = "<environment name>"
 }
 
-
 output "output_storage" {
   value = data.coxedge_compute_firewalls.firewalls
 }
