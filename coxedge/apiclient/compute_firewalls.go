@@ -68,6 +68,10 @@ type ComputeReservedIPConvertRequest struct {
 	IpAddress string `json:"ipAddress"`
 }
 
+type ComputeReservedIPAttachDetachRequest struct {
+	WorkloadId string `json:"workloadId"`
+}
+
 func (c *Client) GetComputeFirewalls(environmentName string, organizationId string) ([]ComputeFirewall, error) {
 	request, err := http.NewRequest("GET",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/firewalls?&org_id="+organizationId,
@@ -724,6 +728,55 @@ func (c *Client) CreateComputeReservedIPConvert(reservedIPRequest ComputeReserve
 	request, err := http.NewRequest("POST",
 		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/convert-ip-request?org_id="+organizationId,
 		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) PatchAttachComputeReservedIP(reservedIPRequest ComputeReservedIPAttachDetachRequest, environmentName string, organizationId string, reservedIPId string) (*TaskStatusResponse, error) {
+	//Marshal the request
+	jsonBytes, err := json.Marshal(reservedIPRequest)
+	if err != nil {
+		return nil, err
+	}
+	//Wrap bytes in reader
+	bReader := bytes.NewReader(jsonBytes)
+	//Create the request
+	request, err := http.NewRequest("PATCH",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/reserved-ip/"+reservedIPId+"?org_id="+organizationId,
+		bReader,
+	)
+	request.Header.Set("Content-Type", "application/json")
+	//Execute request
+	respBytes, err := c.doRequest(request)
+	if err != nil {
+		return nil, err
+	}
+	//Return struct
+	var wrappedAPIStruct TaskStatusResponse
+	err = json.Unmarshal(respBytes, &wrappedAPIStruct)
+	if err != nil {
+		return nil, err
+	}
+	return &wrappedAPIStruct, nil
+}
+
+func (c *Client) PatchDetachComputeReservedIP(environmentName string, organizationId string, reservedIPId string) (*TaskStatusResponse, error) {
+	//Create the request
+	request, err := http.NewRequest("PATCH",
+		CoxEdgeAPIBase+"/services/"+CoxEdgeComputeServiceCode+"/"+environmentName+"/reserved-ip/"+reservedIPId+"?org_id="+organizationId,
+		nil,
 	)
 	request.Header.Set("Content-Type", "application/json")
 	//Execute request

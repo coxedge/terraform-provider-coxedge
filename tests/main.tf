@@ -11,13 +11,12 @@ provider "coxedge" {
   key = "GM3COPLOU6nOI12/NZ7HNg=="
 }
 
-resource "coxedge_compute_storage" "storage" {
+resource "coxedge_compute_reserved_ip_attach_detach_instance" "reserved_ip" {
   organization_id  = "7e80611c-29c5-4bab-8e6d-1c4fc5b2c035"
   environment_name = "automation"
-  region           = "ewr"
-  size_gb          = "100"
-  label            = "dev2"
-  block_type       = "NVMe"
+  reserved_ip_id   = "b365a082-9068-458b-b619-e8809b109c22"
+  action           = "attach"
+  workload_id      = "baf54949-cad9-495a-837c-c91cabe5893b"
 }
 
 #data "coxedge_compute_snapshots" "snapshots" {
