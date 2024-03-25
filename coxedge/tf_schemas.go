@@ -7205,6 +7205,27 @@ func getResourceComputeStorageSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 		},
+		"block_type": {
+			Type:     schema.TypeString,
+			Required: true,
+			ValidateDiagFunc: func(i interface{}, path cty.Path) diag.Diagnostics {
+				var diags diag.Diagnostics
+				value := i.(string)
+				val := false
+				if value == "HDD" || value == "NVMe" {
+					val = true
+				}
+				if !val {
+					diagnostic := diag.Diagnostic{
+						Severity: diag.Error,
+						Summary:  "wrong value",
+						Detail:   fmt.Sprintf("%q is not equal to one of the values: %q", value, "HDD or NVMe"),
+					}
+					diags = append(diags, diagnostic)
+				}
+				return diags
+			},
+		},
 		"date_created": {
 			Type:     schema.TypeString,
 			Computed: true,
@@ -7222,10 +7243,6 @@ func getResourceComputeStorageSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"mount_id": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"block_type": {
 			Type:     schema.TypeString,
 			Computed: true,
 		},

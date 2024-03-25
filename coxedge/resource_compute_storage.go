@@ -196,10 +196,14 @@ func resourceComputeStorageDelete(ctx context.Context, data *schema.ResourceData
 
 func convertResourceDataToComputeStorageCreateAPIObject(data *schema.ResourceData) apiclient.ComputeStorageRequest {
 	storageRequest := apiclient.ComputeStorageRequest{
-		Region:    data.Get("region").(string),
-		SizeGB:    data.Get("size_gb").(string),
-		Label:     data.Get("label").(string),
-		BlockType: "storage_opt",
+		Region: data.Get("region").(string),
+		SizeGB: data.Get("size_gb").(string),
+		Label:  data.Get("label").(string),
+	}
+	if data.Get("block_type").(string) == "HDD" {
+		storageRequest.BlockType = "storage_opt"
+	} else {
+		storageRequest.BlockType = "high_perf"
 	}
 	return storageRequest
 }

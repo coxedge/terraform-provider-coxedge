@@ -22,6 +22,7 @@ resource "coxedge_compute_storage" "storage" {
   region           = "<region>"
   size_gb          = "<size>"
   label            = "<label>"
+  block_type       = "<block_type>" #HDD or NVMe
 }
 ```
 
@@ -37,6 +38,7 @@ The following arguments are supported:
 - `organization_id` (String) - The id of the organization.
 - `region` (String) - The Region id where the Block Storage will be created.
 - `size_gb` (String) - Size in GB may range between 10 and 40000
+- `block_type` (String) - type of storage
 
 ### Optional
 

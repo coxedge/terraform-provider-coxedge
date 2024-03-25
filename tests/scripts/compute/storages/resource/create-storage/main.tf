@@ -17,4 +17,5 @@ resource "coxedge_compute_storage" "storage" {
   region           = "<region>"
   size_gb          = "<size>"
   label            = "<label>"
+  block_type       = "<block_type>" #HDD or NVMe
 }
